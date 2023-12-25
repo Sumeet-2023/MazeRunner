@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.List;
@@ -65,10 +67,32 @@ public class GameScreen implements Screen {
         String filePath = "maps\\level-1.properties";
         map = Utils.readMap(filePath);
 
-        game.getSpriteBatch().begin(); // Important to call this before drawing anything
+        // Declaring TextureRegions & animations for require objects on the map
+        TextureRegion wall = game.getWall();
+        TextureRegion door = game.getDoor();
+        Animation<TextureRegion> fire = game.getFireAnimation();
 
-
-        game.getSpriteBatch().end(); // Important to call this after drawing everything
+        // Rendering the Map
+        game.getSpriteBatch().begin();
+        for(List<Integer> key: map.keySet())
+        {
+            switch (map.get(key)){
+                case 0: {
+                    game.getSpriteBatch().draw(wall, key.get(0) * 16, key.get(1) * 16);
+                    break ;
+                }
+                case 2: {
+                    game.getSpriteBatch().draw(door, key.get(0) * 16, key.get(1) * 16);
+                    break ;
+                }
+                case 3: {
+                    game.getSpriteBatch().draw(
+                            fire.getKeyFrame(sinusInput, true), key.get(0) * 16, key.get(1) * 16, 16, 16);
+                    break ;
+                }
+            }
+        }
+        game.getSpriteBatch().end();
     }
 
     @Override
