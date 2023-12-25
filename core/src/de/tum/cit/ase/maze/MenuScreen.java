@@ -28,7 +28,7 @@ public class MenuScreen implements Screen {
      */
     public MenuScreen(MazeRunnerGame game) {
         var camera = new OrthographicCamera();
-        camera.zoom = 1.5f; // Set camera zoom for a closer view
+        camera.zoom = 1.0f; // Set camera zoom for a closer view
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
@@ -38,15 +38,27 @@ public class MenuScreen implements Screen {
         stage.addActor(table); // Add the table to the stage
 
         // Add a label as a title
-        table.add(new Label("Hello World from the Menu!", game.getSkin(), "title")).padBottom(80).row();
+        table.add(new Label("MAZE RUNNER", game.getSkin(), "title")).padBottom(80).row();
 
         // Create and add a button to go to the game screen
-        TextButton goToGameButton = new TextButton("Go To Game", game.getSkin());
-        table.add(goToGameButton).width(300).row();
-        goToGameButton.addListener(new ChangeListener() {
+        TextButton startGame = new TextButton("Start", game.getSkin());
+        table.add(startGame).width(300).pad(10).row();
+        TextButton settings = new TextButton("Settings", game.getSkin());
+        table.add(settings).width(300).pad(10).row();
+        TextButton howToPlay = new TextButton("How to Play", game.getSkin());
+        table.add(howToPlay).width(300).pad(10).row();
+        TextButton credits = new TextButton("Credits", game.getSkin());
+        table.add(credits).width(300).pad(10).row();
+
+        startGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) { game.goToGame(); }
+        });
+
+        credits.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(); // Change to the game screen when button is pressed
+                game.goToCredits();
             }
         });
     }

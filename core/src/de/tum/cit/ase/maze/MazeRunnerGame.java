@@ -19,6 +19,7 @@ public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
+    private CreditScreen creditScreen;
 
     // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
@@ -75,6 +76,18 @@ public class MazeRunnerGame extends Game {
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
+        }
+    }
+
+    /**
+     * Switches to the Credits screen.
+     */
+    public void goToCredits()
+    {
+        this.setScreen(new CreditScreen(this));
+        if (creditScreen != null){
+            creditScreen.dispose();
+            creditScreen = null;
         }
     }
 
