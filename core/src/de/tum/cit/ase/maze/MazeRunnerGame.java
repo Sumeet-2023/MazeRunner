@@ -30,6 +30,15 @@ public class MazeRunnerGame extends Game {
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
 
+    // Fire Animation
+    private Animation<TextureRegion> fireAnimation;
+
+    // Door TextureRegions
+    private TextureRegion door;
+
+    // Wall TextureRegions
+    private TextureRegion wall;
+
     /**
      * Constructor for MazeRunnerGame.
      *
@@ -47,6 +56,9 @@ public class MazeRunnerGame extends Game {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
         this.loadCharacterAnimation(); // Load character animation
+        this.loadFireAnimation(); // Load fire animation
+        this.loadDoor(); // Load door TextureRegion
+        this.loadWall(); // Load wall TextureRegion
 
         // Play some background music
         // Background sound
@@ -112,6 +124,45 @@ public class MazeRunnerGame extends Game {
         characterDownAnimation = new Animation<>(0.1f, walkFrames);
     }
 
+
+    /**
+     * Loads the fire animation from the objects.png file.
+     */
+    public void loadFireAnimation() {
+        Texture fireSheet = new Texture(Gdx.files.internal("objects.png"));
+
+        int frameWidth = 16;
+        int frameHeight = 16;
+        int animationFrame = 7;
+
+        Array<TextureRegion> fireFrames = new Array<>(TextureRegion.class);
+
+        for (int col = 4; col < animationFrame + 4; col++){
+            fireFrames.add(new TextureRegion(fireSheet, col * frameWidth, 3 * frameHeight, frameWidth, frameHeight));
+        }
+        fireAnimation = new Animation<>(0.1f, fireFrames);
+    }
+
+    // TODO: Create methods for loading animation for different direction of character.
+
+    // TODO: Create method for loading animation for different direction of different enemies.
+
+    // TODO: Create method for loading animation for door opening;
+
+
+    public void loadWall() {
+        Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));
+        wall = new TextureRegion(wallTexture, 1, 0, 16, 16);
+    }
+
+    public void loadDoor() {
+        Texture doorTexture = new Texture(Gdx.files.internal("things.png"));
+        door = new TextureRegion(doorTexture, 1, 0, 16, 16);
+    }
+
+    // TODO: Create method for Loading TextureRegion for Key.
+
+    // TODO: Create methods for Loading TextureRegion for different directions of walls.
     /**
      * Cleans up resources when the game is disposed.
      */
@@ -131,6 +182,9 @@ public class MazeRunnerGame extends Game {
     public Animation<TextureRegion> getCharacterDownAnimation() {
         return characterDownAnimation;
     }
+    public Animation<TextureRegion> getFireAnimation() { return fireAnimation; }
+    public TextureRegion getDoor() { return door; }
+    public TextureRegion getWall() { return wall; }
 
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
