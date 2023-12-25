@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
  * It handles the game logic and rendering of the game elements.
@@ -18,6 +21,9 @@ public class GameScreen implements Screen {
     private final BitmapFont font;
 
     private float sinusInput = 0f;
+
+    private Map<List<Integer>, Integer> map;
+
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -49,27 +55,18 @@ public class GameScreen implements Screen {
 
         camera.update(); // Update the camera
 
-        // Move text in a circular path to have an example of a moving object
         sinusInput += delta;
-        float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
-        float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
 
         // Set up and begin drawing with the sprite batch
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
+
+        // Reading the Map
+        String filePath = "maps\\level-1.properties";
+        map = Utils.readMap(filePath);
+
         game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
-        // Render the text
-        font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
-
-        // Draw the character next to the text :) / We can reuse sinusInput here
-        game.getSpriteBatch().draw(
-                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
-                textX - 96,
-                textY - 64,
-                64,
-                128
-        );
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
     }
