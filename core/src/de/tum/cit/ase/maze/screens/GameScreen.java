@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import de.tum.cit.ase.maze.MapLoader;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 import de.tum.cit.ase.maze.Utils;
+import de.tum.cit.ase.maze.objects.Wall;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,8 @@ public class GameScreen implements Screen {
 
     private float sinusInput = 0f;
 
-    private Map<List<Integer>, Integer> map;
+    private MapLoader mapLoader;
+
 
 
     /**
@@ -44,6 +47,8 @@ public class GameScreen implements Screen {
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
+        mapLoader = new MapLoader(sinusInput);
+        mapLoader.loadMap1();
     }
 
 
@@ -54,46 +59,21 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.goToMenu();
         }
-
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
         camera.update(); // Update the camera
 
         sinusInput += delta;
-
+        mapLoader.setSinusInput(sinusInput);
         // Set up and begin drawing with the sprite batch
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
 
-        // Reading the Map
-        String filePath = "maps\\level-1.properties";
-        map = Utils.readMap(filePath);
-
-        // Declaring TextureRegions & animations for require objects on the map
-        TextureRegion wall = game.getWall();
-        TextureRegion door = game.getDoor();
-        Animation<TextureRegion> fire = game.getFireAnimation();
-
         // Rendering the Map
+        List<Wall> walls = mapLoader.getWalls();
         game.getSpriteBatch().begin();
-        for(List<Integer> key: map.keySet())
-        {
-            switch (map.get(key)){
-                case 0: {
-                    game.getSpriteBatch().draw(wall, key.get(0) * 16, key.get(1) * 16);
-                    break ;
-                }
-                case 2: {
-                    game.getSpriteBatch().draw(door, key.get(0) * 16, key.get(1) * 16);
-                    break ;
-                }
-                case 3: {
-                    game.getSpriteBatch().draw(
-                            fire.getKeyFrame(sinusInput, true), key.get(0) * 16, key.get(1) * 16, 16, 16);
-                    break ;
-                }
-            }
-        }
+        for (Wall wall: walls)
+            wall.render(game.getSpriteBatch());
         game.getSpriteBatch().end();
     }
 
