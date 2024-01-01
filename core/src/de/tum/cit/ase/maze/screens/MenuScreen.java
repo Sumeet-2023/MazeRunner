@@ -44,8 +44,6 @@ public class MenuScreen implements Screen {
         // Create and add a button to go to the game screen
         TextButton startGame = new TextButton("Start", game.getSkin());
         table.add(startGame).width(300).pad(10).row();
-        TextButton settings = new TextButton("Settings", game.getSkin());
-        table.add(settings).width(300).pad(10).row();
         TextButton howToPlay = new TextButton("How to Play", game.getSkin());
         table.add(howToPlay).width(300).pad(10).row();
         TextButton credits = new TextButton("Credits", game.getSkin());
@@ -66,6 +64,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0.2f,0.2f,0.2f,0.2f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Update the stage
         stage.draw(); // Draw the stage

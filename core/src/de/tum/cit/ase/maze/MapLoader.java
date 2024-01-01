@@ -1,5 +1,6 @@
 package de.tum.cit.ase.maze;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Player;
 import de.tum.cit.ase.maze.objects.*;
@@ -14,22 +15,30 @@ public class MapLoader {
 
     private Integer max_x;
     private Integer max_y;
-    
-    private List<Wall> walls;
-    private List<Obstacle> obstacles;
-    private List<Enemy> enemies;
-    private List<Door> doors;
-    private List<Tile> tiles;
+    private final Integer min_x=0;
+    private final Integer min_y=0;
+    private MazeRunnerGame game;
+    private Wall wall;
+    private Obstacle obstacles;
+    private Enemy enemies;
+    private Door doors;
+    private Tile tiles;
     private Player player;
     private Key key;
 
-    public MapLoader(float sinusInput) {
+    public MapLoader(MazeRunnerGame game, float sinusInput) {
         this.sinusInput = sinusInput;
-        this.walls = new ArrayList<Wall>();
-        this.obstacles = new ArrayList<>();
-        this.enemies = new ArrayList<>();
-        this.doors = new ArrayList<>();
-        this.tiles = new ArrayList<>();
+        this.wall = new Wall();
+        wall.loadHorizontalWall();
+        wall.loadVerticalWall();
+        wall.loadCornerWall();
+        this.obstacles = new Obstacle();
+        obstacles.loadSpikeAnimation();
+        this.enemies = new Enemy();
+        this.doors = new Door();
+        doors.loadDoor();
+        this.tiles = new Tile();
+        this.game = game;
     }
 
     public void setMaxXY(Map<List<Integer>, Integer> map)
@@ -46,14 +55,14 @@ public class MapLoader {
 
     public void loadMap1()
     {
-        map = Utils.readMap("maps\\level-3.properties");
+        map = Utils.readMap("maps\\level-1.properties");
         setMaxXY(map);
 
         for (int i = 0; i <= max_x; i++)
         {
-            for (int j = 0; j <= max_y; j++)
+           for (int j = 0; j <= max_y; j++)
             {
-                tiles.add(new Tile());
+                game.getSpriteBatch().draw(tiles.getTile(),i*16,j*16);
             }
         }
 
@@ -62,45 +71,63 @@ public class MapLoader {
             switch (map.get(coordinates))
             {
                 case 0:
-                    walls.add(new Wall(coordinates.get(0), coordinates.get(1)));
-                    break;
+                    if (coordinates.get(1).equals(min_y) || coordinates.get(1).equals(max_y)){
+                     game.getSpriteBatch().draw(wall.getHorizontalWall(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);}
+                    else if(coordinates.get(0).equals(min_x)){
+                        wall.getVerticalWall().setPosition(coordinates.get(0)*16,coordinates.get(1)*16);
+                         wall.getVerticalWall().setRotation(90);
+                         wall.getVerticalWall().draw(game.getSpriteBatch());}
+                    else if(coordinates.get(0).equals(max_x)){
+                        wall.getVerticalWall().setPosition(coordinates.get(0)*16,coordinates.get(1)*16);
+                        wall.getVerticalWall().setRotation(270);
+                        wall.getVerticalWall().draw(game.getSpriteBatch());}
+                    else{
+                        game.getSpriteBatch().draw(wall.getHorizontalWall(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);}
+                    if(coordinates.get(0).equals(min_x) && coordinates.get(1).equals(max_y) || coordinates.get(0).equals(max_x) && coordinates.get(1).equals(max_y)){
+                        game.getSpriteBatch().draw(wall.getCornerWall(),coordinates.get(0)*16,coordinates.get(1)*16);}
+                     break;
                 case 1:
-                    player = new Player();
+
                     break;
                 case 2:
-                    doors.add(new Door());
+                    game.getSpriteBatch().draw(doors.getDoor(),coordinates.get(0)*16,coordinates.get(1)*16,16,16);
                     break;
                 case 3:
-                    obstacles.add(new Obstacle());
+                    if (coordinates.get(0) == 10 && coordinates.get(1) == 5 || coordinates.get(0) == 6 && coordinates.get(1) == 12){
+                    game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput,true),coordinates.get(0)*16,coordinates.get(1)*16,16,16);}
+                    else {
+                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput,true),coordinates.get(0)*16,coordinates.get(1)*16);
+                    }
                     break;
                 case 4:
-                    enemies.add(new Enemy());
+
                     break;
                 case 5:
-                    key = new Key();
+
                     break;
             }
         }
     }
 
-    public List<Wall> getWalls() {
-        return walls;
-    }
 
-    public List<Obstacle> getObstacles() {
+    public Obstacle getObstacles() {
         return obstacles;
     }
 
-    public List<Enemy> getEnemies() {
+    public Enemy getEnemies() {
         return enemies;
     }
 
-    public List<Door> getDoors() {
+    public Door getDoors() {
         return doors;
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Tile getTiles() {
+        return tiles;
     }
 
     public Key getKey() {

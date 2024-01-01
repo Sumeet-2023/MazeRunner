@@ -47,8 +47,7 @@ public class GameScreen implements Screen {
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
-        mapLoader = new MapLoader(sinusInput);
-        mapLoader.loadMap1();
+        mapLoader = new MapLoader(game, sinusInput);
     }
 
 
@@ -70,10 +69,8 @@ public class GameScreen implements Screen {
 
 
         // Rendering the Map
-        List<Wall> walls = mapLoader.getWalls();
         game.getSpriteBatch().begin();
-        for (Wall wall: walls)
-            wall.render(game.getSpriteBatch());
+            mapLoader.loadMap1();
         game.getSpriteBatch().end();
     }
 
