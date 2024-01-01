@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -21,6 +22,7 @@ import java.util.Map;
  * It handles the game logic and rendering of the game elements.
  */
 public class GameScreen implements Screen {
+    private Music backgroundMusic;
 
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
@@ -56,7 +58,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+
+            backgroundMusic.dispose();
+            game.goToEscMenu();
         }
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
@@ -85,10 +89,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void show() {
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+        backgroundMusic.setVolume(0.2f);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
 
     }
 
@@ -98,6 +107,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        backgroundMusic.dispose();
     }
 
     // Additional methods and logic can be added as needed for the game screen

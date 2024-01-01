@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.ase.maze.screens.CreditScreen;
+import de.tum.cit.ase.maze.screens.EscMenuScreen;
 import de.tum.cit.ase.maze.screens.GameScreen;
 import de.tum.cit.ase.maze.screens.MenuScreen;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
@@ -20,6 +21,7 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
  * It manages the screens and global resources like SpriteBatch and Skin.
  */
 public class MazeRunnerGame extends Game {
+    private Music backgroundMusic;
     // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
@@ -65,11 +67,6 @@ public class MazeRunnerGame extends Game {
         this.loadDoor(); // Load door TextureRegion
         this.loadWall(); // Load wall TextureRegion
 
-        // Play some background music
-        // Background sound
-        Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
 
         goToMenu(); // Navigate to the menu screen
     }
@@ -93,6 +90,13 @@ public class MazeRunnerGame extends Game {
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
+        }
+    }
+    public void goToEscMenu() {
+        this.setScreen(new EscMenuScreen(this)); // Set the current screen to MenuScreen
+        if (gameScreen != null) {
+            gameScreen.dispose(); // Dispose the game screen if it exists
+            gameScreen = null;
         }
     }
 

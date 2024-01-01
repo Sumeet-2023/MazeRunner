@@ -2,6 +2,7 @@ package de.tum.cit.ase.maze.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,6 +22,7 @@ import de.tum.cit.ase.maze.MazeRunnerGame;
 public class MenuScreen implements Screen {
 
     private final Stage stage;
+    private Music backgroundMusic;
 
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
@@ -51,7 +53,8 @@ public class MenuScreen implements Screen {
 
         startGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) { game.goToGame(); }
+            public void changed(ChangeEvent event, Actor actor) { game.goToGame();
+            backgroundMusic.dispose();}
         });
 
         credits.addListener(new ChangeListener() {
@@ -85,6 +88,10 @@ public class MenuScreen implements Screen {
     public void show() {
         // Set the input processor so the stage can receive input events
         Gdx.input.setInputProcessor(stage);
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+        backgroundMusic.setVolume(0.8f);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
     }
 
     // The following methods are part of the Screen interface but are not used in this screen.
