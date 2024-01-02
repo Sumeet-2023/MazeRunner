@@ -42,7 +42,6 @@ public class MenuScreen implements Screen {
 
         // Add a label as a title
         table.add(new Label("MAZE RUNNER", game.getSkin(), "title")).padBottom(80).row();
-
         // Create and add a button to go to the game screen
         TextButton startGame = new TextButton("Start", game.getSkin());
         table.add(startGame).width(300).pad(10).row();
@@ -105,5 +104,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
+        Gdx.input.setInputProcessor(null);
     }
 }
