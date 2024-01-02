@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import de.tum.cit.ase.maze.screens.CreditScreen;
-import de.tum.cit.ase.maze.screens.EscMenuScreen;
-import de.tum.cit.ase.maze.screens.GameScreen;
-import de.tum.cit.ase.maze.screens.MenuScreen;
+import de.tum.cit.ase.maze.screens.*;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
@@ -26,6 +23,8 @@ public class MazeRunnerGame extends Game {
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
     private CreditScreen creditScreen;
+    private EscMenuScreen escMenuScreen;
+    private SelectMapScreen selectMapScreen;
 
     // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
@@ -34,17 +33,6 @@ public class MazeRunnerGame extends Game {
     // UI Skin
     private Skin skin;
 
-    // Character animation downwards
-    private Animation<TextureRegion> characterDownAnimation;
-
-    // Fire Animation
-    private Animation<TextureRegion> fireAnimation;
-
-    // Door TextureRegions
-    private TextureRegion door;
-
-    // Wall TextureRegions
-    private TextureRegion wall;
 
     /**
      * Constructor for MazeRunnerGame.
@@ -62,13 +50,10 @@ public class MazeRunnerGame extends Game {
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
-        this.loadCharacterAnimation(); // Load character animation
-        this.loadFireAnimation(); // Load fire animation
-        this.loadDoor(); // Load door TextureRegion
-        this.loadWall(); // Load wall TextureRegion
-
 
         goToMenu(); // Navigate to the menu screen
+
+
     }
 
     /**
@@ -91,6 +76,11 @@ public class MazeRunnerGame extends Game {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
         }
+        if (escMenuScreen != null) {
+            escMenuScreen.dispose(); // Dispose the menu screen if it exists
+            escMenuScreen = null;
+        }
+
     }
     public void goToEscMenu() {
         this.setScreen(new EscMenuScreen(this)); // Set the current screen to MenuScreen
@@ -98,7 +88,20 @@ public class MazeRunnerGame extends Game {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
+        if (selectMapScreen != null) {
+            selectMapScreen.dispose(); // Dispose the game screen if it exists
+            selectMapScreen = null;
+        }
+
     }
+    public void goToSelectMap() {
+        this.setScreen(new SelectMapScreen(this)); // Set the current screen to MenuScreen
+        if (escMenuScreen != null) {
+            escMenuScreen.dispose(); // Dispose the game screen if it exists
+            escMenuScreen = null;
+        }
+    }
+
 
     /**
      * Switches to the Credits screen.
@@ -106,72 +109,16 @@ public class MazeRunnerGame extends Game {
     public void goToCredits()
     {
         this.setScreen(new CreditScreen(this));
-        if (creditScreen != null){
-            creditScreen.dispose();
-            creditScreen = null;
+        if (menuScreen != null){
+            menuScreen.dispose();
+            menuScreen = null;
         }
     }
 
     /**
      * Loads the character animation from the character.png file.
      */
-    private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
 
-        int frameWidth = 16;
-        int frameHeight = 32;
-        int animationFrames = 4;
-
-        // libGDX internal Array instead of ArrayList because of performance
-        Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
-
-        // Add all frames to the animation
-        for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
-        }
-
-        characterDownAnimation = new Animation<>(0.1f, walkFrames);
-    }
-
-
-    /**
-     * Loads the fire animation from the objects.png file.
-     */
-    public void loadFireAnimation() {
-        Texture fireSheet = new Texture(Gdx.files.internal("objects.png"));
-
-        int frameWidth = 16;
-        int frameHeight = 16;
-        int animationFrame = 7;
-
-        Array<TextureRegion> fireFrames = new Array<>(TextureRegion.class);
-
-        for (int col = 4; col < animationFrame + 4; col++){
-            fireFrames.add(new TextureRegion(fireSheet, col * frameWidth, 3 * frameHeight, frameWidth, frameHeight));
-        }
-        fireAnimation = new Animation<>(0.1f, fireFrames);
-    }
-
-    // TODO: Create methods for loading animation for different direction of character.
-
-    // TODO: Create method for loading animation for different direction of different enemies.
-
-    // TODO: Create method for loading animation for door opening;
-
-
-    public void loadWall() {
-        Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));
-        wall = new TextureRegion(wallTexture, 1, 0, 16, 16);
-    }
-
-    public void loadDoor() {
-        Texture doorTexture = new Texture(Gdx.files.internal("things.png"));
-        door = new TextureRegion(doorTexture, 1, 0, 16, 16);
-    }
-
-    // TODO: Create method for Loading TextureRegion for Key.
-
-    // TODO: Create methods for Loading TextureRegion for different directions of walls.
     /**
      * Cleans up resources when the game is disposed.
      */
@@ -187,13 +134,6 @@ public class MazeRunnerGame extends Game {
     public Skin getSkin() {
         return skin;
     }
-
-    public Animation<TextureRegion> getCharacterDownAnimation() {
-        return characterDownAnimation;
-    }
-    public Animation<TextureRegion> getFireAnimation() { return fireAnimation; }
-    public TextureRegion getDoor() { return door; }
-    public TextureRegion getWall() { return wall; }
 
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;

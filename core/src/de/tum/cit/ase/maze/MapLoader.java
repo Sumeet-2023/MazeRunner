@@ -39,6 +39,8 @@ public class MapLoader {
         doors.loadDoor();
         this.tiles = new Tile();
         this.game = game;
+        this.key=new Key();
+        key.loadHeartAnimation();
     }
 
     public void setMaxXY(Map<List<Integer>, Integer> map)
@@ -65,6 +67,7 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(),i*16,j*16);
             }
         }
+         game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput,true), 12*16,12*13,16,16);
 
         for (List<Integer> coordinates: map.keySet())
         {
@@ -82,9 +85,12 @@ public class MapLoader {
                         wall.getVerticalWall().setRotation(270);
                         wall.getVerticalWall().draw(game.getSpriteBatch());}
                     else{
-                        game.getSpriteBatch().draw(wall.getHorizontalWall(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);}
+                        game.getSpriteBatch().draw(wall.getTree(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);}
                     if(coordinates.get(0).equals(min_x) && coordinates.get(1).equals(max_y) || coordinates.get(0).equals(max_x) && coordinates.get(1).equals(max_y)){
                         game.getSpriteBatch().draw(wall.getCornerWall(),coordinates.get(0)*16,coordinates.get(1)*16);}
+                    if(coordinates.get(0)==2 && coordinates.get(1)==4 || coordinates.get(0)==13 && coordinates.get(1)==9){
+                        game.getSpriteBatch().draw(wall.getWell(),coordinates.get(0)*16,coordinates.get(1)*16,16,16);
+                    }
                      break;
                 case 1:
 
@@ -95,6 +101,9 @@ public class MapLoader {
                 case 3:
                     if (coordinates.get(0) == 10 && coordinates.get(1) == 5 || coordinates.get(0) == 6 && coordinates.get(1) == 12){
                     game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput,true),coordinates.get(0)*16,coordinates.get(1)*16,16,16);}
+                    else if( coordinates.get(0) == 11 && coordinates.get(1) == 12){
+                        game.getSpriteBatch().draw(obstacles.getFlameAnimation().getKeyFrame(sinusInput,true),coordinates.get(0)*16,coordinates.get(1)*16,16,16);
+                    }
                     else {
                         game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput,true),coordinates.get(0)*16,coordinates.get(1)*16);
                     }

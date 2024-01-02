@@ -14,7 +14,7 @@ public class Tile {
     public void loadTile()
     {
         Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));
-        tile = new TextureRegion(wallTexture, 0, 16, 16, 16);
+        tile = new TextureRegion(wallTexture, 16, 8*16, 16, 16);
     }
 
     public TextureRegion getTile() {

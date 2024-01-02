@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        camera.zoom = 0.75f;
+        camera.zoom = 0.5f;
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
