@@ -10,6 +10,9 @@ public class Player {
     private Animation<TextureRegion> characterRightAnimation;
     private Animation<TextureRegion> characterUpAnimation;
     private Animation<TextureRegion> characterLeftAnimation;
+    private boolean isAnimating = false;
+    private float animationTime = 0f;
+    private Animation<TextureRegion> playerAnimation = null;
     public Player(){
         this.loadDownCharacterAnimation(); // Load Down character animation
         this.loadRightCharacterAnimation();
@@ -64,6 +67,32 @@ public class Player {
             walkFrames.add(new TextureRegion(walkSheet,col*frameWidth,frameHeight*3,frameWidth,frameHeight));
         }
         characterLeftAnimation =new Animation<>(0.1f,walkFrames);
+    }
+
+    public void startAnimation(Animation<TextureRegion> animation){
+        this.playerAnimation = animation;
+        this.animationTime = 0f;
+        this.isAnimating = true;
+    }
+
+    public void update(float sinusInput){
+        if (isAnimating){
+            animationTime += sinusInput;
+            if (animationTime >= playerAnimation.getAnimationDuration()){
+                isAnimating = false;
+            }
+        }
+    }
+
+    public TextureRegion getCurrentAnimationFrame() {
+        if (isAnimating && playerAnimation != null) {
+            return playerAnimation.getKeyFrame(animationTime, false);
+        }
+        return null;
+    }
+
+    public boolean isAnimating() {
+        return isAnimating;
     }
 
     public Animation<TextureRegion> getCharacterDownAnimation() {
