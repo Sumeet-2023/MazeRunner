@@ -24,6 +24,10 @@ public class Obstacle {
          for(int col=6;col<animationFrame+6;col++){
              spikeFrames.add(new TextureRegion(spikeSheet,col*16,6*16,16,16));
          }
+         for(int col=8;col>=6;col--){
+             spikeFrames.add(new TextureRegion(spikeSheet,col*16,6*16,16,16));
+         }
+
          spikeAnimation=new Animation<>(0.4f,spikeFrames);
      }
     public void loadFireAnimation() {

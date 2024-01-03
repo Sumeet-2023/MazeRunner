@@ -34,11 +34,8 @@ public class GameScreen implements Screen {
     private boolean isAnimating = false;
     private float animationTime = 0f;
     private TextureRegion defaultFrame;
-
-
-
-
-
+    private static final float LIMIT_X = 0;
+    private static final float LIMIT_Y = 16;
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -50,7 +47,7 @@ public class GameScreen implements Screen {
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        camera.zoom = 0.25f;
+        camera.zoom = 0.2f;
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
@@ -64,7 +61,7 @@ public class GameScreen implements Screen {
         player_x = mapLoader.getPlayer_x();
         player_y = mapLoader.getPlayer_y();
         playerAnimation = player.getCharacterRightAnimation();
-        defaultFrame = player.getCharacterRightAnimation().getKeyFrame(0, false);
+        defaultFrame = player.getCharacterRight();
 
     }
 
@@ -81,7 +78,15 @@ public class GameScreen implements Screen {
 
         // Handel Player Movements
         handlePlayerEvents();
+        float minY=0;
+        float maxY=mapLoader.getMax_y()*16;
 
+        if( player_y*16 - camera.position.y > LIMIT_Y && player_y*16 <maxY-3*16 -LIMIT_Y){
+            camera.translate(0,LIMIT_Y,0);
+        }
+        else if(camera.position.y -player_y*16 > LIMIT_Y && player_y*16 > minY + 4*16 + LIMIT_Y){
+            camera.translate(0,-LIMIT_Y,0);
+        }
 
         camera.update();
         sinusInput += delta;
@@ -146,19 +151,19 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && !player.isAnimating()) {
             player_x -= animationSpeed * Gdx.graphics.getDeltaTime();
             player.startAnimation(player.getCharacterLeftAnimation());
-            defaultFrame = player.getCharacterLeftAnimation().getKeyFrame(0, false);
+            defaultFrame = player.getCharacterLeft();
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !player.isAnimating()) {
             player_x += animationSpeed * Gdx.graphics.getDeltaTime();
             player.startAnimation(player.getCharacterRightAnimation());
-            defaultFrame = player.getCharacterRightAnimation().getKeyFrame(0, false);
+            defaultFrame = player.getCharacterRight();
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) && !player.isAnimating()) {
             player_y += animationSpeed * Gdx.graphics.getDeltaTime();
             player.startAnimation(player.getCharacterUpAnimation());
-            defaultFrame = player.getCharacterUpAnimation().getKeyFrame(0, false);
+            defaultFrame = player.getCharacterUp();
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !player.isAnimating()) {
             player_y -= animationSpeed * Gdx.graphics.getDeltaTime();
             player.startAnimation(player.getCharacterDownAnimation());
-            defaultFrame = player.getCharacterDownAnimation().getKeyFrame(0, false);
+            defaultFrame = player.getCharacterDown();
         }
     }
 

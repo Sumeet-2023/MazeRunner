@@ -8,8 +8,10 @@ import com.badlogic.gdx.utils.Array;
 
 public class Key {
     private Animation<TextureRegion> life;
+    private TextureRegion key;
     public Key(){
         loadHeartAnimation();
+        loadKey();
     }
     public void loadHeartAnimation() {
         Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
@@ -25,8 +27,16 @@ public class Key {
         }
         life = new Animation<>(0.2f,heartFrames);
     }
+    public void loadKey(){
+        Texture keyTexture = new Texture(Gdx.files.internal("keys_1_1.png"));
+        key = new TextureRegion(keyTexture,16,16);
+    }
 
     public Animation<TextureRegion> getLife() {
         return life;
+    }
+
+    public TextureRegion getKey() {
+        return key;
     }
 }
