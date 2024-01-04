@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        camera.zoom = 0.1f;
+        camera.zoom = 1f;
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
@@ -77,10 +77,32 @@ public class GameScreen implements Screen {
         // Handel Player Movements
         handlePlayerEvents();
 
-        camera.update();
+        // Setting the camera position
+        /**
+         * Math.max(player_x * 16, camera.viewportWidth / 2) gives the bigger value from players x position and half of viewport width.
+         *
+         * mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16) this is the maximum value till which the camera can move.
+         *
+         * Math.min(Math.max(player_x * 16, camera.viewportWidth / 2), mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16)
+         * The whole statement give the minimum out of the above two statements.
+         */
+        camera.position.set(Math.min(Math.max(player_x * 16, camera.viewportWidth / 2), mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16),
+                Math.min(Math.max(player_y * 16, camera.viewportHeight / 2), mapLoader.getMax_y() * 16 - camera.viewportHeight / 2 + 16),
+                0);
+
+
         sinusInput += delta;
         mapLoader.setSinusInput(sinusInput);
+        camera.update();
+
+        // Setting the viewport such that it displays 12x8 tiles.
+        camera.viewportWidth = 16 * 12;
+        camera.viewportHeight = 16 * 8;
+
+        // Setting the projection Matrix
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+
 
         player.update(Gdx.graphics.getDeltaTime());
         // Rendering the Map
@@ -159,5 +181,4 @@ public class GameScreen implements Screen {
             defaultFrame = player.getCharacterDown();
         }
     }
-
 }

@@ -39,7 +39,7 @@ public class MapLoader {
         this.game = game;
         this.key = new Key();
         key.loadHeartAnimation();
-        map = Utils.readMap("maps\\level-1.properties");
+        map = Utils.readMap("maps\\level-3.properties");
     }
 
     public void setPlayerStartingPos() {
