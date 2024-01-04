@@ -16,13 +16,15 @@ import de.tum.cit.ase.maze.MazeRunnerGame;
 
 public class EscMenuScreen implements Screen{
     private final Stage stage;
+    private GameScreen gameScreen;
 
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public EscMenuScreen(MazeRunnerGame game) {
+    public EscMenuScreen(MazeRunnerGame game,GameScreen gameScreen) {
+        this.gameScreen=gameScreen;
         var camera = new OrthographicCamera();
         camera.zoom = 1.0f; // Set camera zoom for a closer view
 
@@ -36,8 +38,6 @@ public class EscMenuScreen implements Screen{
         // Create and add a button to go to the game screen
         TextButton continueGame = new TextButton("Continue", game.getSkin());
         table.add(continueGame).width(300).pad(10).row();
-        TextButton selectMap = new TextButton("New Map", game.getSkin());
-        table.add(selectMap).width(300).pad(10).row();
         TextButton howToPlay = new TextButton("Volume", game.getSkin());
         table.add(howToPlay).width(300).pad(10).row();
         TextButton exitGame = new TextButton("Exit", game.getSkin());
@@ -45,12 +45,7 @@ public class EscMenuScreen implements Screen{
 
         continueGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) { game.goToGame();
-            }
-        });
-        selectMap.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) { game.goToSelectMap();
+            public void changed(ChangeEvent event, Actor actor) { gameScreen.resumeGame();
             }
         });
 

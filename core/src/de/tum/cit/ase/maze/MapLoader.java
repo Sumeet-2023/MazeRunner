@@ -11,7 +11,6 @@ public class MapLoader {
     private float sinusInput;
     private float max_x;
     private float max_y;
-
     private  float player_x;
     private float player_y;
     private final float min_x = 0;
@@ -69,52 +68,58 @@ public class MapLoader {
 
         for (int i = 0; i <= max_x; i++) {
             for (int j = 0; j <= max_y; j++) {
-                game.getSpriteBatch().draw(tiles.getTile(), i * 16, j * 16,16,16);
+                game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 16, 7 * 16, 16, 16);
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         //game.getSpriteBatch().draw(key.getKey(),12*16,10*16,16,16);
 
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
-                    if (coordinates.get(1)==0 || coordinates.get(1)==14) {
-                        game.getSpriteBatch().draw(wall.getHorizontalWall(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);
-                    } else if (coordinates.get(0)==0) {
-                        wall.getVerticalWall().setPosition(coordinates.get(0) * 16, coordinates.get(1) * 16);
-                        wall.getVerticalWall().setRotation(90);
-                        wall.getVerticalWall().draw(game.getSpriteBatch());
-                    } else if (coordinates.get(0)==14) {
-                        wall.getVerticalWall().setPosition(coordinates.get(0) * 16, coordinates.get(1) * 16);
+                    if (coordinates.get(1)==min_y || coordinates.get(1)==max_y) {
+                        game.getSpriteBatch().draw(wall.getHorizontalWall(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    } else if ( coordinates.get(0)==max_x ) {
+                        wall.getVerticalWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
+                        wall.getVerticalWall().setSize(32,32);
+                        wall.getVerticalWall().translateY(16);
                         wall.getVerticalWall().setRotation(270);
                         wall.getVerticalWall().draw(game.getSpriteBatch());
-                    } else {
-                        game.getSpriteBatch().draw(wall.getTree(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);
                     }
-                    if (coordinates.get(0)==0 && coordinates.get(1)==14 || coordinates.get(0)==14 && coordinates.get(1)==14) {
-                        game.getSpriteBatch().draw(wall.getCornerWall(), coordinates.get(0) * 16, coordinates.get(1) * 16,16,16);
+                    else if (coordinates.get(0)==min_x ) {
+                        wall.getVerticalWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
+                        wall.getVerticalWall().setSize(32,32);
+                        wall.getVerticalWall().translateX(16);
+                        wall.getVerticalWall().setRotation(90);
+                        wall.getVerticalWall().draw(game.getSpriteBatch());
+                    }
+                    else {
+                        game.getSpriteBatch().draw(wall.getTree(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    if(coordinates.get(0)==max_x && coordinates.get(1)==max_y || coordinates.get(0)==0 && coordinates.get(1)==max_y){
+                        game.getSpriteBatch().draw(wall.getCornerWall(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
                     }
                     if (coordinates.get(0) == 2 && coordinates.get(1) == 4 || coordinates.get(0) == 13 && coordinates.get(1) == 9) {
-                        game.getSpriteBatch().draw(wall.getWell(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);
+                        game.getSpriteBatch().draw(wall.getWell(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     }
                     break;
                 case 1:
                     break;
                 case 2:
-                    game.getSpriteBatch().draw(doors.getDoor(), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);
+                    game.getSpriteBatch().draw(doors.getDoor(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     break;
                 case 3:
                     if (coordinates.get(0) == 10 && coordinates.get(1) == 5 || coordinates.get(0) == 6 && coordinates.get(1) == 12) {
-                        game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 16, coordinates.get(1) * 16, 16, 16);
+                        game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     } else {
-                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 16, coordinates.get(1) * 16);
+                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32,32,32);
                     }
                     break;
                 case 4:
 
                     break;
                 case 5:
-                    game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*16,coordinates.get(1)*16,16,16);
+                    game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
 
                     break;
             }
