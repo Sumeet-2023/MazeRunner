@@ -10,6 +10,10 @@ public class Player {
     private Animation<TextureRegion> characterRightAnimation;
     private Animation<TextureRegion> characterUpAnimation;
     private Animation<TextureRegion> characterLeftAnimation;
+    private TextureRegion characterDown;
+    private TextureRegion characterRight;
+    private TextureRegion characterUp;
+    private TextureRegion characterLeft;
     private boolean isAnimating = false;
     private float animationTime = 0f;
     private Animation<TextureRegion> playerAnimation = null;
@@ -18,6 +22,10 @@ public class Player {
         this.loadRightCharacterAnimation();
         this.loadUpCharacterAnimation();
         this.loadLeftCharacterAnimation();
+        this.loadDownCharacter();
+        this.loadRightCharacter();
+        this.loadUpCharacter();
+        this.loadLeftCharacter();
     }
     public void loadDownCharacterAnimation() {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
@@ -31,6 +39,9 @@ public class Player {
 
         // Add all frames to the animation
         for (int col = 0; col < animationFrames; col++) {
+            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0,frameWidth, frameHeight));
+        }
+        for(int col = 3;col>=0;col--){
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
         }
         characterDownAnimation = new Animation<>(0.1f, walkFrames);
@@ -44,6 +55,9 @@ public class Player {
         for (int col =0;col< animationFrame;col++){
             walkFrames.add(new TextureRegion(walkSheet,col*frameWidth,frameHeight,frameWidth,frameHeight));
         }
+        for(int col = 3;col>=0;col--){
+            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight, frameWidth, frameHeight));
+        }
         characterRightAnimation =new Animation<>(0.1f,walkFrames);
     }
     public void loadUpCharacterAnimation(){
@@ -54,6 +68,9 @@ public class Player {
         Array<TextureRegion> walkFrames= new Array<>(TextureRegion.class);
         for (int col =0;col< animationFrame;col++){
             walkFrames.add(new TextureRegion(walkSheet,col*frameWidth,frameHeight*2,frameWidth,frameHeight));
+        }
+        for(int col = 3;col>=0;col--){
+            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight*2, frameWidth, frameHeight));
         }
         characterUpAnimation =new Animation<>(0.1f,walkFrames);
     }
@@ -66,7 +83,26 @@ public class Player {
         for (int col =0;col< animationFrame;col++){
             walkFrames.add(new TextureRegion(walkSheet,col*frameWidth,frameHeight*3,frameWidth,frameHeight));
         }
+        for(int col = 3;col>=0;col--){
+            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight*3, frameWidth, frameHeight));
+        }
         characterLeftAnimation =new Animation<>(0.1f,walkFrames);
+    }
+    public void loadDownCharacter(){
+        Texture downTexture = new Texture(Gdx.files.internal("character.png"));
+        characterDown = new TextureRegion(downTexture, 0, 0, 16, 32);
+    }
+    public void loadRightCharacter(){
+        Texture rightTexture = new Texture(Gdx.files.internal("character.png"));
+        characterRight = new TextureRegion(rightTexture, 0, 32, 16, 32);
+    }
+    public void loadUpCharacter(){
+        Texture upTexture = new Texture(Gdx.files.internal("character.png"));
+        characterUp = new TextureRegion(upTexture, 0, 2*32, 16, 32);
+    }
+    public void loadLeftCharacter(){
+        Texture leftTexture = new Texture(Gdx.files.internal("character.png"));
+        characterLeft = new TextureRegion(leftTexture, 0, 3*32, 16, 32);
     }
 
     public void startAnimation(Animation<TextureRegion> animation){
@@ -109,5 +145,21 @@ public class Player {
 
     public Animation<TextureRegion> getCharacterLeftAnimation() {
         return characterLeftAnimation;
+    }
+
+    public TextureRegion getCharacterDown() {
+        return characterDown;
+    }
+
+    public TextureRegion getCharacterRight() {
+        return characterRight;
+    }
+
+    public TextureRegion getCharacterUp() {
+        return characterUp;
+    }
+
+    public TextureRegion getCharacterLeft() {
+        return characterLeft;
     }
 }

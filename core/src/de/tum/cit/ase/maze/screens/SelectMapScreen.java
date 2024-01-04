@@ -30,21 +30,27 @@ public class SelectMapScreen implements Screen {
         stage.addActor(table); // Add the table to the stage
 
         // Create and add a button to go to the game screen
-        TextButton map0 = new TextButton("Nature World", game.getSkin());
+        TextButton map0 = new TextButton("Level 1", game.getSkin());
         table.add(map0).width(300).pad(10).row();
-        TextButton map1 = new TextButton("Dungeon World", game.getSkin());
+        TextButton map1 = new TextButton("Level 2", game.getSkin());
         table.add(map1).width(300).pad(10).row();
-        TextButton map2 = new TextButton("Island World", game.getSkin());
+        TextButton map2 = new TextButton("Level 3", game.getSkin());
         table.add(map2).width(300).pad(10).row();
-        TextButton map3 = new TextButton("Ninja World", game.getSkin());
+        TextButton map3 = new TextButton("Level 4", game.getSkin());
         table.add(map3).width(300).pad(10).row();
-        TextButton map4 = new TextButton("Tech World", game.getSkin());
+        TextButton map4 = new TextButton("Level 5", game.getSkin());
         table.add(map4).width(300).pad(10).row();
         TextButton cancel = new TextButton("Back", game.getSkin());
         table.add(cancel).width(300).pad(10).row();
+        map0.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame();
+            }
+        });
         cancel.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) { game.goToEscMenu();
+            public void changed(ChangeEvent event, Actor actor) { game.goToMenu();
             }
         });
 
@@ -52,7 +58,6 @@ public class SelectMapScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor(0.2f,0.2f,0.2f,1);  // Set the Color to Dark Grey
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Update the stage

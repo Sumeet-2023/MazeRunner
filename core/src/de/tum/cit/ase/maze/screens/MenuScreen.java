@@ -30,6 +30,12 @@ public class MenuScreen implements Screen {
      * @param game The main game class, used to access global resources and methods.
      */
     public MenuScreen(MazeRunnerGame game) {
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+        backgroundMusic.setVolume(0.8f);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
+
         var camera = new OrthographicCamera();
         camera.zoom = 1.0f; // Set camera zoom for a closer view
 
@@ -45,6 +51,8 @@ public class MenuScreen implements Screen {
         // Create and add a button to go to the game screen
         TextButton startGame = new TextButton("Start", game.getSkin());
         table.add(startGame).width(300).pad(10).row();
+        TextButton selectMap = new TextButton("Select Map", game.getSkin());
+        table.add(selectMap).width(300).pad(10).row();
         TextButton howToPlay = new TextButton("How to Play", game.getSkin());
         table.add(howToPlay).width(300).pad(10).row();
         TextButton credits = new TextButton("Credits", game.getSkin());
@@ -55,11 +63,19 @@ public class MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) { game.goToGame();
             backgroundMusic.dispose();}
         });
+        selectMap.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToSelectMap();
+                backgroundMusic.pause();
+            }
+        });
 
         credits.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.goToCredits();
+                backgroundMusic.stop();
             }
         });
     }
@@ -81,16 +97,13 @@ public class MenuScreen implements Screen {
     public void dispose() {
         // Dispose of the stage when screen is disposed
         stage.dispose();
+        backgroundMusic.dispose();
     }
 
     @Override
     public void show() {
         // Set the input processor so the stage can receive input events
         Gdx.input.setInputProcessor(stage);
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
-        backgroundMusic.setVolume(0.8f);
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
     }
 
     // The following methods are part of the Screen interface but are not used in this screen.

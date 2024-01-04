@@ -65,12 +65,14 @@ public class MazeRunnerGame extends Game {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
+
     }
 
     /**
      * Switches to the game screen.
      */
     public void goToGame() {
+
         this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
@@ -79,7 +81,7 @@ public class MazeRunnerGame extends Game {
         }
     }
     public void goToEscMenu() {
-        this.setScreen(new EscMenuScreen(this)); // Set the current screen to MenuScreen
+        this.setScreen(new EscMenuScreen(this,gameScreen)); // Set the current screen to MenuScreen
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
