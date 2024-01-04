@@ -25,7 +25,6 @@
 
 
      private final Stage stage;
-     private Music backgroundMusic;
 
      /**
       * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
@@ -36,10 +35,7 @@
          var camera = new OrthographicCamera();
          camera.zoom = 1.0f; // Set camera zoom for a closer view
 
-         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MainMenuMusic.mp3"));
-         backgroundMusic.setVolume(0.8f);
-         backgroundMusic.setLooping(true);
-         backgroundMusic.play();
+
          Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
          stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
 
@@ -63,13 +59,12 @@
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) { game.goToGame();
-            backgroundMusic.dispose();}
+            }
         });
         selectMap.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.goToSelectMap();
-                backgroundMusic.pause();
             }
         });
 
@@ -77,7 +72,7 @@
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.goToCredits();
-                backgroundMusic.stop();
+
             }
         });
     }
@@ -86,7 +81,7 @@
     public void dispose() {
         // Dispose of the stage when screen is disposed
         stage.dispose();
-        backgroundMusic.dispose();
+
     }
 
      @Override
