@@ -192,6 +192,7 @@ public class GameScreen implements Screen {
     {
         float animationSpeed = 3;
         float deltaTime = Gdx.graphics.getDeltaTime();
+        handelKey(player_x, player_y);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             if (canPlayerMove(Direction.LEFT)) {
                 player_x -= animationSpeed * deltaTime;
@@ -284,6 +285,15 @@ public class GameScreen implements Screen {
             }
         }
         return false;
+    }
+
+    public void handelKey(float x, float y)
+    {
+        if (Math.abs(player_x -  mapLoader.getKeyX()) < 0.2  && player_y - mapLoader.getKeyY() < 0.2) {
+            hasKey = true;
+            mapLoader.setDisplayKey(false);
+        }
+
     }
 
 }

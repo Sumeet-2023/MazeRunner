@@ -14,12 +14,16 @@ public class MapLoader {
 
     // Attributes (Variables)
     private float sinusInput;
+
+    // Maximum & Minimum value of x and y of the map
     private float max_x;
     private float max_y;
-    private  float player_x;
-    private float player_y;
     private final float min_x = 0;
     private final float min_y = 0;
+
+    // Coordinates of player's starting point
+    private  float player_x;
+    private float player_y;
 
     // Attributes (Class Instances)
     private MazeRunnerGame game;
@@ -28,7 +32,12 @@ public class MapLoader {
     private Enemy enemies;
     private Door doors;
     private Tile tiles;
+
+    // Key and its position
     private Key key;
+    private int keyX;
+    private int keyY;
+    private boolean displayKey = true;
 
     // Attributes Coordinate lists
     private List<List<Integer>> wallCoordinates;
@@ -68,7 +77,6 @@ public class MapLoader {
         // Key
         this.key = new Key();
         key.loadHeartAnimation();
-
 
     }
 
@@ -172,8 +180,10 @@ public class MapLoader {
 
                     break;
                 case 5:
-                    game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
-
+                    keyX = coordinates.get(0);
+                    keyY = coordinates.get(1);
+                    if (displayKey)
+                        game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
                     break;
             }
         }
@@ -207,8 +217,6 @@ public class MapLoader {
 
 
     // Getter for player starting pos
-
-
     public float getMax_x() {
         return max_x;
     }
@@ -225,12 +233,27 @@ public class MapLoader {
         return player_y;
     }
 
+    // getters for coordinate lists
     public List<List<Integer>> getWallCoordinates() {
         return wallCoordinates;
     }
 
     public List<List<Integer>> getDoorCoordinates() {
         return doorCoordinates;
+    }
+
+    // Getters for key starting values
+
+    public int getKeyX() {
+        return keyX;
+    }
+
+    public int getKeyY() {
+        return keyY;
+    }
+
+    public void setDisplayKey(boolean displayKey) {
+        this.displayKey = displayKey;
     }
 }
 
