@@ -5,8 +5,10 @@
     import com.badlogic.gdx.audio.Music;
     import com.badlogic.gdx.graphics.GL20;
     import com.badlogic.gdx.graphics.OrthographicCamera;
+    import com.badlogic.gdx.graphics.Texture;
     import com.badlogic.gdx.scenes.scene2d.Actor;
     import com.badlogic.gdx.scenes.scene2d.Stage;
+    import com.badlogic.gdx.scenes.scene2d.ui.Image;
     import com.badlogic.gdx.scenes.scene2d.ui.Label;
     import com.badlogic.gdx.scenes.scene2d.ui.Table;
     import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -34,7 +36,7 @@
          var camera = new OrthographicCamera();
          camera.zoom = 1.0f; // Set camera zoom for a closer view
 
-         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MainMenuMusic.mp3"));
          backgroundMusic.setVolume(0.8f);
          backgroundMusic.setLooping(true);
          backgroundMusic.play();
@@ -44,6 +46,8 @@
          Table table = new Table(); // Create a table for layout
          table.setFillParent(true); // Make the table fill the stage
          stage.addActor(table); // Add the table to the stage
+         Image backgroundImage = new Image(new Texture(Gdx.files.internal("MainMenuImage.jpg")));
+         table.setBackground(backgroundImage.getDrawable());
          // Add a label as a title
          table.add(new Label("MAZE RUNNER", game.getSkin(), "title")).padBottom(80).row();
          // Create and add a button to go to the game screen

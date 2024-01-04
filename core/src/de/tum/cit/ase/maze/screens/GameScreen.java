@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
 
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
         backgroundMusic.setVolume(0.2f);
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
