@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.objects.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,22 +24,42 @@ public class MapLoader {
     private Tile tiles;
     private Key key;
 
+    private List<List<Integer>> wallCoordinates;
+
     public MapLoader(MazeRunnerGame game, float sinusInput) {
+        this.game = game;
         this.sinusInput = sinusInput;
+
+        // Select Map
+        map = Utils.readMap("maps\\level-1.properties");
+
+        // Wall
         this.wall = new Wall();
         wall.loadHorizontalWall();
         wall.loadVerticalWall();
         wall.loadCornerWall();
+        wallCoordinates = new ArrayList<>();
+        setWallCoordinates();
+
+        // Obstacles
         this.obstacles = new Obstacle();
         obstacles.loadSpikeAnimation();
+
+        // Enemies
         this.enemies = new Enemy();
+
+        // Doors
         this.doors = new Door();
         doors.loadDoor();
+
+        // Tiles
         this.tiles = new Tile();
-        this.game = game;
+
+        // Key
         this.key = new Key();
         key.loadHeartAnimation();
-        map = Utils.readMap("maps\\level-3.properties");
+
+
     }
 
     public void setPlayerStartingPos() {
@@ -47,6 +68,18 @@ public class MapLoader {
                 player_x = coordinates.get(0);
                 player_y = coordinates.get(1);
                 break;
+            }
+        }
+    }
+
+    public void setWallCoordinates() {
+        for (List<Integer> coordinates : map.keySet()) {
+            if (map.get(coordinates) == 0)
+            {
+                List<Integer> data = new ArrayList<>();
+                data.add(coordinates.get(0));
+                data.add(coordinates.get(1));
+                wallCoordinates.add(data);
             }
         }
     }
@@ -72,8 +105,6 @@ public class MapLoader {
             }
         }
         game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
-        //game.getSpriteBatch().draw(key.getKey(),12*16,10*16,16,16);
-
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -172,12 +203,8 @@ public class MapLoader {
         return player_y;
     }
 
-    public float getMin_x() {
-        return min_x;
-    }
-
-    public float getMin_y() {
-        return min_y;
+    public List<List<Integer>> getWallCoordinates() {
+        return wallCoordinates;
     }
 }
 

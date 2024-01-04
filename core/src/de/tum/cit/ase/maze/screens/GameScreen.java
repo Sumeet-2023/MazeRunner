@@ -11,9 +11,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
+import de.tum.cit.ase.maze.Direction;
 import de.tum.cit.ase.maze.MapLoader;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 import de.tum.cit.ase.maze.characters.Player;
+
+import java.util.List;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -74,7 +77,6 @@ public class GameScreen implements Screen {
         player_y = mapLoader.getPlayer_y();
         playerAnimation = player.getCharacterRightAnimation();
         defaultFrame = player.getCharacterRight();
-
     }
 
 
@@ -129,9 +131,9 @@ public class GameScreen implements Screen {
             mapLoader.loadMap1();
             TextureRegion currentFrame = player.getCurrentAnimationFrame();
             if (currentFrame != null) {
-                game.getSpriteBatch().draw(currentFrame, player_x * 32, player_y * 32, 32, 36);
+                game.getSpriteBatch().draw(currentFrame, player_x * 32, player_y * 32, 24, 48);
             } else {
-                game.getSpriteBatch().draw(defaultFrame, player_x * 32, player_y * 32, 32, 36);
+                game.getSpriteBatch().draw(defaultFrame, player_x * 32, player_y * 32, 24, 48);
             }
             game.getSpriteBatch().end();
         }
@@ -185,25 +187,78 @@ public class GameScreen implements Screen {
         float animationSpeed = 3;
         float deltaTime = Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player_x -= animationSpeed * deltaTime;
-            if (!player.isAnimating())
-                player.startAnimation(player.getCharacterLeftAnimation());
+            if (canPlayerMove(Direction.LEFT)) {
+                player_x -= animationSpeed * deltaTime;
+                if (!player.isAnimating())
+                    player.startAnimation(player.getCharacterLeftAnimation());
+            }
             defaultFrame = player.getCharacterLeft();
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player_x += animationSpeed * deltaTime;
-            if (!player.isAnimating())
-                player.startAnimation(player.getCharacterRightAnimation());
+            if (canPlayerMove(Direction.RIGHT)) {
+                player_x += animationSpeed * deltaTime;
+                if (!player.isAnimating())
+                    player.startAnimation(player.getCharacterRightAnimation());
+            }
             defaultFrame = player.getCharacterRight();
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player_y += animationSpeed * deltaTime;
-            if (!player.isAnimating())
-                player.startAnimation(player.getCharacterUpAnimation());
+            if (canPlayerMove(Direction.UP)) {
+                player_y += animationSpeed * deltaTime;
+                if (!player.isAnimating())
+                    player.startAnimation(player.getCharacterUpAnimation());
+            }
             defaultFrame = player.getCharacterUp();
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            player_y -= animationSpeed * deltaTime;
-            if (!player.isAnimating())
-                player.startAnimation(player.getCharacterDownAnimation());
+            if (canPlayerMove(Direction.DOWN)) {
+                player_y -= animationSpeed * deltaTime;
+                if (!player.isAnimating())
+                    player.startAnimation(player.getCharacterDownAnimation());
+            }
             defaultFrame = player.getCharacterDown();
         }
+    }
+
+    /**
+     * function takes the direction in which the player wants to move and check if the move is valid.
+     * @param direction
+     * @return Return true if the move is valid and false if not.
+     */
+    public boolean canPlayerMove(Direction direction)
+    {
+        float playerStartX = mapLoader.getPlayer_x();
+        float playerStartY = mapLoader.getPlayer_y();
+
+        if (Math.abs(player_x - playerStartX) < 0.2  && player_y == playerStartY && direction != Direction.RIGHT)
+            return false;
+        else if (isWall(player_x + 0.2f, player_y) && direction == Direction.RIGHT) {
+            return false;
+        }
+        else if (isWall(player_x, player_y + 0.2f) && direction == Direction.UP) {
+            return false;
+        } else if (isWall(player_x - 0.3f, player_y) && direction == Direction.LEFT) {
+            return false;
+        } else if (isWall(player_x, player_y - 0.3f) && direction == Direction.DOWN) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * The function takes the x and y and check if there is a wall in the vicinity.
+     * @param x
+     * @param y
+     * @return true if there is a wall near x and y and false if not
+     */
+    public boolean isWall(float x, float y)
+    {
+        List<List<Integer>> wallCoordinates = mapLoader.getWallCoordinates();
+        final float tolerance = 0.5f;
+        for (List<Integer> coordinate : wallCoordinates) {
+            float wallX = coordinate.get(0);
+            float wallY = coordinate.get(1);
+            if (Math.abs(x - wallX) < tolerance && Math.abs(y - wallY) < tolerance) {
+                return true;
+            }
+        }
+        return false;
     }
 }
