@@ -44,7 +44,7 @@ public class Player {
         for(int col = 3;col>=0;col--){
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
         }
-        characterDownAnimation = new Animation<>(0.1f, walkFrames);
+        characterDownAnimation = new Animation<>(0.08f, walkFrames);
     }
     public void loadRightCharacterAnimation(){
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
@@ -58,7 +58,7 @@ public class Player {
         for(int col = 3;col>=0;col--){
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight, frameWidth, frameHeight));
         }
-        characterRightAnimation =new Animation<>(0.1f,walkFrames);
+        characterRightAnimation =new Animation<>(0.08f,walkFrames);
     }
     public void loadUpCharacterAnimation(){
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
@@ -72,7 +72,7 @@ public class Player {
         for(int col = 3;col>=0;col--){
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight*2, frameWidth, frameHeight));
         }
-        characterUpAnimation =new Animation<>(0.1f,walkFrames);
+        characterUpAnimation =new Animation<>(0.08f,walkFrames);
     }
     public void loadLeftCharacterAnimation(){
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
@@ -86,7 +86,7 @@ public class Player {
         for(int col = 3;col>=0;col--){
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight*3, frameWidth, frameHeight));
         }
-        characterLeftAnimation =new Animation<>(0.1f,walkFrames);
+        characterLeftAnimation =new Animation<>(0.08f,walkFrames);
     }
     public void loadDownCharacter(){
         Texture downTexture = new Texture(Gdx.files.internal("character.png"));
@@ -116,6 +116,7 @@ public class Player {
             animationTime += sinusInput;
             if (animationTime >= playerAnimation.getAnimationDuration()){
                 isAnimating = false;
+                animationTime = 0;
             }
         }
     }

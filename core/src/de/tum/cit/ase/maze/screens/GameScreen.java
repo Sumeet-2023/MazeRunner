@@ -37,6 +37,9 @@ public class GameScreen implements Screen {
     private boolean isAnimating = false;
     private float animationTime = 0f;
     private TextureRegion defaultFrame;
+
+    // Attribute to define tile size
+    private final int tileSize = 32;
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -54,7 +57,9 @@ public class GameScreen implements Screen {
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        camera.zoom = 0.75f;
+
+        camera.zoom = 1f;
+
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
@@ -88,19 +93,39 @@ public class GameScreen implements Screen {
         }
         if(!isPause) {
             ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+        // Handel Player Movements
+        handlePlayerEvents();
 
-            // Handel Player Movements
-            handlePlayerEvents();
+        // Setting the camera position
+        /**
+         * Math.max(player_x * 16, camera.viewportWidth / 2) gives the bigger value from players x position and half of viewport width.
+         *
+         * mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16) this is the maximum value till which the camera can move.
+         *
+         * Math.min(Math.max(player_x * 16, camera.viewportWidth / 2), mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16)
+         * The whole statement give the minimum out of the above two statements.
+         */
+        camera.position.set(Math.min(Math.max(player_x * tileSize, camera.viewportWidth / 2), mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize),
+                Math.min(Math.max(player_y * tileSize, camera.viewportHeight / 2), mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize),
+                0);
 
-            camera.update();
-            sinusInput += delta;
-            mapLoader.setSinusInput(sinusInput);
-            game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+        sinusInput += delta;
+        mapLoader.setSinusInput(sinusInput);
+        camera.update();
+
+        // Setting the viewport such that it displays 12x8 tiles.
+        camera.viewportWidth = tileSize * 12;
+        camera.viewportHeight = tileSize * 8;
+
+        // Setting the projection Matrix
+        game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
 
-            player.update(Gdx.graphics.getDeltaTime());
-            // Rendering the Map
-            game.getSpriteBatch().begin();
+
+        player.update(Gdx.graphics.getDeltaTime());
+        // Rendering the Map
+        game.getSpriteBatch().begin();
             mapLoader.loadMap1();
             TextureRegion currentFrame = player.getCurrentAnimationFrame();
             if (currentFrame != null) {
@@ -157,22 +182,27 @@ public class GameScreen implements Screen {
      */
     public void handlePlayerEvents()
     {
-        float animationSpeed = 20;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && !player.isAnimating()) {
-            player_x -= animationSpeed * Gdx.graphics.getDeltaTime();
-            player.startAnimation(player.getCharacterLeftAnimation());
+        float animationSpeed = 3;
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player_x -= animationSpeed * deltaTime;
+            if (!player.isAnimating())
+                player.startAnimation(player.getCharacterLeftAnimation());
             defaultFrame = player.getCharacterLeft();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !player.isAnimating()) {
-            player_x += animationSpeed * Gdx.graphics.getDeltaTime();
-            player.startAnimation(player.getCharacterRightAnimation());
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player_x += animationSpeed * deltaTime;
+            if (!player.isAnimating())
+                player.startAnimation(player.getCharacterRightAnimation());
             defaultFrame = player.getCharacterRight();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) && !player.isAnimating()) {
-            player_y += animationSpeed * Gdx.graphics.getDeltaTime();
-            player.startAnimation(player.getCharacterUpAnimation());
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            player_y += animationSpeed * deltaTime;
+            if (!player.isAnimating())
+                player.startAnimation(player.getCharacterUpAnimation());
             defaultFrame = player.getCharacterUp();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && !player.isAnimating()) {
-            player_y -= animationSpeed * Gdx.graphics.getDeltaTime();
-            player.startAnimation(player.getCharacterDownAnimation());
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            player_y -= animationSpeed * deltaTime;
+            if (!player.isAnimating())
+                player.startAnimation(player.getCharacterDownAnimation());
             defaultFrame = player.getCharacterDown();
         }
     }
