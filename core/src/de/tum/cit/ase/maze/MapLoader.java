@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public class MapLoader {
+
+    // Map
     private Map<List<Integer>, Integer> map;
+
+    // Attributes (Variables)
     private float sinusInput;
     private float max_x;
     private float max_y;
@@ -16,6 +20,8 @@ public class MapLoader {
     private float player_y;
     private final float min_x = 0;
     private final float min_y = 0;
+
+    // Attributes (Class Instances)
     private MazeRunnerGame game;
     private Wall wall;
     private Obstacle obstacles;
@@ -24,7 +30,9 @@ public class MapLoader {
     private Tile tiles;
     private Key key;
 
+    // Attributes Coordinate lists
     private List<List<Integer>> wallCoordinates;
+    private List<List<Integer>> doorCoordinates;
 
     public MapLoader(MazeRunnerGame game, float sinusInput) {
         this.game = game;
@@ -51,6 +59,8 @@ public class MapLoader {
         // Doors
         this.doors = new Door();
         doors.loadDoor();
+        doorCoordinates = new ArrayList<>();
+        setDoorCoordinates();
 
         // Tiles
         this.tiles = new Tile();
@@ -80,6 +90,18 @@ public class MapLoader {
                 data.add(coordinates.get(0));
                 data.add(coordinates.get(1));
                 wallCoordinates.add(data);
+            }
+        }
+    }
+
+    public void setDoorCoordinates() {
+        for (List<Integer> coordinates : map.keySet()) {
+            if (map.get(coordinates) == 2)
+            {
+                List<Integer> data = new ArrayList<>();
+                data.add(coordinates.get(0));
+                data.add(coordinates.get(1));
+                doorCoordinates.add(data);
             }
         }
     }
@@ -205,6 +227,10 @@ public class MapLoader {
 
     public List<List<Integer>> getWallCoordinates() {
         return wallCoordinates;
+    }
+
+    public List<List<Integer>> getDoorCoordinates() {
+        return doorCoordinates;
     }
 }
 

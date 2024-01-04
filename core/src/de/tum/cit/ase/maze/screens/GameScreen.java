@@ -43,6 +43,9 @@ public class GameScreen implements Screen {
 
     // Attribute to define tile size
     private final int tileSize = 32;
+
+    // Attribute for key
+    private boolean hasKey;
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -77,6 +80,9 @@ public class GameScreen implements Screen {
         player_y = mapLoader.getPlayer_y();
         playerAnimation = player.getCharacterRightAnimation();
         defaultFrame = player.getCharacterRight();
+
+        // Key
+        hasKey = false;
     }
 
 
@@ -224,19 +230,23 @@ public class GameScreen implements Screen {
      */
     public boolean canPlayerMove(Direction direction)
     {
-        float playerStartX = mapLoader.getPlayer_x();
-        float playerStartY = mapLoader.getPlayer_y();
-
-        if (Math.abs(player_x - playerStartX) < 0.2  && player_y == playerStartY && direction != Direction.RIGHT)
+        if (Math.abs(player_x -  mapLoader.getPlayer_x()) < 0.2  && player_y == mapLoader.getPlayer_y() && direction != Direction.RIGHT)
             return false;
         else if (isWall(player_x + 0.2f, player_y) && direction == Direction.RIGHT) {
             return false;
-        }
-        else if (isWall(player_x, player_y + 0.2f) && direction == Direction.UP) {
+        } else if (isWall(player_x, player_y + 0.2f) && direction == Direction.UP) {
             return false;
         } else if (isWall(player_x - 0.3f, player_y) && direction == Direction.LEFT) {
             return false;
         } else if (isWall(player_x, player_y - 0.3f) && direction == Direction.DOWN) {
+            return false;
+        } else if (isDoor(player_x + 0.2f, player_y) && direction == Direction.RIGHT && !hasKey) {
+            return false;
+        } else if (isDoor(player_x, player_y + 0.2f) && direction == Direction.UP && !hasKey) {
+            return false;
+        } else if (isDoor(player_x - 0.3f, player_y) && direction == Direction.LEFT && !hasKey) {
+            return false;
+        } else if (isDoor(player_x, player_y - 0.3f) && direction == Direction.DOWN && !hasKey) {
             return false;
         }
         return true;
@@ -261,4 +271,19 @@ public class GameScreen implements Screen {
         }
         return false;
     }
+
+    public boolean isDoor(float x, float y)
+    {
+        List<List<Integer>> doorCoordinates = mapLoader.getDoorCoordinates();
+        final float tolerance = 0.5f;
+        for (List<Integer> coordinate : doorCoordinates) {
+            float doorX = coordinate.get(0);
+            float doorY = coordinate.get(1);
+            if (Math.abs(x - doorX) < tolerance && Math.abs(y - doorY) < tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
