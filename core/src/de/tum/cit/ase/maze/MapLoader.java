@@ -10,7 +10,7 @@ import java.util.Map;
 public class MapLoader {
 
     // Map
-    private Map<List<Integer>, Integer> map;
+    private Map<List<Integer>, Integer> map ;
 
     // Attributes (Variables)
     private float sinusInput;
@@ -43,13 +43,12 @@ public class MapLoader {
     private List<List<Integer>> wallCoordinates;
     private List<List<Integer>> doorCoordinates;
 
-    public MapLoader(MazeRunnerGame game, float sinusInput) {
+    public MapLoader(MazeRunnerGame game, float sinusInput,String level) {
         this.game = game;
         this.sinusInput = sinusInput;
 
         // Select Map
-        map = Utils.readMap("maps\\level-1.properties");
-
+         map = Utils.readMap(level);
         // Wall
         this.wall = new Wall();
         wall.loadHorizontalWall();
@@ -67,7 +66,10 @@ public class MapLoader {
 
         // Doors
         this.doors = new Door();
-        doors.loadDoor();
+        doors.loadHorizontalDoor();
+        doors.loadVerticalDoor();
+        doors.loadHDoorOpenAnimation();
+        doors.loadVDoorOpenAnimation();
         doorCoordinates = new ArrayList<>();
         setDoorCoordinates();
 
@@ -167,7 +169,18 @@ public class MapLoader {
                 case 1:
                     break;
                 case 2:
-                    game.getSpriteBatch().draw(doors.getDoor(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    if(coordinates.get(0)==min_x || coordinates.get(0)==max_x){
+                    doors.getVerticalDoor().setPosition(coordinates.get(0)*32,coordinates.get(1)*32);
+                    doors.getVerticalDoor().setSize(32,32);
+                    doors.getVerticalDoor().translateX(16);
+                    doors.getVerticalDoor().setRotation(90);
+                    doors.getVerticalDoor().draw(game.getSpriteBatch());
+                    }
+                    else {
+                    game.getSpriteBatch().draw(doors.getHorizontalDoor(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);}
+//                    game.getSpriteBatch().draw(doors.getHdoorOpenAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+
+
                     break;
                 case 3:
                     if (coordinates.get(0) == 10 && coordinates.get(1) == 5 || coordinates.get(0) == 6 && coordinates.get(1) == 12) {

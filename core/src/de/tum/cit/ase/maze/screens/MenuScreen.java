@@ -58,7 +58,7 @@
 
         startGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) { game.goToGame();
+            public void changed(ChangeEvent event, Actor actor) { game.goToGame(1);
             }
         });
         selectMap.addListener(new ChangeListener() {

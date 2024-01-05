@@ -17,6 +17,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
+import java.util.List;
+import java.util.Map;
+
 public class SelectMapScreen implements Screen {
     private final Stage stage;
     private MazeRunnerGame game;
@@ -46,12 +49,38 @@ public class SelectMapScreen implements Screen {
         table.add(map4).width(300).pad(10).row();
         TextButton cancel = new TextButton("Back", game.getSkin());
         table.add(cancel).width(300).pad(10).row();
+
         map0.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame();
+                game.goToGame(1);
             }
         });
+        map1.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(2);
+            }
+        });
+        map2.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(3);
+            }
+        });
+        map3.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(4);
+            }
+        });
+        map4.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToGame(5);
+            }
+        });
+
         cancel.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) { game.goToMenu();

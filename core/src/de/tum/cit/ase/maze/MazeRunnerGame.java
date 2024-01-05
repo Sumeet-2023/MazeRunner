@@ -19,6 +19,7 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
  */
 public class MazeRunnerGame extends Game {
     private Music backgroundMusic;
+    private MapLoader mapLoader;
     // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
@@ -77,16 +78,16 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the game screen.
      */
-    public void goToGame() {
+    public void goToGame(int level) {
 
-        this.setScreen(new GameScreen(this));// Set the current screen to GameScreen
+        this.setScreen(new GameScreen(this,level));// Set the current screen to GameScreen
         backgroundMusic.pause();
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
-
             menuScreen = null;
         }
     }
+
     public void goToEscMenu() {
         this.setScreen(new EscMenuScreen(this,gameScreen)); // Set the current screen to MenuScreen
         if (gameScreen != null) {

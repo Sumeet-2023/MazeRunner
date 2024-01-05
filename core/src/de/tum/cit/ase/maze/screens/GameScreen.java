@@ -23,6 +23,7 @@ import java.util.List;
  * It handles the game logic and rendering of the game elements.
  */
 public class GameScreen implements Screen {
+    private final int level;
     private EscMenuScreen escMenuScreen;
     private boolean isPause = false;
     private Music backgroundMusic;
@@ -51,7 +52,8 @@ public class GameScreen implements Screen {
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public GameScreen(MazeRunnerGame game) {
+    public GameScreen(MazeRunnerGame game,int level) {
+        this.level=level;
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
         backgroundMusic.setVolume(0.2f);
@@ -64,14 +66,14 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
 
-        camera.zoom = 1f;
+        camera.zoom = 6f;
 
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
 
         // Create a new instance of MapLoader
-        mapLoader = new MapLoader(game, sinusInput);
+        mapLoader = new MapLoader(game, sinusInput,"maps//level-" + level + ".properties");
 
         // Create new player and set starting position and animation.
         player = new Player();
