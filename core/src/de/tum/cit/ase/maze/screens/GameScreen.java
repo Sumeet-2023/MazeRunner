@@ -46,6 +46,15 @@ public class GameScreen implements Screen {
 
     // Attribute for key
     private boolean hasKey;
+
+    // Attribute for heart count
+    private int heartCount = 3;
+
+    // Attribute for handling obstacle
+    private float timeOnObstacle = 0f;
+    private boolean isOnObstacle = false;
+
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -75,7 +84,8 @@ public class GameScreen implements Screen {
 
         // Create new player and set starting position and animation.
         player = new Player();
-        mapLoader.setPlayerStartingPos();
+
+        //mapLoader.setPlayerStartingPos();
         player_x = mapLoader.getPlayer_x();
         player_y = mapLoader.getPlayer_y();
         playerAnimation = player.getCharacterRightAnimation();
@@ -101,48 +111,54 @@ public class GameScreen implements Screen {
         }
         if(!isPause) {
             ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
-        // Handel Player Movements
-        handlePlayerEvents();
 
-        // Setting the camera position
-        /**
-         * Math.max(player_x * 16, camera.viewportWidth / 2) gives the bigger value from players x position and half of viewport width.
-         *
-         * mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16) this is the maximum value till which the camera can move.
-         *
-         * Math.min(Math.max(player_x * 16, camera.viewportWidth / 2), mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16)
-         * The whole statement give the minimum out of the above two statements.
-         */
-        camera.position.set(Math.min(Math.max(player_x * tileSize, camera.viewportWidth / 2), mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize),
-                Math.min(Math.max(player_y * tileSize, camera.viewportHeight / 2), mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize),
-                0);
+            // Setting the camera position
+            /**
+             * Math.max(player_x * 16, camera.viewportWidth / 2) gives the bigger value from players x position and half of viewport width.
+             *
+             * mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16) this is the maximum value till which the camera can move.
+             *
+             * Math.min(Math.max(player_x * 16, camera.viewportWidth / 2), mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16)
+             * The whole statement give the minimum out of the above two statements.
+             */
+            camera.position.set(Math.min(Math.max(player_x * tileSize, camera.viewportWidth / 2), mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize),
+                    Math.min(Math.max(player_y * tileSize, camera.viewportHeight / 2), mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize),
+                    0);
 
 
-        sinusInput += delta;
-        mapLoader.setSinusInput(sinusInput);
-        camera.update();
+            sinusInput += delta;
+            mapLoader.setSinusInput(sinusInput);
+            camera.update();
 
-        // Setting the viewport such that it displays 12x8 tiles.
-        camera.viewportWidth = tileSize * 12;
-        camera.viewportHeight = tileSize * 8;
+            // Setting the viewport such that it displays 12x8 tiles.
+            camera.viewportWidth = tileSize * 12;
+            camera.viewportHeight = tileSize * 8;
 
-        // Setting the projection Matrix
-        game.getSpriteBatch().setProjectionMatrix(camera.combined);
+            // Setting the projection Matrix
+            game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
+            // Handel Player Movements
+            handlePlayerEvents();
 
+            // Handling Obstacles
+            handelObstacle(delta);
 
-        player.update(Gdx.graphics.getDeltaTime());
-        // Rendering the Map
-        game.getSpriteBatch().begin();
-            mapLoader.loadMap1();
-            TextureRegion currentFrame = player.getCurrentAnimationFrame();
-            if (currentFrame != null) {
-                game.getSpriteBatch().draw(currentFrame, player_x * 32, player_y * 32, 24, 48);
-            } else {
-                game.getSpriteBatch().draw(defaultFrame, player_x * 32, player_y * 32, 24, 48);
+            // Handling win and loose
+            handelWin();
+            handelLose();
+
+            player.update(Gdx.graphics.getDeltaTime());
+            // Rendering the Map
+            game.getSpriteBatch().begin();
+                mapLoader.loadMap1();
+                TextureRegion currentFrame = player.getCurrentAnimationFrame();
+                if (currentFrame != null) {
+                    game.getSpriteBatch().draw(currentFrame, player_x * 32, player_y * 32, 24, 48);
+                } else {
+                    game.getSpriteBatch().draw(defaultFrame, player_x * 32, player_y * 32, 24, 48);
+                }
+                game.getSpriteBatch().end();
             }
-            game.getSpriteBatch().end();
-        }
     }
 
     @Override
@@ -293,7 +309,57 @@ public class GameScreen implements Screen {
             hasKey = true;
             mapLoader.setDisplayKey(false);
         }
-
     }
 
+    public void handelObstacle(float deltaTime)
+    {
+        if (isObstacle(player_x, player_y)){
+            if (!isOnObstacle){
+                heartCount--;
+                isOnObstacle = true;
+                timeOnObstacle = 0f;
+            }
+            else {
+                timeOnObstacle += deltaTime;
+                if (timeOnObstacle >= 3.0f){
+                    heartCount--;
+                    timeOnObstacle = 0f;
+                }
+            }
+        }
+        else {
+            isOnObstacle = false;
+            timeOnObstacle = 0f;
+        }
+    }
+
+    public boolean isObstacle(float x, float y)
+    {
+        List<List<Integer>> obstacleCoordinates = mapLoader.getObstacleCoordinates();
+        final float tolerance = 0.2f;
+        for (List<Integer> coordinate : obstacleCoordinates) {
+            float obstacleX = coordinate.get(0);
+            float obstacleY = coordinate.get(1);
+            if (Math.abs(x - obstacleX) < tolerance && Math.abs(y - obstacleY) < tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void handelLose()
+    {
+        if (heartCount == 0)
+        {
+            game.goToMenu();
+        }
+    }
+
+    public void handelWin()
+    {
+        if (isDoor(player_x, player_y) && hasKey)
+        {
+            game.goToMenu();
+        }
+    }
 }

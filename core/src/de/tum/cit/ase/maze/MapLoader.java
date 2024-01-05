@@ -42,6 +42,8 @@ public class MapLoader {
     // Attributes Coordinate lists
     private List<List<Integer>> wallCoordinates;
     private List<List<Integer>> doorCoordinates;
+    private List<List<Integer>> obstacleCoordinates;
+    private List<List<Integer>> enemyCoordinates;
 
     public MapLoader(MazeRunnerGame game, float sinusInput) {
         this.game = game;
@@ -56,20 +58,20 @@ public class MapLoader {
         wall.loadVerticalWall();
         wall.loadCornerWall();
         wallCoordinates = new ArrayList<>();
-        setWallCoordinates();
 
         // Obstacles
         this.obstacles = new Obstacle();
         obstacles.loadSpikeAnimation();
+        obstacleCoordinates = new ArrayList<>();
 
         // Enemies
         this.enemies = new Enemy();
+        enemyCoordinates = new ArrayList<>();
 
         // Doors
         this.doors = new Door();
         doors.loadDoor();
         doorCoordinates = new ArrayList<>();
-        setDoorCoordinates();
 
         // Tiles
         this.tiles = new Tile();
@@ -78,41 +80,10 @@ public class MapLoader {
         this.key = new Key();
         key.loadHeartAnimation();
 
+        // Store coordinates
+        setCoordinateLists();
     }
 
-    public void setPlayerStartingPos() {
-        for (List<Integer> coordinates : map.keySet()) {
-            if (map.get(coordinates) == 1) {
-                player_x = coordinates.get(0);
-                player_y = coordinates.get(1);
-                break;
-            }
-        }
-    }
-
-    public void setWallCoordinates() {
-        for (List<Integer> coordinates : map.keySet()) {
-            if (map.get(coordinates) == 0)
-            {
-                List<Integer> data = new ArrayList<>();
-                data.add(coordinates.get(0));
-                data.add(coordinates.get(1));
-                wallCoordinates.add(data);
-            }
-        }
-    }
-
-    public void setDoorCoordinates() {
-        for (List<Integer> coordinates : map.keySet()) {
-            if (map.get(coordinates) == 2)
-            {
-                List<Integer> data = new ArrayList<>();
-                data.add(coordinates.get(0));
-                data.add(coordinates.get(1));
-                doorCoordinates.add(data);
-            }
-        }
-    }
 
 
     public void setMaxXY(Map<List<Integer>, Integer> map) {
@@ -123,6 +94,46 @@ public class MapLoader {
                 max_x = key.get(0);
             if (key.get(1) > max_y)
                 max_y = key.get(1);
+        }
+    }
+
+    public void setCoordinateLists(){
+        for (List<Integer> coordinates : map.keySet()) {
+            switch (map.get(coordinates)){
+                case 0:
+                    List<Integer> wall = new ArrayList<>();
+                    wall.add(coordinates.get(0));
+                    wall.add(coordinates.get(1));
+                    wallCoordinates.add(wall);
+                    break ;
+                case 1:
+                    player_x = coordinates.get(0);
+                    player_y = coordinates.get(1);
+                    break;
+                case 2:
+                    List<Integer> door = new ArrayList<>();
+                    door.add(coordinates.get(0));
+                    door.add(coordinates.get(1));
+                    doorCoordinates.add(door);
+                    break;
+                case 3:
+                    List<Integer> obstacle = new ArrayList<>();
+                    obstacle.add(coordinates.get(0));
+                    obstacle.add(coordinates.get(1));
+                    obstacleCoordinates.add(obstacle);
+                    break;
+                case 4:
+                    List<Integer> enemy = new ArrayList<>();
+                    enemy.add(coordinates.get(0));
+                    enemy.add(coordinates.get(1));
+                    enemyCoordinates.add(enemy);
+                    break;
+                case 5:
+                    keyX = coordinates.get(0);
+                    keyY = coordinates.get(1);
+                    break;
+
+            }
         }
     }
 
@@ -180,8 +191,6 @@ public class MapLoader {
 
                     break;
                 case 5:
-                    keyX = coordinates.get(0);
-                    keyY = coordinates.get(1);
                     if (displayKey)
                         game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
                     break;
@@ -242,7 +251,14 @@ public class MapLoader {
         return doorCoordinates;
     }
 
-    // Getters for key starting values
+    public List<List<Integer>> getObstacleCoordinates() {
+        return obstacleCoordinates;
+    }
+
+    public List<List<Integer>> getEnemyCoordinates() {
+        return enemyCoordinates;
+    }
+// Getters for key starting values
 
     public int getKeyX() {
         return keyX;
