@@ -1,16 +1,18 @@
 package de.tum.cit.ase.maze;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.objects.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.badlogic.gdx.math.MathUtils.random;
 
 public class MapLoader {
 
     // Map
-    private Map<List<Integer>, Integer> map;
+    private Map<List<Integer>, Integer> map ;
 
     // Attributes (Variables)
     private float sinusInput;
@@ -45,13 +47,12 @@ public class MapLoader {
     private List<List<Integer>> obstacleCoordinates;
     private List<List<Integer>> enemyCoordinates;
 
-    public MapLoader(MazeRunnerGame game, float sinusInput) {
+    public MapLoader(MazeRunnerGame game, float sinusInput,String level) {
         this.game = game;
         this.sinusInput = sinusInput;
 
         // Select Map
-        map = Utils.readMap("maps\\level-1.properties");
-
+         map = Utils.readMap(level);
         // Wall
         this.wall = new Wall();
         wall.loadHorizontalWall();
@@ -61,8 +62,13 @@ public class MapLoader {
 
         // Obstacles
         this.obstacles = new Obstacle();
+        obstacles.loadFireAnimation();
         obstacles.loadSpikeAnimation();
         obstacleCoordinates = new ArrayList<>();
+        obstacles.loadFlameAnimation();
+        obstacles.loadPoisonAnimation();
+        obstacleCoordinates = new ArrayList<>();
+
 
         // Enemies
         this.enemies = new Enemy();
@@ -70,7 +76,10 @@ public class MapLoader {
 
         // Doors
         this.doors = new Door();
-        doors.loadDoor();
+        doors.loadHorizontalDoor();
+        doors.loadVerticalDoor();
+        doors.loadHDoorOpenAnimation();
+        doors.loadVDoorOpenAnimation();
         doorCoordinates = new ArrayList<>();
 
         // Tiles
@@ -83,8 +92,6 @@ public class MapLoader {
         // Store coordinates
         setCoordinateLists();
     }
-
-
 
     public void setMaxXY(Map<List<Integer>, Integer> map) {
         max_x = 0;
@@ -145,6 +152,8 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
+
+
         game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
@@ -178,13 +187,33 @@ public class MapLoader {
                 case 1:
                     break;
                 case 2:
-                    game.getSpriteBatch().draw(doors.getDoor(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    if(coordinates.get(0)==min_x || coordinates.get(0)==max_x){
+                    doors.getVerticalDoor().setPosition(coordinates.get(0)*32,coordinates.get(1)*32);
+                    doors.getVerticalDoor().setSize(32,32);
+                    doors.getVerticalDoor().translateX(16);
+                    doors.getVerticalDoor().setRotation(90);
+                    doors.getVerticalDoor().draw(game.getSpriteBatch());
+                    }
+                    else {
+                    game.getSpriteBatch().draw(doors.getHorizontalDoor(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);}
+
+
                     break;
                 case 3:
-                    if (coordinates.get(0) == 10 && coordinates.get(1) == 5 || coordinates.get(0) == 6 && coordinates.get(1) == 12) {
+                    if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0) {
+                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    else if(coordinates.get(0)%2==1 && coordinates.get(1)%2==0){
                         game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    } else {
-                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32,32,32);
+                    }
+                    else if(coordinates.get(0)%2==0 && coordinates.get(1)%2==1){
+                        game.getSpriteBatch().draw(obstacles.getPoisonAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    else if(coordinates.get(0)%2==1 && coordinates.get(1)%2==1){
+                        game.getSpriteBatch().draw(obstacles.getFlameAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    else {
+                        game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     }
                     break;
                 case 4:
@@ -197,7 +226,6 @@ public class MapLoader {
             }
         }
     }
-
 
     public Obstacle getObstacles() {
         return obstacles;

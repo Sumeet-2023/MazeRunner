@@ -3,13 +3,9 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
 import de.tum.cit.ase.maze.screens.*;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
@@ -19,6 +15,7 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
  */
 public class MazeRunnerGame extends Game {
     private Music backgroundMusic;
+    private MapLoader mapLoader;
     // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
@@ -48,8 +45,13 @@ public class MazeRunnerGame extends Game {
      */
     @Override
     public void create() {
+
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MainMenuMusic.mp3"));
+        backgroundMusic.setVolume(0.8f);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
 
         goToMenu(); // Navigate to the menu screen
 
@@ -60,7 +62,8 @@ public class MazeRunnerGame extends Game {
      * Switches to the menu screen.
      */
     public void goToMenu() {
-        this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
+        this.setScreen(new MenuScreen(this));// Set the current screen to MenuScreen
+        backgroundMusic.play();
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
@@ -71,15 +74,16 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the game screen.
      */
-    public void goToGame() {
+    public void goToGame(String level) {
 
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+        this.setScreen(new GameScreen(this,level));// Set the current screen to GameScreen
+        backgroundMusic.pause();
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
-
             menuScreen = null;
         }
     }
+
     public void goToEscMenu() {
         this.setScreen(new EscMenuScreen(this,gameScreen)); // Set the current screen to MenuScreen
         if (gameScreen != null) {
@@ -126,6 +130,7 @@ public class MazeRunnerGame extends Game {
         getScreen().dispose(); // Dispose the current screen
         spriteBatch.dispose(); // Dispose the spriteBatch
         skin.dispose(); // Dispose the skin
+        backgroundMusic.dispose();
     }
 
     // Getter methods

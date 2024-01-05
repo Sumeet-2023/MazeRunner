@@ -41,9 +41,6 @@ public class Player {
         for (int col = 0; col < animationFrames; col++) {
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0,frameWidth, frameHeight));
         }
-        for(int col = 3;col>=0;col--){
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
-        }
         characterDownAnimation = new Animation<>(0.08f, walkFrames);
     }
     public void loadRightCharacterAnimation(){
@@ -54,9 +51,6 @@ public class Player {
         Array<TextureRegion> walkFrames= new Array<>(TextureRegion.class);
         for (int col =0;col< animationFrame;col++){
             walkFrames.add(new TextureRegion(walkSheet,col*frameWidth,frameHeight,frameWidth,frameHeight));
-        }
-        for(int col = 3;col>=0;col--){
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight, frameWidth, frameHeight));
         }
         characterRightAnimation =new Animation<>(0.08f,walkFrames);
     }
@@ -69,9 +63,6 @@ public class Player {
         for (int col =0;col< animationFrame;col++){
             walkFrames.add(new TextureRegion(walkSheet,col*frameWidth,frameHeight*2,frameWidth,frameHeight));
         }
-        for(int col = 3;col>=0;col--){
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight*2, frameWidth, frameHeight));
-        }
         characterUpAnimation =new Animation<>(0.08f,walkFrames);
     }
     public void loadLeftCharacterAnimation(){
@@ -82,9 +73,6 @@ public class Player {
         Array<TextureRegion> walkFrames= new Array<>(TextureRegion.class);
         for (int col =0;col< animationFrame;col++){
             walkFrames.add(new TextureRegion(walkSheet,col*frameWidth,frameHeight*3,frameWidth,frameHeight));
-        }
-        for(int col = 3;col>=0;col--){
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, frameHeight*3, frameWidth, frameHeight));
         }
         characterLeftAnimation =new Animation<>(0.08f,walkFrames);
     }

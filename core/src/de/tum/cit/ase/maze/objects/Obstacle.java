@@ -6,15 +6,20 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Obstacle {
      private Animation<TextureRegion> spikeAnimation;
      private Animation<TextureRegion> fireAnimation;
      private Animation<TextureRegion> flameAnimation;
+     private Animation<TextureRegion> poisonAnimation;
      public Obstacle(){
          this.loadSpikeAnimation();
          this.loadFireAnimation();
          this.loadFlameAnimation();
+         this.loadPoisonAnimation();
 
      }
      public void loadSpikeAnimation(){
@@ -58,6 +63,21 @@ public class Obstacle {
         }
         flameAnimation = new Animation<>(0.2f, flameFrames);
     }
+    public void loadPoisonAnimation() {
+        Texture poisonSheet = new Texture(Gdx.files.internal("objects.png"));
+
+        int frameWidth = 32;
+        int frameHeight = 32;
+        int animationFrame = 8;
+
+        Array<TextureRegion> poisonFrames = new Array<>(TextureRegion.class);
+
+        for (int col = 2; col < animationFrame +2; col++){
+            poisonFrames.add(new TextureRegion(poisonSheet, col * frameWidth, 2 * frameHeight, frameWidth, frameHeight));
+        }
+
+        poisonAnimation = new Animation<>(0.2f, poisonFrames);
+    }
 
     public Animation<TextureRegion> getSpikeAnimation() {
         return spikeAnimation;
@@ -69,5 +89,9 @@ public class Obstacle {
 
     public Animation<TextureRegion> getFlameAnimation() {
         return flameAnimation;
+    }
+
+    public Animation<TextureRegion> getPoisonAnimation() {
+        return poisonAnimation;
     }
 }
