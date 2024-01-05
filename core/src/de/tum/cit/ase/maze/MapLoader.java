@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.tum.cit.ase.maze.characters.Enemy;
+import de.tum.cit.ase.maze.characters.Ghost;
 import de.tum.cit.ase.maze.objects.*;
 
 import java.util.*;
@@ -32,6 +33,7 @@ public class MapLoader {
     private Wall wall;
     private Obstacle obstacles;
     private Enemy enemies;
+    private Ghost ghost;
     private Door doors;
     private Tile tiles;
 
@@ -72,6 +74,10 @@ public class MapLoader {
 
         // Enemies
         enemyCoordinates = new ArrayList<>();
+
+        //Ghost
+        this.ghost = new Ghost();
+        ghost.loadDownGhost();
 
         // Doors
         this.doors = new Door();
@@ -215,6 +221,7 @@ public class MapLoader {
                     }
                     break;
                 case 4:
+ //                   game.getSpriteBatch().draw(ghost.getGhostLeftAnimation().getKeyFrame(sinusInput,true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
 
                     break;
                 case 5:
@@ -235,6 +242,9 @@ public class MapLoader {
 
     public Door getDoors() {
         return doors;
+    }
+    public Ghost getGhost(){
+        return ghost;
     }
 
 

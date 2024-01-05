@@ -151,7 +151,6 @@ public class GameScreen implements Screen {
             // Handling win and loose
             handelWin();
             handelLose();
-            System.out.println(hasKey);
             player.update(Gdx.graphics.getDeltaTime());
             // Rendering the Map
             game.getSpriteBatch().begin();
@@ -356,6 +355,7 @@ public class GameScreen implements Screen {
         if (heartCount == 0)
         {
             game.goToMenu();
+            backgroundMusic.dispose();
         }
     }
 
@@ -364,6 +364,7 @@ public class GameScreen implements Screen {
         if (isDoor(player_x, player_y) && hasKey)
         {
             game.goToMenu();
+            backgroundMusic.dispose();
         }
     }
 }
