@@ -335,8 +335,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    public boolean isObstacle(float x, float y)
-    {
+    public boolean isObstacle(float x, float y){
         List<List<Integer>> obstacleCoordinates = mapLoader.getObstacleCoordinates();
         final float tolerance = 0.2f;
         for (List<Integer> coordinate : obstacleCoordinates) {

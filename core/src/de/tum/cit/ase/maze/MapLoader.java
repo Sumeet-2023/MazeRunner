@@ -53,6 +53,7 @@ public class MapLoader {
 
         // Select Map
          map = Utils.readMap(level);
+
         // Wall
         this.wall = new Wall();
         wall.loadHorizontalWall();
@@ -69,9 +70,7 @@ public class MapLoader {
         obstacles.loadPoisonAnimation();
         obstacleCoordinates = new ArrayList<>();
 
-
         // Enemies
-        this.enemies = new Enemy();
         enemyCoordinates = new ArrayList<>();
 
         // Doors
