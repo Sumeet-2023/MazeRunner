@@ -23,7 +23,7 @@ import java.util.List;
  * It handles the game logic and rendering of the game elements.
  */
 public class GameScreen implements Screen {
-    private final int level;
+    private final String mapLevel;
     private EscMenuScreen escMenuScreen;
     private boolean isPause = false;
     private Music backgroundMusic;
@@ -52,8 +52,8 @@ public class GameScreen implements Screen {
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public GameScreen(MazeRunnerGame game,int level) {
-        this.level=level;
+    public GameScreen(MazeRunnerGame game,String mapLevel) {
+        this.mapLevel=mapLevel;
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
         backgroundMusic.setVolume(0.2f);
@@ -66,14 +66,14 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
 
-        camera.zoom = 6f;
+        camera.zoom = 5f;
 
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
 
         // Create a new instance of MapLoader
-        mapLoader = new MapLoader(game, sinusInput,"maps//level-" + level + ".properties");
+        mapLoader = new MapLoader(game, sinusInput,mapLevel);
 
         // Create new player and set starting position and animation.
         player = new Player();
@@ -195,28 +195,28 @@ public class GameScreen implements Screen {
         float animationSpeed = 3;
         float deltaTime = Gdx.graphics.getDeltaTime();
         handelKey(player_x, player_y);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (canPlayerMove(Direction.LEFT)) {
                 player_x -= animationSpeed * deltaTime;
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterLeftAnimation());
             }
             defaultFrame = player.getCharacterLeft();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (canPlayerMove(Direction.RIGHT)) {
                 player_x += animationSpeed * deltaTime;
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterRightAnimation());
             }
             defaultFrame = player.getCharacterRight();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (canPlayerMove(Direction.UP)) {
                 player_y += animationSpeed * deltaTime;
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterUpAnimation());
             }
             defaultFrame = player.getCharacterUp();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (canPlayerMove(Direction.DOWN)) {
                 player_y -= animationSpeed * deltaTime;
                 if (!player.isAnimating())

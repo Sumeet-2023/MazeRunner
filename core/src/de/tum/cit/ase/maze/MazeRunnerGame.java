@@ -3,13 +3,9 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
 import de.tum.cit.ase.maze.screens.*;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
@@ -78,7 +74,7 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the game screen.
      */
-    public void goToGame(int level) {
+    public void goToGame(String level) {
 
         this.setScreen(new GameScreen(this,level));// Set the current screen to GameScreen
         backgroundMusic.pause();

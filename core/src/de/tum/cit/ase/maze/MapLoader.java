@@ -1,11 +1,13 @@
 package de.tum.cit.ase.maze;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.objects.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.badlogic.gdx.math.MathUtils.random;
 
 public class MapLoader {
 
@@ -42,6 +44,7 @@ public class MapLoader {
     // Attributes Coordinate lists
     private List<List<Integer>> wallCoordinates;
     private List<List<Integer>> doorCoordinates;
+    private List<List<Integer>> obstacleCoordinates;
 
     public MapLoader(MazeRunnerGame game, float sinusInput,String level) {
         this.game = game;
@@ -59,7 +62,13 @@ public class MapLoader {
 
         // Obstacles
         this.obstacles = new Obstacle();
+        obstacles.loadFireAnimation();
         obstacles.loadSpikeAnimation();
+        obstacles.loadFlameAnimation();
+        obstacles.loadPoisonAnimation();
+        obstacleCoordinates = new ArrayList<>();
+        setObstaclesCoordinates();
+
 
         // Enemies
         this.enemies = new Enemy();
@@ -115,6 +124,17 @@ public class MapLoader {
             }
         }
     }
+    public void setObstaclesCoordinates() {
+        for (List<Integer> coordinates : map.keySet()) {
+            if (map.get(coordinates) == 3)
+            {
+                List<Integer> data = new ArrayList<>();
+                data.add(coordinates.get(0));
+                data.add(coordinates.get(1));
+                obstacleCoordinates.add(data);
+            }
+        }
+    }
 
 
     public void setMaxXY(Map<List<Integer>, Integer> map) {
@@ -136,6 +156,8 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
+
+
         game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
@@ -178,15 +200,24 @@ public class MapLoader {
                     }
                     else {
                     game.getSpriteBatch().draw(doors.getHorizontalDoor(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);}
-//                    game.getSpriteBatch().draw(doors.getHdoorOpenAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
 
 
                     break;
                 case 3:
-                    if (coordinates.get(0) == 10 && coordinates.get(1) == 5 || coordinates.get(0) == 6 && coordinates.get(1) == 12) {
+                    if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0) {
+                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    else if(coordinates.get(0)%2==1 && coordinates.get(1)%2==0){
                         game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    } else {
-                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32,32,32);
+                    }
+                    else if(coordinates.get(0)%2==0 && coordinates.get(1)%2==1){
+                        game.getSpriteBatch().draw(obstacles.getPoisonAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    else if(coordinates.get(0)%2==1 && coordinates.get(1)%2==1){
+                        game.getSpriteBatch().draw(obstacles.getFlameAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    else {
+                        game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     }
                     break;
                 case 4:
@@ -201,7 +232,6 @@ public class MapLoader {
             }
         }
     }
-
 
     public Obstacle getObstacles() {
         return obstacles;
@@ -255,6 +285,9 @@ public class MapLoader {
         return doorCoordinates;
     }
 
+    public List<List<Integer>> getObstacleCoordinates() {
+        return obstacleCoordinates;
+    }
     // Getters for key starting values
 
     public int getKeyX() {

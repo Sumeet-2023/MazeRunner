@@ -58,7 +58,7 @@
 
         startGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) { game.goToGame(1);
+            public void changed(ChangeEvent event, Actor actor) { game.goToGame("maps//level-1.properties");
             }
         });
         selectMap.addListener(new ChangeListener() {

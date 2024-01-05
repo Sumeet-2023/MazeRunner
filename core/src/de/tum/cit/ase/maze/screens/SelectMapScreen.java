@@ -7,16 +7,23 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileView;
+import javax.swing.plaf.FileChooserUI;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -47,37 +54,39 @@ public class SelectMapScreen implements Screen {
         table.add(map3).width(300).pad(10).row();
         TextButton map4 = new TextButton("Level 5", game.getSkin());
         table.add(map4).width(300).pad(10).row();
+        TextButton upload = new TextButton("Upload Map", game.getSkin());
+        table.add(upload).width(300).pad(10).row();
         TextButton cancel = new TextButton("Back", game.getSkin());
         table.add(cancel).width(300).pad(10).row();
 
         map0.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(1);
+                game.goToGame("maps//level-1.properties");
             }
         });
         map1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(2);
+                game.goToGame("maps//level-2.properties");
             }
         });
         map2.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(3);
+                game.goToGame("maps//level-3.properties");
             }
         });
         map3.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(4);
+                game.goToGame("maps//level-4.properties");
             }
         });
         map4.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(5);
+                game.goToGame("maps//level-5.properties");
             }
         });
 
@@ -126,6 +135,4 @@ public class SelectMapScreen implements Screen {
     @Override
     public void hide() {
     }
-
-
 }
