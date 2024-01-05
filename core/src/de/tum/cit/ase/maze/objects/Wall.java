@@ -13,7 +13,6 @@ public class Wall {
     private TextureRegion horizontalWall;
     private Sprite verticalWall;
     private TextureRegion cornerWall;
-    private Animation<TextureRegion> flame;
     private TextureRegion tree;
     private TextureRegion well;
 
@@ -21,7 +20,6 @@ public class Wall {
         loadHorizontalWall();
         loadVerticalWall();
         loadCornerWall();
-        loadFlame();
         loadTree();
         loadWell();
     }
@@ -38,15 +36,6 @@ public class Wall {
     public void loadCornerWall() {
         Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));
         cornerWall = new TextureRegion(wallTexture, 16*3, 0, 16, 16);
-    }
-    public void loadFlame(){
-        Texture flameSheet =new Texture(Gdx.files.internal("basictiles.png"));
-        int animationFrame=2;
-        Array<TextureRegion> flameFrames=new Array<>(TextureRegion.class);
-        for(int col=4;col<animationFrame+4;col++){
-            flameFrames.add(new TextureRegion(flameSheet,col*16,7*16,16,16));
-        }
-        flame=new Animation<>(0.6f,flameFrames);
     }
     public void loadTree() {
         Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));
@@ -69,10 +58,6 @@ public class Wall {
 
     public TextureRegion getCornerWall() {
         return cornerWall;
-    }
-
-    public Animation<TextureRegion> getFlame() {
-        return flame;
     }
 
     public TextureRegion getTree() {

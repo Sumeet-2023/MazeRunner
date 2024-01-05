@@ -145,10 +145,13 @@ public class GameScreen implements Screen {
             // Handling Obstacles
             handelObstacle(delta);
 
+            // Handling Key
+            handelKey();
+
             // Handling win and loose
             handelWin();
             handelLose();
-
+            System.out.println(hasKey);
             player.update(Gdx.graphics.getDeltaTime());
             // Rendering the Map
             game.getSpriteBatch().begin();
@@ -210,7 +213,6 @@ public class GameScreen implements Screen {
     {
         float animationSpeed = 3;
         float deltaTime = Gdx.graphics.getDeltaTime();
-        handelKey(player_x, player_y);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (canPlayerMove(Direction.LEFT)) {
                 player_x -= animationSpeed * deltaTime;
@@ -305,9 +307,10 @@ public class GameScreen implements Screen {
         return false;
     }
 
-    public void handelKey(float x, float y)
+    public void handelKey()
     {
-        if (Math.abs(player_x -  mapLoader.getKeyX()) < 0.2  && player_y - mapLoader.getKeyY() < 0.2) {
+        //System.out.println("KEYx: " + mapLoader.getKeyX() + " ,KEYY: " + mapLoader.getKeyY());
+        if (Math.abs(player_x -  mapLoader.getKeyX()) < 0.5  && Math.abs(player_y - mapLoader.getKeyY()) < 0.5) {
             hasKey = true;
             mapLoader.setDisplayKey(false);
         }

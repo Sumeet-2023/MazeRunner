@@ -187,16 +187,15 @@ public class MapLoader {
                     break;
                 case 2:
                     if(coordinates.get(0)==min_x || coordinates.get(0)==max_x){
-                    doors.getVerticalDoor().setPosition(coordinates.get(0)*32,coordinates.get(1)*32);
-                    doors.getVerticalDoor().setSize(32,32);
-                    doors.getVerticalDoor().translateX(16);
-                    doors.getVerticalDoor().setRotation(90);
-                    doors.getVerticalDoor().draw(game.getSpriteBatch());
+                        doors.getVerticalDoor().setPosition(coordinates.get(0)*32,coordinates.get(1)*32);
+                        doors.getVerticalDoor().setSize(32,32);
+                        doors.getVerticalDoor().translateX(16);
+                        doors.getVerticalDoor().setRotation(90);
+                        doors.getVerticalDoor().draw(game.getSpriteBatch());
                     }
                     else {
-                    game.getSpriteBatch().draw(doors.getHorizontalDoor(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);}
-
-
+                        game.getSpriteBatch().draw(doors.getHorizontalDoor(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+                    }
                     break;
                 case 3:
                     if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0) {

@@ -20,7 +20,6 @@ public class Obstacle {
          this.loadFireAnimation();
          this.loadFlameAnimation();
          this.loadPoisonAnimation();
-
      }
      public void loadSpikeAnimation(){
          Texture spikeSheet =new Texture(Gdx.files.internal("things.png"));
