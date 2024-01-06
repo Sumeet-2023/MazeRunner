@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import de.tum.cit.ase.maze.Direction;
 import de.tum.cit.ase.maze.MapLoader;
 import de.tum.cit.ase.maze.MazeRunnerGame;
+import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Player;
 
 import java.util.List;
@@ -148,6 +149,12 @@ public class GameScreen implements Screen {
             // Handling Key
             handelKey();
 
+            // Handling Enemy
+            for (Enemy enemy : mapLoader.getEnemies())
+            {
+                enemy.handleEnemy(Gdx.graphics.getDeltaTime());
+            }
+
             // Handling win and loose
             handelWin();
             handelLose();
@@ -250,7 +257,7 @@ public class GameScreen implements Screen {
      */
     public boolean canPlayerMove(Direction direction)
     {
-        if (Math.abs(player_x -  mapLoader.getPlayer_x()) < 0.2  && player_y == mapLoader.getPlayer_y() && direction != Direction.RIGHT)
+        if (Math.abs(player_x -  mapLoader.getPlayer_x()) < 0.5  && Math.abs(player_y -  mapLoader.getPlayer_y()) < 0.5 && direction != Direction.RIGHT)
             return false;
         else if (isWall(player_x + 0.2f, player_y) && direction == Direction.RIGHT) {
             return false;

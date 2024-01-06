@@ -3,10 +3,15 @@ package de.tum.cit.ase.maze.characters;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import de.tum.cit.ase.maze.Direction;
 
-public class Ghost {
+import java.util.List;
+
+public class Ghost{
     private Animation<TextureRegion> ghostDownAnimation;
     private Animation<TextureRegion> ghostRightAnimation;
     private Animation<TextureRegion> ghostUpAnimation;
@@ -15,6 +20,9 @@ public class Ghost {
     private TextureRegion ghostUp;
     private TextureRegion ghostLeft;
     private TextureRegion ghostDown;
+
+
+
 
     public Ghost(){
         this.loadRightGhostAnimation();
@@ -27,6 +35,9 @@ public class Ghost {
         this.loadUpGhost();
 
     }
+
+
+
     private void loadDownGhostAnimation(){
         Texture walkSheet = new Texture(Gdx.files.internal("mobs.png"));
         int frameWidth = 16;
@@ -91,6 +102,8 @@ public class Ghost {
         Texture leftTexture = new Texture(Gdx.files.internal("mobs.png"));
         ghostLeft = new TextureRegion(leftTexture, 6*16, 5*16, 16, 16);
     }
+
+
 
     public Animation<TextureRegion> getGhostDownAnimation() {
         return ghostDownAnimation;

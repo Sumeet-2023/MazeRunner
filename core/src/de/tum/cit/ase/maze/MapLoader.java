@@ -1,7 +1,6 @@
 package de.tum.cit.ase.maze;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Gdx;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Ghost;
 import de.tum.cit.ase.maze.objects.*;
@@ -32,7 +31,6 @@ public class MapLoader {
     private MazeRunnerGame game;
     private Wall wall;
     private Obstacle obstacles;
-    private Enemy enemies;
     private Ghost ghost;
     private Door doors;
     private Tile tiles;
@@ -47,7 +45,8 @@ public class MapLoader {
     private List<List<Integer>> wallCoordinates;
     private List<List<Integer>> doorCoordinates;
     private List<List<Integer>> obstacleCoordinates;
-    private List<List<Integer>> enemyCoordinates;
+    private List<Enemy> enemies;
+
 
     public MapLoader(MazeRunnerGame game, float sinusInput,String level) {
         this.game = game;
@@ -73,11 +72,8 @@ public class MapLoader {
         obstacleCoordinates = new ArrayList<>();
 
         // Enemies
-        enemyCoordinates = new ArrayList<>();
-
-        //Ghost
-        this.ghost = new Ghost();
-        ghost.loadDownGhost();
+        enemies = new ArrayList<>();
+        ghost = new Ghost();
 
         // Doors
         this.doors = new Door();
@@ -135,10 +131,8 @@ public class MapLoader {
                     obstacleCoordinates.add(obstacle);
                     break;
                 case 4:
-                    List<Integer> enemy = new ArrayList<>();
-                    enemy.add(coordinates.get(0));
-                    enemy.add(coordinates.get(1));
-                    enemyCoordinates.add(enemy);
+                    Enemy enemy = new Enemy(coordinates.get(0), coordinates.get(1), 2f, Direction.getRandomDirection(), this);
+                    enemies.add(enemy);
                     break;
                 case 5:
                     keyX = coordinates.get(0);
@@ -221,8 +215,11 @@ public class MapLoader {
                     }
                     break;
                 case 4:
- //                   game.getSpriteBatch().draw(ghost.getGhostLeftAnimation().getKeyFrame(sinusInput,true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    for (Enemy enemy: enemies)
+                    {
 
+                        enemy.drawEnemy(game.getSpriteBatch(), sinusInput, ghost.getGhostDownAnimation());
+                    }
                     break;
                 case 5:
                     if (displayKey)
@@ -232,31 +229,8 @@ public class MapLoader {
         }
     }
 
-    public Obstacle getObstacles() {
-        return obstacles;
-    }
 
-    public Enemy getEnemies() {
-        return enemies;
-    }
-
-    public Door getDoors() {
-        return doors;
-    }
-    public Ghost getGhost(){
-        return ghost;
-    }
-
-
-    public Tile getTiles() {
-        return tiles;
-    }
-
-    public Key getKey() {
-        return key;
-    }
-
-    public void setSinusInput(float sinusInput) {
+        public void setSinusInput(float sinusInput) {
         this.sinusInput = sinusInput;
     }
 
@@ -291,8 +265,8 @@ public class MapLoader {
         return obstacleCoordinates;
     }
 
-    public List<List<Integer>> getEnemyCoordinates() {
-        return enemyCoordinates;
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 // Getters for key starting values
 
