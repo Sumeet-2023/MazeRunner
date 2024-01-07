@@ -1,5 +1,7 @@
 package de.tum.cit.ase.maze;
 
+import de.tum.cit.ase.maze.characters.Enemy;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -93,5 +95,31 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    public static boolean isObstacle(float x, float y, List<List<Integer>> obstacleCoordinates){
+        final float tolerance = 0.2f;
+        for (List<Integer> coordinate : obstacleCoordinates) {
+            float obstacleX = coordinate.get(0);
+            float obstacleY = coordinate.get(1);
+            if (Math.abs(x - obstacleX) < tolerance && Math.abs(y - obstacleY) < tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isEnemy(float x, float y, List<Enemy> enemies)
+    {
+        final float tolerance = 0.5f;
+        for (Enemy enemy: enemies)
+        {
+            float enemyX = enemy.getX();
+            float enemyY = enemy.getY();
+            if (Math.abs(x - enemyX) < tolerance && Math.abs(y - enemyY) < tolerance) {
+                return true;
+            }
+        }
+        return false;
     }
 }

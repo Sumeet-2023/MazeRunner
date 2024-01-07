@@ -58,6 +58,8 @@ public class GameScreen implements Screen {
     private float timeOnObstacle = 0f;
     private boolean isOnObstacle = false;
 
+    private boolean isOnEnemy = false;
+    private float timeOnEnemy = 0f;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -146,7 +148,8 @@ public class GameScreen implements Screen {
             handlePlayerEvents();
 
             // Handling Obstacles
-            handelObstacle(delta);
+            handelPlayerObstacleInteraction(delta);
+            handlePlayerEnemyInteraction(delta);
 
             // Handling Key
             handelKey();
@@ -252,6 +255,8 @@ public class GameScreen implements Screen {
         }
     }
 
+
+
     public void handelKey()
     {
         //System.out.println("KEYx: " + mapLoader.getKeyX() + " ,KEYY: " + mapLoader.getKeyY());
@@ -261,9 +266,9 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void handelObstacle(float deltaTime)
+    public void handelPlayerObstacleInteraction(float deltaTime)
     {
-        if (isObstacle(player_x, player_y)){
+        if (Utils.isObstacle(player_x, player_y, mapLoader.getObstacleCoordinates())){
             if (!isOnObstacle){
                 heartCount--;
                 isOnObstacle = true;
@@ -283,17 +288,26 @@ public class GameScreen implements Screen {
         }
     }
 
-    public boolean isObstacle(float x, float y){
-        List<List<Integer>> obstacleCoordinates = mapLoader.getObstacleCoordinates();
-        final float tolerance = 0.2f;
-        for (List<Integer> coordinate : obstacleCoordinates) {
-            float obstacleX = coordinate.get(0);
-            float obstacleY = coordinate.get(1);
-            if (Math.abs(x - obstacleX) < tolerance && Math.abs(y - obstacleY) < tolerance) {
-                return true;
+    public void handlePlayerEnemyInteraction(float deltaTime)
+    {
+        if (Utils.isEnemy(player_x, player_y, mapLoader.getEnemies())){
+            if (!isOnEnemy){
+                heartCount--;
+                isOnEnemy = true;
+                timeOnObstacle = 0f;
+            }
+            else {
+                timeOnObstacle += deltaTime;
+                if (timeOnEnemy >= 3.0f){
+                    heartCount--;
+                    timeOnEnemy = 0f;
+                }
             }
         }
-        return false;
+        else {
+            isOnEnemy = false;
+            timeOnEnemy = 0f;
+        }
     }
 
     public void handelLose()
