@@ -26,8 +26,6 @@ public class WinScreen implements Screen {
     private Music backgroundMusic;
     private final BitmapFont font;
     private final Stage stage;
-    private float sinusInput;
-    private Animation<TextureRegion> happyAnimation;
     public WinScreen(MazeRunnerGame game){
         this.game = game;
         var camera = new OrthographicCamera();
@@ -38,14 +36,11 @@ public class WinScreen implements Screen {
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
-        Label label1 = new Label("You WIN!",game.getSkin(),"title");
 
-        Label label2 = new Label("Click Space for Main Menu!",game.getSkin());
+        Label label = new Label("Click Space for Main Menu!",game.getSkin());
+        table.bottom().add(label);
 
-        table.top().add(label1).padBottom(20).row();
-        table.add(label2);
-
-        Image backgroundImage = new Image(new Texture(Gdx.files.internal("WinImage.jpg")));
+        Image backgroundImage = new Image(new Texture(Gdx.files.internal("WinImage.png")));
         table.setBackground(backgroundImage.getDrawable());
 
 
