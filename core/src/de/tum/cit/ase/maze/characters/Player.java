@@ -19,6 +19,8 @@ public class Player {
     private Animation<TextureRegion> playerAnimation = null;
     private float x;
     private float y;
+    private boolean hasKey = false;
+    private TextureRegion defaultFrame;
     public Player(float x, float y){
         this.loadDownCharacterAnimation(); // Load Down character animation
         this.loadRightCharacterAnimation();
@@ -28,6 +30,7 @@ public class Player {
         this.loadRightCharacter();
         this.loadUpCharacter();
         this.loadLeftCharacter();
+        defaultFrame = characterRight;
         this.x = x;
         this.y = y;
     }
@@ -170,5 +173,21 @@ public class Player {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public boolean getHasKey() {
+        return hasKey;
+    }
+
+    public void setHasKey(boolean hasKey) {
+        this.hasKey = hasKey;
+    }
+
+    public TextureRegion getDefaultFrame() {
+        return defaultFrame;
+    }
+
+    public void setDefaultFrame(TextureRegion defaultFrame) {
+        this.defaultFrame = defaultFrame;
     }
 }

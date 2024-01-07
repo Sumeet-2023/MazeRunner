@@ -11,10 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
-import de.tum.cit.ase.maze.Direction;
-import de.tum.cit.ase.maze.MapLoader;
-import de.tum.cit.ase.maze.MazeRunnerGame;
-import de.tum.cit.ase.maze.Utils;
+import de.tum.cit.ase.maze.*;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Player;
 import jdk.jshell.execution.Util;
@@ -26,38 +23,18 @@ import java.util.List;
  * It handles the game logic and rendering of the game elements.
  */
 public class GameScreen implements Screen {
-    private final String mapLevel;
-    private EscMenuScreen escMenuScreen;
-    private boolean isPause = false;
-    private Music backgroundMusic;
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
     private final BitmapFont font;
-    private float sinusInput = 0f;
+    private final String mapLevel;
+    private Music backgroundMusic;
     private MapLoader mapLoader;
-
-    // Attributes to handle player
     private Player player;
-    private Animation<TextureRegion> playerAnimation;
-    private boolean isAnimating = false;
-    private float animationTime = 0f;
-    private TextureRegion defaultFrame;
-
-    // Attribute to define tile size
+    private EventHandler eventHandler;
+    private EscMenuScreen escMenuScreen;
+    private boolean isPause = false;
+    private float sinusInput = 0f;
     private final int tileSize = 32;
-
-    // Attribute for key
-    private boolean hasKey;
-
-    // Attribute for heart count
-    private int heartCount = 3;
-
-    // Attribute for handling obstacle
-    private float timeOnObstacle = 0f;
-    private boolean isOnObstacle = false;
-
-    private boolean isOnEnemy = false;
-    private float timeOnEnemy = 0f;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -65,37 +42,29 @@ public class GameScreen implements Screen {
      * @param game The main game class, used to access global resources and methods.
      */
     public GameScreen(MazeRunnerGame game,String mapLevel) {
+        this.game = game;
         this.mapLevel=mapLevel;
 
+        // Music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
         backgroundMusic.setVolume(0.2f);
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
 
-        escMenuScreen = new EscMenuScreen(game,this);
-        this.game = game;
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-
         camera.zoom = 1f;
-
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
 
-        // Create a new instance of MapLoader
+
+        // Creating new Instances of clsses
         mapLoader = new MapLoader(game, sinusInput,mapLevel);
-
-        // Create new player and set starting position and animation.
         player = new Player(mapLoader.getPlayer_x(), mapLoader.getPlayer_y());
-
-        //mapLoader.setPlayerStartingPos();
-        playerAnimation = player.getCharacterRightAnimation();
-        defaultFrame = player.getCharacterRight();
-
-        // Key
-        hasKey = false;
+        eventHandler = new EventHandler(player, mapLoader, game, backgroundMusic);
+        escMenuScreen = new EscMenuScreen(game,this);
     }
 
 
@@ -127,47 +96,38 @@ public class GameScreen implements Screen {
             camera.position.set(Math.min(Math.max(player.getX() * tileSize, camera.viewportWidth / 2), mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize),
                     Math.min(Math.max(player.getY() * tileSize, camera.viewportHeight / 2), mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize),
                     0);
+            camera.update();
 
+            // Setting the projection Matrix
+            game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
             sinusInput += delta;
             mapLoader.setSinusInput(sinusInput);
-            camera.update();
 
             // Setting the viewport such that it displays 12x8 tiles.
             camera.viewportWidth = tileSize * 12;
             camera.viewportHeight = tileSize * 8;
 
-            // Setting the projection Matrix
-            game.getSpriteBatch().setProjectionMatrix(camera.combined);
-
-            // Handel Player Movements
-            handlePlayerEvents();
-
-            // Handling Obstacles
-            handelPlayerObstacleInteraction(delta);
-            handlePlayerEnemyInteraction(delta);
-
-            // Handling Key
-            handelKey();
-
-            // Handling Enemy
+            // Handle Events
+            eventHandler.handlePlayerMovements();
+            eventHandler.handelPlayerObstacleInteraction(delta);
+            eventHandler.handlePlayerEnemyInteraction(delta);
+            eventHandler.handelKey();
+            eventHandler.handelWin();
+            eventHandler.handelLose();
+            player.update(Gdx.graphics.getDeltaTime());
             for (Enemy enemy : mapLoader.getEnemies())
             {
                 enemy.handleEnemy(Gdx.graphics.getDeltaTime());
             }
 
-            // Handling win and loose
-            handelWin();
-            handelLose();
-            player.update(Gdx.graphics.getDeltaTime());
             // Rendering the Map
             game.getSpriteBatch().begin();
                 mapLoader.loadMap1();
-                TextureRegion currentFrame = player.getCurrentAnimationFrame();
-                if (currentFrame != null) {
-                    game.getSpriteBatch().draw(currentFrame, player.getX() * 32, player.getY() * 32, 24, 48);
+                if (player.getCurrentAnimationFrame() != null) {
+                    game.getSpriteBatch().draw(player.getCurrentAnimationFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
                 } else {
-                    game.getSpriteBatch().draw(defaultFrame, player.getX() * 32, player.getY() * 32, 24, 48);
+                    game.getSpriteBatch().draw(player.getDefaultFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
                 }
                 game.getSpriteBatch().end();
             }
@@ -209,118 +169,5 @@ public class GameScreen implements Screen {
         backgroundMusic.play();
         isPause=false;
         game.setScreen(this);
-    }
-
-    // Additional methods and logic can be added as needed for the game screen
-
-    /**
-     * Function to handle all character movements
-     */
-    public void handlePlayerEvents()
-    {
-        float animationSpeed = 3;
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.LEFT, mapLoader, hasKey)) {
-                player.setX(player.getX() - (animationSpeed * deltaTime));
-                if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterLeftAnimation());
-            }
-            defaultFrame = player.getCharacterLeft();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.RIGHT, mapLoader, hasKey)) {
-                player.setX(player.getX() + (animationSpeed * deltaTime));
-                if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterRightAnimation());
-            }
-            defaultFrame = player.getCharacterRight();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.UP, mapLoader, hasKey)) {
-                player.setY(player.getY() + (animationSpeed * deltaTime));
-                if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterUpAnimation());
-            }
-            defaultFrame = player.getCharacterUp();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.DOWN, mapLoader, hasKey)) {
-                player.setY(player.getY() - (animationSpeed * deltaTime));
-                if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterDownAnimation());
-            }
-            defaultFrame = player.getCharacterDown();
-        }
-    }
-
-
-
-    public void handelKey()
-    {
-        //System.out.println("KEYx: " + mapLoader.getKeyX() + " ,KEYY: " + mapLoader.getKeyY());
-        if (Math.abs(player.getX() -  mapLoader.getKeyX()) < 0.5  && Math.abs(player.getY() - mapLoader.getKeyY()) < 0.5) {
-            hasKey = true;
-            mapLoader.setDisplayKey(false);
-        }
-    }
-
-    public void handelPlayerObstacleInteraction(float deltaTime)
-    {
-        if (Utils.isObstacle(player.getX(), player.getY(), mapLoader.getObstacleCoordinates())){
-            if (!isOnObstacle){
-                heartCount--;
-                isOnObstacle = true;
-                timeOnObstacle = 0f;
-            }
-            else {
-                timeOnObstacle += deltaTime;
-                if (timeOnObstacle >= 3.0f){
-                    heartCount--;
-                    timeOnObstacle = 0f;
-                }
-            }
-        }
-        else {
-            isOnObstacle = false;
-            timeOnObstacle = 0f;
-        }
-    }
-
-    public void handlePlayerEnemyInteraction(float deltaTime)
-    {
-        if (Utils.isEnemy(player.getX(), player.getY(), mapLoader.getEnemies())){
-            if (!isOnEnemy){
-                heartCount--;
-                isOnEnemy = true;
-                timeOnObstacle = 0f;
-            }
-            else {
-                timeOnObstacle += deltaTime;
-                if (timeOnEnemy >= 3.0f){
-                    heartCount--;
-                    timeOnEnemy = 0f;
-                }
-            }
-        }
-        else {
-            isOnEnemy = false;
-            timeOnEnemy = 0f;
-        }
-    }
-
-    public void handelLose()
-    {
-        if (heartCount == 0)
-        {
-            game.goToMenu();
-            backgroundMusic.dispose();
-        }
-    }
-
-    public void handelWin()
-    {
-        if (Utils.isDoor(player.getX(), player.getY(), mapLoader.getDoorCoordinates()) && hasKey)
-        {
-            game.goToMenu();
-            backgroundMusic.dispose();
-        }
     }
 }
