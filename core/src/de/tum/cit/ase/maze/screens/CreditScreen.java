@@ -18,14 +18,13 @@ import de.tum.cit.ase.maze.MazeRunnerGame;
 
 public class CreditScreen implements Screen {
     private final MazeRunnerGame game;
-    private final OrthographicCamera camera;
     private final BitmapFont font;
 
     private final Stage stage;
     public CreditScreen(MazeRunnerGame game)
     {
         this.game = game;
-        camera = new OrthographicCamera();
+       var camera = new OrthographicCamera();
         camera.zoom = 1.0f;
         font = game.getSkin().getFont("font");
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
@@ -52,7 +51,7 @@ public class CreditScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

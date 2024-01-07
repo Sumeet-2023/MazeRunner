@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze.screens;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,13 +18,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import de.tum.cit.ase.maze.DesktopFileChooser;
+import de.tum.cit.ase.maze.FileChooser;
+import de.tum.cit.ase.maze.FileChooserCallBack;
 import de.tum.cit.ase.maze.MazeRunnerGame;
+import games.spooky.gdx.nativefilechooser.NativeFileChooser;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 import javax.swing.plaf.FileChooserUI;
 import java.io.File;
+import java.lang.annotation.Native;
 import java.util.List;
 import java.util.Map;
 
@@ -89,12 +97,28 @@ public class SelectMapScreen implements Screen {
                 game.goToGame("maps//level-5.properties");
             }
         });
+        upload.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showFileChooser(new FileChooserCallBack() {
+                    @Override
+                    public void onFileChosen(String filePath) {
+                        game.goToGame(filePath);
+                    }
+                });
+            }
+        });
 
         cancel.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) { game.goToMenu();
             }
         });
+
+    }
+    public void showFileChooser(FileChooserCallBack callBack){
+        FileChooser fileChooser = new DesktopFileChooser();
+        fileChooser.chooseFile(callBack);
 
     }
 
