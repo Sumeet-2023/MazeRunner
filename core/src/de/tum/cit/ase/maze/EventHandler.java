@@ -121,7 +121,7 @@ public class EventHandler {
     {
         if (heartCount == 0)
         {
-            game.goToMenu();
+            game.goToLooseScreen();
             backgroundMusic.dispose();
         }
     }
