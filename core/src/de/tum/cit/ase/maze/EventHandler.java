@@ -130,7 +130,7 @@ public class EventHandler {
     {
         if (Utils.isDoor(player.getX(), player.getY(), mapLoader.getDoorCoordinates()) && player.getHasKey())
         {
-            game.goToMenu();
+            game.goToWinScreen();
             backgroundMusic.dispose();
         }
     }
