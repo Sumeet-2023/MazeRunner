@@ -14,8 +14,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import de.tum.cit.ase.maze.Direction;
 import de.tum.cit.ase.maze.MapLoader;
 import de.tum.cit.ase.maze.MazeRunnerGame;
+import de.tum.cit.ase.maze.Utils;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Player;
+import jdk.jshell.execution.Util;
 
 import java.util.List;
 
@@ -220,97 +222,34 @@ public class GameScreen implements Screen {
         float animationSpeed = 3;
         float deltaTime = Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (canPlayerMove(Direction.LEFT)) {
+            if (Utils.canCharacterMove(player_x, player_y, Direction.LEFT, mapLoader, hasKey)) {
                 player_x -= animationSpeed * deltaTime;
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterLeftAnimation());
             }
             defaultFrame = player.getCharacterLeft();
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (canPlayerMove(Direction.RIGHT)) {
+            if (Utils.canCharacterMove(player_x, player_y, Direction.RIGHT, mapLoader, hasKey)) {
                 player_x += animationSpeed * deltaTime;
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterRightAnimation());
             }
             defaultFrame = player.getCharacterRight();
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (canPlayerMove(Direction.UP)) {
+            if (Utils.canCharacterMove(player_x, player_y, Direction.UP, mapLoader, hasKey)) {
                 player_y += animationSpeed * deltaTime;
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterUpAnimation());
             }
             defaultFrame = player.getCharacterUp();
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            if (canPlayerMove(Direction.DOWN)) {
+            if (Utils.canCharacterMove(player_x, player_y, Direction.DOWN, mapLoader, hasKey)) {
                 player_y -= animationSpeed * deltaTime;
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterDownAnimation());
             }
             defaultFrame = player.getCharacterDown();
         }
-    }
-
-    /**
-     * function takes the direction in which the player wants to move and check if the move is valid.
-     * @param direction
-     * @return Return true if the move is valid and false if not.
-     */
-    public boolean canPlayerMove(Direction direction)
-    {
-        if (Math.abs(player_x -  mapLoader.getPlayer_x()) < 0.5  && Math.abs(player_y -  mapLoader.getPlayer_y()) < 0.5 && direction != Direction.RIGHT)
-            return false;
-        else if (isWall(player_x + 0.2f, player_y) && direction == Direction.RIGHT) {
-            return false;
-        } else if (isWall(player_x, player_y + 0.2f) && direction == Direction.UP) {
-            return false;
-        } else if (isWall(player_x - 0.3f, player_y) && direction == Direction.LEFT) {
-            return false;
-        } else if (isWall(player_x, player_y - 0.3f) && direction == Direction.DOWN) {
-            return false;
-        } else if (isDoor(player_x + 0.2f, player_y) && direction == Direction.RIGHT && !hasKey) {
-            return false;
-        } else if (isDoor(player_x, player_y + 0.2f) && direction == Direction.UP && !hasKey) {
-            return false;
-        } else if (isDoor(player_x - 0.3f, player_y) && direction == Direction.LEFT && !hasKey) {
-            return false;
-        } else if (isDoor(player_x, player_y - 0.3f) && direction == Direction.DOWN && !hasKey) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * The function takes the x and y and check if there is a wall in the vicinity.
-     * @param x
-     * @param y
-     * @return true if there is a wall near x and y and false if not
-     */
-    public boolean isWall(float x, float y)
-    {
-        List<List<Integer>> wallCoordinates = mapLoader.getWallCoordinates();
-        final float tolerance = 0.5f;
-        for (List<Integer> coordinate : wallCoordinates) {
-            float wallX = coordinate.get(0);
-            float wallY = coordinate.get(1);
-            if (Math.abs(x - wallX) < tolerance && Math.abs(y - wallY) < tolerance) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isDoor(float x, float y)
-    {
-        List<List<Integer>> doorCoordinates = mapLoader.getDoorCoordinates();
-        final float tolerance = 0.5f;
-        for (List<Integer> coordinate : doorCoordinates) {
-            float doorX = coordinate.get(0);
-            float doorY = coordinate.get(1);
-            if (Math.abs(x - doorX) < tolerance && Math.abs(y - doorY) < tolerance) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void handelKey()
@@ -368,7 +307,7 @@ public class GameScreen implements Screen {
 
     public void handelWin()
     {
-        if (isDoor(player_x, player_y) && hasKey)
+        if (Utils.isDoor(player_x, player_y, mapLoader.getDoorCoordinates()) && hasKey)
         {
             game.goToMenu();
             backgroundMusic.dispose();

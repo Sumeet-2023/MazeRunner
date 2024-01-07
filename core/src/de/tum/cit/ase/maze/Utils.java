@@ -44,4 +44,54 @@ public class Utils {
         }
         return (map);
     }
+
+    public static boolean isWall(float x, float y, List<List<Integer>> wallCoordinates)
+    {
+        final float tolerance = 0.5f;
+        for (List<Integer> coordinate : wallCoordinates) {
+            float wallX = coordinate.get(0);
+            float wallY = coordinate.get(1);
+            if (Math.abs(x - wallX) < tolerance && Math.abs(y - wallY) < tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isDoor(float x, float y, List<List<Integer>> doorCoordinates)
+    {
+        final float tolerance = 0.5f;
+        for (List<Integer> coordinate : doorCoordinates) {
+            float doorX = coordinate.get(0);
+            float doorY = coordinate.get(1);
+            if (Math.abs(x - doorX) < tolerance && Math.abs(y - doorY) < tolerance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean canCharacterMove(float characterX, float characterY, Direction direction, MapLoader mapLoader, boolean hasKey)
+    {
+        if (Math.abs(characterX -  mapLoader.getPlayer_x()) < 0.5  && Math.abs(characterY -  mapLoader.getPlayer_y()) < 0.5 && direction != Direction.RIGHT)
+            return false;
+        else if (Utils.isWall(characterX + 0.2f, characterY, mapLoader.getWallCoordinates()) && direction == Direction.RIGHT) {
+            return false;
+        } else if (Utils.isWall(characterX, characterY + 0.2f, mapLoader.getWallCoordinates()) && direction == Direction.UP) {
+            return false;
+        } else if (Utils.isWall(characterX - 0.3f, characterY, mapLoader.getWallCoordinates()) && direction == Direction.LEFT) {
+            return false;
+        } else if (Utils.isWall(characterX, characterY - 0.3f, mapLoader.getWallCoordinates()) && direction == Direction.DOWN) {
+            return false;
+        } else if (Utils.isDoor(characterX + 0.2f, characterY, mapLoader.getDoorCoordinates()) && direction == Direction.RIGHT && !hasKey) {
+            return false;
+        } else if (Utils.isDoor(characterX, characterY + 0.2f, mapLoader.getDoorCoordinates()) && direction == Direction.UP && !hasKey) {
+            return false;
+        } else if (Utils.isDoor(characterX - 0.3f, characterY, mapLoader.getDoorCoordinates()) && direction == Direction.LEFT && !hasKey) {
+            return false;
+        } else if (Utils.isDoor(characterX, characterY - 0.3f, mapLoader.getDoorCoordinates()) && direction == Direction.DOWN && !hasKey) {
+            return false;
+        }
+        return true;
+    }
 }

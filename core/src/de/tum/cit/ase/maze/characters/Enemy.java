@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.tum.cit.ase.maze.Direction;
 import de.tum.cit.ase.maze.MapLoader;
+import de.tum.cit.ase.maze.Utils;
 import de.tum.cit.ase.maze.objects.Wall;
 
 import java.util.List;
@@ -31,36 +32,10 @@ public class Enemy {
         spriteBatch.draw(animation.getKeyFrame(sinusInput,true), x * 32, y * 32, 32, 32);
     }
 
-    public boolean canEnemyMove()
-    {
-        if (isWall(x + 0.2f, y) && direction == Direction.RIGHT) {
-            return false;
-        } else if (isWall(x, y + 0.2f) && direction == Direction.UP) {
-            return false;
-        } else if (isWall(x - 0.3f, y) && direction == Direction.LEFT) {
-            return false;
-        } else if (isWall(x, y - 0.3f) && direction == Direction.DOWN) {
-            return false;
-        }
-        return true;
-    }
 
-    public boolean isWall(float x, float y)
-    {
-        for (List<Integer> coordinate : mapLoader.getWallCoordinates())
-        {
-            float wallX = coordinate.get(0);
-            float wallY = coordinate.get(1);
-            final float tolerance = 0.8f;
-            if (Math.abs(x - wallX) < tolerance && Math.abs(y - wallY) < tolerance) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void handleEnemy(float deltaTime) {
-        if (canEnemyMove())
+        if (Utils.canCharacterMove(x, y, direction, mapLoader, false))
             moveStraight(deltaTime, direction);
         else
             setNewDirection();
