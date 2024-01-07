@@ -38,8 +38,6 @@ public class GameScreen implements Screen {
 
     // Attributes to handle player
     private Player player;
-    private float player_x;
-    private float player_y;
     private Animation<TextureRegion> playerAnimation;
     private boolean isAnimating = false;
     private float animationTime = 0f;
@@ -90,11 +88,9 @@ public class GameScreen implements Screen {
         mapLoader = new MapLoader(game, sinusInput,mapLevel);
 
         // Create new player and set starting position and animation.
-        player = new Player();
+        player = new Player(mapLoader.getPlayer_x(), mapLoader.getPlayer_y());
 
         //mapLoader.setPlayerStartingPos();
-        player_x = mapLoader.getPlayer_x();
-        player_y = mapLoader.getPlayer_y();
         playerAnimation = player.getCharacterRightAnimation();
         defaultFrame = player.getCharacterRight();
 
@@ -128,8 +124,8 @@ public class GameScreen implements Screen {
              * Math.min(Math.max(player_x * 16, camera.viewportWidth / 2), mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16)
              * The whole statement give the minimum out of the above two statements.
              */
-            camera.position.set(Math.min(Math.max(player_x * tileSize, camera.viewportWidth / 2), mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize),
-                    Math.min(Math.max(player_y * tileSize, camera.viewportHeight / 2), mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize),
+            camera.position.set(Math.min(Math.max(player.getX() * tileSize, camera.viewportWidth / 2), mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize),
+                    Math.min(Math.max(player.getY() * tileSize, camera.viewportHeight / 2), mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize),
                     0);
 
 
@@ -169,9 +165,9 @@ public class GameScreen implements Screen {
                 mapLoader.loadMap1();
                 TextureRegion currentFrame = player.getCurrentAnimationFrame();
                 if (currentFrame != null) {
-                    game.getSpriteBatch().draw(currentFrame, player_x * 32, player_y * 32, 24, 48);
+                    game.getSpriteBatch().draw(currentFrame, player.getX() * 32, player.getY() * 32, 24, 48);
                 } else {
-                    game.getSpriteBatch().draw(defaultFrame, player_x * 32, player_y * 32, 24, 48);
+                    game.getSpriteBatch().draw(defaultFrame, player.getX() * 32, player.getY() * 32, 24, 48);
                 }
                 game.getSpriteBatch().end();
             }
@@ -225,29 +221,29 @@ public class GameScreen implements Screen {
         float animationSpeed = 3;
         float deltaTime = Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (Utils.canCharacterMove(player_x, player_y, Direction.LEFT, mapLoader, hasKey)) {
-                player_x -= animationSpeed * deltaTime;
+            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.LEFT, mapLoader, hasKey)) {
+                player.setX(player.getX() - (animationSpeed * deltaTime));
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterLeftAnimation());
             }
             defaultFrame = player.getCharacterLeft();
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (Utils.canCharacterMove(player_x, player_y, Direction.RIGHT, mapLoader, hasKey)) {
-                player_x += animationSpeed * deltaTime;
+            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.RIGHT, mapLoader, hasKey)) {
+                player.setX(player.getX() + (animationSpeed * deltaTime));
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterRightAnimation());
             }
             defaultFrame = player.getCharacterRight();
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (Utils.canCharacterMove(player_x, player_y, Direction.UP, mapLoader, hasKey)) {
-                player_y += animationSpeed * deltaTime;
+            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.UP, mapLoader, hasKey)) {
+                player.setY(player.getY() + (animationSpeed * deltaTime));
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterUpAnimation());
             }
             defaultFrame = player.getCharacterUp();
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            if (Utils.canCharacterMove(player_x, player_y, Direction.DOWN, mapLoader, hasKey)) {
-                player_y -= animationSpeed * deltaTime;
+            if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.DOWN, mapLoader, hasKey)) {
+                player.setY(player.getY() - (animationSpeed * deltaTime));
                 if (!player.isAnimating())
                     player.startAnimation(player.getCharacterDownAnimation());
             }
@@ -260,7 +256,7 @@ public class GameScreen implements Screen {
     public void handelKey()
     {
         //System.out.println("KEYx: " + mapLoader.getKeyX() + " ,KEYY: " + mapLoader.getKeyY());
-        if (Math.abs(player_x -  mapLoader.getKeyX()) < 0.5  && Math.abs(player_y - mapLoader.getKeyY()) < 0.5) {
+        if (Math.abs(player.getX() -  mapLoader.getKeyX()) < 0.5  && Math.abs(player.getY() - mapLoader.getKeyY()) < 0.5) {
             hasKey = true;
             mapLoader.setDisplayKey(false);
         }
@@ -268,7 +264,7 @@ public class GameScreen implements Screen {
 
     public void handelPlayerObstacleInteraction(float deltaTime)
     {
-        if (Utils.isObstacle(player_x, player_y, mapLoader.getObstacleCoordinates())){
+        if (Utils.isObstacle(player.getX(), player.getY(), mapLoader.getObstacleCoordinates())){
             if (!isOnObstacle){
                 heartCount--;
                 isOnObstacle = true;
@@ -290,7 +286,7 @@ public class GameScreen implements Screen {
 
     public void handlePlayerEnemyInteraction(float deltaTime)
     {
-        if (Utils.isEnemy(player_x, player_y, mapLoader.getEnemies())){
+        if (Utils.isEnemy(player.getX(), player.getY(), mapLoader.getEnemies())){
             if (!isOnEnemy){
                 heartCount--;
                 isOnEnemy = true;
@@ -321,7 +317,7 @@ public class GameScreen implements Screen {
 
     public void handelWin()
     {
-        if (Utils.isDoor(player_x, player_y, mapLoader.getDoorCoordinates()) && hasKey)
+        if (Utils.isDoor(player.getX(), player.getY(), mapLoader.getDoorCoordinates()) && hasKey)
         {
             game.goToMenu();
             backgroundMusic.dispose();

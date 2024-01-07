@@ -17,7 +17,9 @@ public class Player {
     private boolean isAnimating = false;
     private float animationTime = 0f;
     private Animation<TextureRegion> playerAnimation = null;
-    public Player(){
+    private float x;
+    private float y;
+    public Player(float x, float y){
         this.loadDownCharacterAnimation(); // Load Down character animation
         this.loadRightCharacterAnimation();
         this.loadUpCharacterAnimation();
@@ -26,6 +28,8 @@ public class Player {
         this.loadRightCharacter();
         this.loadUpCharacter();
         this.loadLeftCharacter();
+        this.x = x;
+        this.y = y;
     }
     public void loadDownCharacterAnimation() {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
@@ -150,5 +154,21 @@ public class Player {
 
     public TextureRegion getCharacterLeft() {
         return characterLeft;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
     }
 }
