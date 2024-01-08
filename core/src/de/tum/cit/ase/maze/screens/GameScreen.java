@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,6 +28,8 @@ public class GameScreen implements Screen {
     private final OrthographicCamera camera;
     private final BitmapFont font;
     private final String mapLevel;
+    private final Sound keySound;
+    private boolean hasKeyCollected = false;
     private Music backgroundMusic;
     private MapLoader mapLoader;
     private Player player;
@@ -50,6 +53,8 @@ public class GameScreen implements Screen {
         backgroundMusic.setVolume(0.2f);
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
+
+        this.keySound = Gdx.audio.newSound(Gdx.files.internal("keyPickup.mp3"));
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -100,8 +105,8 @@ public class GameScreen implements Screen {
 
             // Setting the projection Matrix
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
-
             sinusInput += delta;
+
             mapLoader.setSinusInput(sinusInput);
 
             // Setting the viewport such that it displays 12x8 tiles.
@@ -115,6 +120,9 @@ public class GameScreen implements Screen {
             eventHandler.handelKey();
             eventHandler.handelWin();
             eventHandler.handelLose();
+
+            playSound();
+
             player.update(Gdx.graphics.getDeltaTime());
             for (Enemy enemy : mapLoader.getEnemies())
             {
@@ -131,6 +139,13 @@ public class GameScreen implements Screen {
                 }
                 game.getSpriteBatch().end();
             }
+    }
+    public void playSound(){
+        if(player.getHasKey() && !hasKeyCollected){
+            keySound.play();
+            hasKeyCollected = true;
+        }
+
     }
 
     @Override
@@ -150,7 +165,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -160,6 +174,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         backgroundMusic.dispose();
+        keySound.dispose();
     }
     public void pauseGame(){
         backgroundMusic.pause();

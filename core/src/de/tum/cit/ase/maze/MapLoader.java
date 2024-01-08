@@ -224,16 +224,14 @@ public class MapLoader {
                 case 5:
                     if (displayKey)
                         game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+
                     break;
             }
         }
     }
-
-
-        public void setSinusInput(float sinusInput) {
+    public void setSinusInput(float sinusInput) {
         this.sinusInput = sinusInput;
     }
-
 
     // Getter for player starting pos
     public float getMax_x() {
@@ -280,6 +278,10 @@ public class MapLoader {
 
     public void setDisplayKey(boolean displayKey) {
         this.displayKey = displayKey;
+    }
+
+    public boolean isDisplayKey() {
+        return displayKey;
     }
 }
 

@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import de.tum.cit.ase.maze.characters.Player;
 
 import java.lang.invoke.MutableCallSite;
@@ -13,6 +14,8 @@ public class EventHandler {
     private MapLoader mapLoader;
     private MazeRunnerGame game;
     private Music backgroundMusic;
+
+    private Sound keySound;
 
     // Attribute for heart count
     private int heartCount = 3;
@@ -28,6 +31,7 @@ public class EventHandler {
         this.mapLoader = mapLoader;
         this.game = game;
         this.backgroundMusic = backgroundMusic;
+        this.keySound = Gdx.audio.newSound(Gdx.files.internal("keyPickup.mp3"));
     }
 
     public void handlePlayerMovements()
