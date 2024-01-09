@@ -38,6 +38,8 @@ public class GameScreen implements Screen {
     private boolean isPause = false;
     private float sinusInput = 0f;
     private final int tileSize = 32;
+    private float aspectRatio;
+    private int minTilesVisibleY;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -70,6 +72,8 @@ public class GameScreen implements Screen {
         player = new Player(mapLoader.getPlayer_x(), mapLoader.getPlayer_y());
         eventHandler = new EventHandler(player, mapLoader, game, backgroundMusic);
         escMenuScreen = new EscMenuScreen(game,this);
+        aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+        minTilesVisibleY = 6;
     }
 
 
@@ -110,8 +114,10 @@ public class GameScreen implements Screen {
             mapLoader.setSinusInput(sinusInput);
 
             // Setting the viewport such that it displays 12x8 tiles.
-            camera.viewportWidth = tileSize * 12;
-            camera.viewportHeight = tileSize * 8;
+
+            camera.viewportHeight = tileSize * minTilesVisibleY;
+            camera.viewportWidth = camera.viewportHeight * aspectRatio;
+
 
             // Handle Events
             eventHandler.handlePlayerMovements();
@@ -151,6 +157,12 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false);
+        aspectRatio = (float) width / (float) height;
+        camera.viewportHeight = tileSize * minTilesVisibleY;
+        camera.viewportWidth = camera.viewportHeight * aspectRatio;
+
+        camera.viewportWidth = Math.min(camera.viewportWidth, (mapLoader.getMax_x() - 2) * tileSize);
+        camera.viewportHeight = Math.min(camera.viewportHeight, (mapLoader.getMax_y() - 2) * tileSize);
     }
 
     @Override
