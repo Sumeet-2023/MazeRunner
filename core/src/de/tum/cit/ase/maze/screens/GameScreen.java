@@ -38,6 +38,11 @@ public class GameScreen implements Screen {
     private boolean isPause = false;
     private float sinusInput = 0f;
     private final int tileSize = 32;
+    private String map1 = "maps//level-1.properties";
+    private String map2 = "maps//level-2.properties";
+    private String map3 = "maps//level-3.properties";
+    private String map4 = "maps//level-4.properties";
+    private String map5 = "maps//level-5.properties";
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -131,8 +136,23 @@ public class GameScreen implements Screen {
 
             // Rendering the Map
             game.getSpriteBatch().begin();
-                mapLoader.loadMap1();
-                if (player.getCurrentAnimationFrame() != null) {
+              if(mapLevel.equals(map1)){
+                  mapLoader.loadMap1();
+              } else if (mapLevel.equals(map2)) {
+                  mapLoader.loadMap2();
+              } else if (mapLevel.equals(map3)) {
+                  mapLoader.loadMap3();
+              } else if (mapLevel.equals(map4)) {
+                 mapLoader.loadMap4();
+              } else if (mapLevel.equals(map5)) {
+                 mapLoader.loadMap5();
+              }
+              else
+              {
+                  mapLoader.loadMap1();
+              }
+
+            if (player.getCurrentAnimationFrame() != null) {
                     game.getSpriteBatch().draw(player.getCurrentAnimationFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
                 } else {
                     game.getSpriteBatch().draw(player.getDefaultFrame(), player.getX() * 32, player.getY() * 32, 24, 48);

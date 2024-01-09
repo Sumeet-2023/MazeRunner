@@ -10,13 +10,11 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Arrays;
 
 public class Door {
-    private TextureRegion horizontalDoor;
-    private Sprite verticalDoor;
+    private Sprite horizontalDoor;
     private Animation<TextureRegion> HdoorOpenAnimation;
     private Animation<Sprite> VdoorOpenAnimation;
     public Door(){
         loadHorizontalDoor();
-        loadVerticalDoor();
         loadHDoorOpenAnimation();
         loadVDoorOpenAnimation();
     }
@@ -44,19 +42,11 @@ public class Door {
     }
     public void loadHorizontalDoor(){
         Texture doorTexture = new Texture(Gdx.files.internal("things.png"));
-        horizontalDoor = new TextureRegion(doorTexture, 1, 0, 16, 16);
-    }
-    public void loadVerticalDoor(){
-        Texture doorTexture = new Texture(Gdx.files.internal("things.png"));
-        verticalDoor = new Sprite(doorTexture, 1, 0, 16, 16);
+        horizontalDoor = new Sprite(doorTexture, 1, 0, 16, 16);
     }
 
-    public TextureRegion getHorizontalDoor() {
+    public Sprite getHorizontalDoor() {
         return horizontalDoor;
-    }
-
-    public Sprite getVerticalDoor() {
-        return verticalDoor;
     }
 
     public Animation<TextureRegion> getHdoorOpenAnimation() {
