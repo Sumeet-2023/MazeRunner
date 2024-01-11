@@ -15,8 +15,6 @@ public class EventHandler {
     private MazeRunnerGame game;
     private Music backgroundMusic;
 
-    private Sound keySound;
-
     // Attribute for heart count
     private int heartCount = 3;
 
@@ -31,7 +29,6 @@ public class EventHandler {
         this.mapLoader = mapLoader;
         this.game = game;
         this.backgroundMusic = backgroundMusic;
-        this.keySound = Gdx.audio.newSound(Gdx.files.internal("keyPickup.mp3"));
     }
 
     public void handlePlayerMovements()
@@ -42,30 +39,30 @@ public class EventHandler {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.LEFT, mapLoader, player.getHasKey())) {
                 player.setX(player.getX() - (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterLeftAnimation());
+                    player.startAnimation(player.getCharacter4LeftAnimation());
             }
-            player.setDefaultFrame(player.getCharacterLeft());
+            player.setDefaultFrame(player.getCharacter4Left());
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.RIGHT, mapLoader, player.getHasKey())) {
                 player.setX(player.getX() + (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterRightAnimation());
+                    player.startAnimation(player.getCharacter4RightAnimation());
             }
-            player.setDefaultFrame(player.getCharacterRight());
+            player.setDefaultFrame(player.getCharacter4Right());
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.UP, mapLoader, player.getHasKey())) {
                 player.setY(player.getY() + (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterUpAnimation());
+                    player.startAnimation(player.getCharacter4UpAnimation());
             }
-            player.setDefaultFrame(player.getCharacterUp());
+            player.setDefaultFrame(player.getCharacter4Up());
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.DOWN, mapLoader, player.getHasKey())) {
                 player.setY(player.getY() - (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacterDownAnimation());
+                    player.startAnimation(player.getCharacter4DownAnimation());
             }
-            player.setDefaultFrame(player.getCharacterDown());
+            player.setDefaultFrame(player.getCharacter4Down());
         }
     }
 

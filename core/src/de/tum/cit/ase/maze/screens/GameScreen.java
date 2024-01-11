@@ -43,7 +43,6 @@ public class GameScreen implements Screen {
     private String map3 = "maps//level-3.properties";
     private String map4 = "maps//level-4.properties";
     private String map5 = "maps//level-5.properties";
-    private boolean menuScreenDispose = false;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -53,7 +52,6 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game,String mapLevel) {
         this.game = game;
         this.mapLevel=mapLevel;
-        this.menuScreenDispose = true;
 
         // Music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
@@ -77,6 +75,7 @@ public class GameScreen implements Screen {
         player = new Player(mapLoader.getPlayer_x(), mapLoader.getPlayer_y());
         eventHandler = new EventHandler(player, mapLoader, game, backgroundMusic);
         escMenuScreen = new EscMenuScreen(game,this);
+
     }
 
 
@@ -155,9 +154,9 @@ public class GameScreen implements Screen {
               }
 
             if (player.getCurrentAnimationFrame() != null) {
-                    game.getSpriteBatch().draw(player.getCurrentAnimationFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
+                    game.getSpriteBatch().draw(player.getCurrentAnimationFrame(), player.getX() * 32, player.getY() * 32, 28, 32);
                 } else {
-                    game.getSpriteBatch().draw(player.getDefaultFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
+                    game.getSpriteBatch().draw(player.getDefaultFrame(), player.getX() * 32, player.getY() * 32, 28, 32);
                 }
                 game.getSpriteBatch().end();
             }
@@ -206,9 +205,5 @@ public class GameScreen implements Screen {
         backgroundMusic.play();
         isPause=false;
         game.setScreen(this);
-    }
-
-    public boolean isMenuScreenDispose() {
-        return menuScreenDispose;
     }
 }
