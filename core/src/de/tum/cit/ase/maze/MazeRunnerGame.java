@@ -68,6 +68,10 @@ public class MazeRunnerGame extends Game {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
+        if (escMenuScreen != null) {
+            escMenuScreen.dispose(); // Dispose the game screen if it exists
+            escMenuScreen = null;
+        }
 
     }
 
@@ -90,18 +94,17 @@ public class MazeRunnerGame extends Game {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
-        if (selectMapScreen != null) {
-            selectMapScreen.dispose(); // Dispose the game screen if it exists
-            selectMapScreen = null;
+        if (menuScreen != null) {
+            menuScreen.dispose(); // Dispose the menu screen if it exists
+            menuScreen = null;
         }
 
     }
     public void goToSelectMap() {
         this.setScreen(new SelectMapScreen(this)); // Set the current screen to MenuScreen
-        if (escMenuScreen != null) {
-            escMenuScreen.dispose(); // Dispose the game screen if it exists
-            escMenuScreen = null;
-        }
+    }
+    public void goToEscSelectMap() {
+        this.setScreen(new EscSelectMapScreen(this)); // Set the current screen to MenuScreen
     }
 
 

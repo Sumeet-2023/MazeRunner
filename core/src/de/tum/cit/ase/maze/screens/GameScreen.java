@@ -43,6 +43,7 @@ public class GameScreen implements Screen {
     private String map3 = "maps//level-3.properties";
     private String map4 = "maps//level-4.properties";
     private String map5 = "maps//level-5.properties";
+    private boolean menuScreenDispose = false;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -52,6 +53,7 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game,String mapLevel) {
         this.game = game;
         this.mapLevel=mapLevel;
+        this.menuScreenDispose = true;
 
         // Music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
@@ -204,5 +206,9 @@ public class GameScreen implements Screen {
         backgroundMusic.play();
         isPause=false;
         game.setScreen(this);
+    }
+
+    public boolean isMenuScreenDispose() {
+        return menuScreenDispose;
     }
 }

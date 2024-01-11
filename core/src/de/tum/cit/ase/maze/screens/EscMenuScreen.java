@@ -40,12 +40,19 @@ public class EscMenuScreen implements Screen{
         table.add(continueGame).width(300).pad(10).row();
         TextButton howToPlay = new TextButton("Volume", game.getSkin());
         table.add(howToPlay).width(300).pad(10).row();
+        TextButton selectMap = new TextButton("Play New Map", game.getSkin());
+        table.add(selectMap).width(300).pad(10).row();
         TextButton exitGame = new TextButton("Exit", game.getSkin());
         table.add(exitGame).width(300).pad(10).row();
 
         continueGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) { gameScreen.resumeGame();
+            }
+        });
+        selectMap.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) { game.goToEscSelectMap();
             }
         });
 
