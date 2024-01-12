@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
 
         // Creating new Instances of clsses
         mapLoader = new MapLoader(game, sinusInput,mapLevel);
-        player = new Player(mapLoader.getPlayer_x(), mapLoader.getPlayer_y());
+        player = new Player(mapLoader.getPlayer_x(), mapLoader.getPlayer_y(),mapLevel);
         eventHandler = new EventHandler(player, mapLoader, game, backgroundMusic);
         escMenuScreen = new EscMenuScreen(game,this);
 

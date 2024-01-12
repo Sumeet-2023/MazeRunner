@@ -39,30 +39,30 @@ public class EventHandler {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.LEFT, mapLoader, player.getHasKey())) {
                 player.setX(player.getX() - (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacter4LeftAnimation());
+                    player.startAnimation(player.getCharacterLeftAnimation());
             }
-            player.setDefaultFrame(player.getCharacter4Left());
+            player.setDefaultFrame(player.getCharacterLeft());
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.RIGHT, mapLoader, player.getHasKey())) {
                 player.setX(player.getX() + (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacter4RightAnimation());
+                    player.startAnimation(player.getCharacterRightAnimation());
             }
-            player.setDefaultFrame(player.getCharacter4Right());
+            player.setDefaultFrame(player.getCharacterRight());
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.UP, mapLoader, player.getHasKey())) {
                 player.setY(player.getY() + (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacter4UpAnimation());
+                    player.startAnimation(player.getCharacterUpAnimation());
             }
-            player.setDefaultFrame(player.getCharacter4Up());
+            player.setDefaultFrame(player.getCharacterUp());
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (Utils.canCharacterMove(player.getX(), player.getY(), Direction.DOWN, mapLoader, player.getHasKey())) {
                 player.setY(player.getY() - (animationSpeed * deltaTime));
                 if (!player.isAnimating())
-                    player.startAnimation(player.getCharacter4DownAnimation());
+                    player.startAnimation(player.getCharacterDownAnimation());
             }
-            player.setDefaultFrame(player.getCharacter4Down());
+            player.setDefaultFrame(player.getCharacterDown());
         }
     }
 

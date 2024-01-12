@@ -78,9 +78,9 @@ public class MazeRunnerGame extends Game {
     /**
      * Switches to the game screen.
      */
-    public void goToGame(String level) {
+    public void goToGame(String mapLevel) {
 
-        this.setScreen(new GameScreen(this,level));// Set the current screen to GameScreen
+        this.setScreen(new GameScreen(this,mapLevel));// Set the current screen to GameScreen
         backgroundMusic.pause();
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
