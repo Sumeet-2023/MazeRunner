@@ -198,7 +198,7 @@ public class MapLoader {
                     }
                     break;
                 case 3:
-                    if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0) {
+                    if(coordinates.get(0) % 2 == 0 && coordinates.get(1) % 2 == 0) {
                         game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     }
                     else if(coordinates.get(0)%2==1 && coordinates.get(1)%2==0){

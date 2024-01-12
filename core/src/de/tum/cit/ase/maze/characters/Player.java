@@ -21,6 +21,9 @@ public class Player {
     private float y;
     private boolean hasKey = false;
     private TextureRegion defaultFrame;
+
+    // Attribute for heart count
+    private int heartCount = 3;
     public Player(float x, float y){
         this.loadDownCharacterAnimation(); // Load Down character animation
         this.loadRightCharacterAnimation();
@@ -189,5 +192,13 @@ public class Player {
 
     public void setDefaultFrame(TextureRegion defaultFrame) {
         this.defaultFrame = defaultFrame;
+    }
+
+    public int getHeartCount() {
+        return heartCount;
+    }
+
+    public void setHeartCount(int heartCount) {
+        this.heartCount = heartCount;
     }
 }

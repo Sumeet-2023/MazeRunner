@@ -17,8 +17,6 @@ public class EventHandler {
 
     private Sound keySound;
 
-    // Attribute for heart count
-    private int heartCount = 3;
 
     // Attribute for handling obstacle
     private float timeOnObstacle = 0f;
@@ -81,14 +79,14 @@ public class EventHandler {
     {
         if (Utils.isObstacle(player.getX(), player.getY(), mapLoader.getObstacleCoordinates())){
             if (!isOnObstacle){
-                heartCount--;
+                player.setHeartCount(player.getHeartCount() - 1);
                 isOnObstacle = true;
                 timeOnObstacle = 0f;
             }
             else {
                 timeOnObstacle += deltaTime;
                 if (timeOnObstacle >= 3.0f){
-                    heartCount--;
+                    player.setHeartCount(player.getHeartCount() - 1);
                     timeOnObstacle = 0f;
                 }
             }
@@ -103,14 +101,14 @@ public class EventHandler {
     {
         if (Utils.isEnemy(player.getX(), player.getY(), mapLoader.getEnemies())){
             if (!isOnEnemy){
-                heartCount--;
+                player.setHeartCount(player.getHeartCount() - 1);
                 isOnEnemy = true;
                 timeOnObstacle = 0f;
             }
             else {
                 timeOnObstacle += deltaTime;
                 if (timeOnEnemy >= 3.0f){
-                    heartCount--;
+                    player.setHeartCount(player.getHeartCount() - 1);
                     timeOnEnemy = 0f;
                 }
             }
@@ -123,7 +121,7 @@ public class EventHandler {
 
     public void handelLose()
     {
-        if (heartCount == 0)
+        if (player.getHeartCount() == 0)
         {
             game.goToLooseScreen();
             backgroundMusic.dispose();

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.tum.cit.ase.maze.*;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Player;
@@ -35,6 +36,7 @@ public class GameScreen implements Screen {
     private Player player;
     private EventHandler eventHandler;
     private EscMenuScreen escMenuScreen;
+    private HUD hud;
     private boolean isPause = false;
     private float sinusInput = 0f;
     private final int tileSize = 32;
@@ -74,6 +76,9 @@ public class GameScreen implements Screen {
         escMenuScreen = new EscMenuScreen(game,this);
         aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         minTilesVisibleY = 6;
+
+        // Initializing HUD
+        hud = new HUD(player.getHeartCount(), player.getHasKey(), new ScreenViewport());
     }
 
 
@@ -119,6 +124,8 @@ public class GameScreen implements Screen {
             camera.viewportWidth = camera.viewportHeight * aspectRatio;
 
 
+
+
             // Handle Events
             eventHandler.handlePlayerMovements();
             eventHandler.handelPlayerObstacleInteraction(delta);
@@ -137,14 +144,19 @@ public class GameScreen implements Screen {
 
             // Rendering the Map
             game.getSpriteBatch().begin();
-                mapLoader.loadMap1();
-                if (player.getCurrentAnimationFrame() != null) {
-                    game.getSpriteBatch().draw(player.getCurrentAnimationFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
-                } else {
-                    game.getSpriteBatch().draw(player.getDefaultFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
-                }
-                game.getSpriteBatch().end();
+            mapLoader.loadMap1();
+            if (player.getCurrentAnimationFrame() != null) {
+                game.getSpriteBatch().draw(player.getCurrentAnimationFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
+            } else {
+                game.getSpriteBatch().draw(player.getDefaultFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
             }
+            game.getSpriteBatch().end();
+
+            // Update and draw HUD
+            hud.getStage().act(delta);
+            hud.draw();
+
+        }
     }
     public void playSound(){
         if(player.getHasKey() && !hasKeyCollected){

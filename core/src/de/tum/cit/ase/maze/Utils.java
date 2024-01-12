@@ -1,6 +1,7 @@
 package de.tum.cit.ase.maze;
 
 import de.tum.cit.ase.maze.characters.Enemy;
+import de.tum.cit.ase.maze.objects.Obstacle;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,6 +48,30 @@ public class Utils {
         return (map);
     }
 
+    public static boolean canCharacterMove(float characterX, float characterY, Direction direction, MapLoader mapLoader, boolean hasKey)
+    {
+        if (Math.abs(characterX -  mapLoader.getPlayer_x()) < 0.5  && Math.abs(characterY -  mapLoader.getPlayer_y()) < 0.5 && direction != Direction.RIGHT)
+            return false;
+        else if (isWall(characterX + 0.2f, characterY, mapLoader.getWallCoordinates()) && direction == Direction.RIGHT) {
+            return false;
+        } else if (isWall(characterX, characterY + 0.2f, mapLoader.getWallCoordinates()) && direction == Direction.UP) {
+            return false;
+        } else if (isWall(characterX - 0.3f, characterY, mapLoader.getWallCoordinates()) && direction == Direction.LEFT) {
+            return false;
+        } else if (isWall(characterX, characterY - 0.3f, mapLoader.getWallCoordinates()) && direction == Direction.DOWN) {
+            return false;
+        } else if (isDoor(characterX + 0.2f, characterY, mapLoader.getDoorCoordinates()) && direction == Direction.RIGHT && !hasKey) {
+            return false;
+        } else if (isDoor(characterX, characterY + 0.2f, mapLoader.getDoorCoordinates()) && direction == Direction.UP && !hasKey) {
+            return false;
+        } else if (isDoor(characterX - 0.3f, characterY, mapLoader.getDoorCoordinates()) && direction == Direction.LEFT && !hasKey) {
+            return false;
+        } else if (isDoor(characterX, characterY - 0.3f, mapLoader.getDoorCoordinates()) && direction == Direction.DOWN && !hasKey) {
+            return false;
+        }
+        return true;
+    }
+
     public static boolean isWall(float x, float y, List<List<Integer>> wallCoordinates)
     {
         final float tolerance = 0.5f;
@@ -72,42 +97,19 @@ public class Utils {
         }
         return false;
     }
-
-    public static boolean canCharacterMove(float characterX, float characterY, Direction direction, MapLoader mapLoader, boolean hasKey)
-    {
-        if (Math.abs(characterX -  mapLoader.getPlayer_x()) < 0.5  && Math.abs(characterY -  mapLoader.getPlayer_y()) < 0.5 && direction != Direction.RIGHT)
-            return false;
-        else if (Utils.isWall(characterX + 0.2f, characterY, mapLoader.getWallCoordinates()) && direction == Direction.RIGHT) {
-            return false;
-        } else if (Utils.isWall(characterX, characterY + 0.2f, mapLoader.getWallCoordinates()) && direction == Direction.UP) {
-            return false;
-        } else if (Utils.isWall(characterX - 0.3f, characterY, mapLoader.getWallCoordinates()) && direction == Direction.LEFT) {
-            return false;
-        } else if (Utils.isWall(characterX, characterY - 0.3f, mapLoader.getWallCoordinates()) && direction == Direction.DOWN) {
-            return false;
-        } else if (Utils.isDoor(characterX + 0.2f, characterY, mapLoader.getDoorCoordinates()) && direction == Direction.RIGHT && !hasKey) {
-            return false;
-        } else if (Utils.isDoor(characterX, characterY + 0.2f, mapLoader.getDoorCoordinates()) && direction == Direction.UP && !hasKey) {
-            return false;
-        } else if (Utils.isDoor(characterX - 0.3f, characterY, mapLoader.getDoorCoordinates()) && direction == Direction.LEFT && !hasKey) {
-            return false;
-        } else if (Utils.isDoor(characterX, characterY - 0.3f, mapLoader.getDoorCoordinates()) && direction == Direction.DOWN && !hasKey) {
-            return false;
-        }
-        return true;
-    }
-
     public static boolean isObstacle(float x, float y, List<List<Integer>> obstacleCoordinates){
-        final float tolerance = 0.2f;
+        final float tolerance = 0.4f;
         for (List<Integer> coordinate : obstacleCoordinates) {
             float obstacleX = coordinate.get(0);
             float obstacleY = coordinate.get(1);
             if (Math.abs(x - obstacleX) < tolerance && Math.abs(y - obstacleY) < tolerance) {
+                System.out.println("Collision Detected");
                 return true;
             }
         }
         return false;
     }
+
 
     public static boolean isEnemy(float x, float y, List<Enemy> enemies)
     {
