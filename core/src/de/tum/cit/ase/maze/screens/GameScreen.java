@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         minTilesVisibleY = 6;
 
         // Initializing HUD
-        hud = new HUD(player.getHeartCount(), player.getHasKey(), new ScreenViewport());
+        hud = new HUD(player, new ScreenViewport());
     }
 
 
@@ -154,6 +154,7 @@ public class GameScreen implements Screen {
 
             // Update and draw HUD
             hud.getStage().act(delta);
+            hud.update();
             hud.draw();
 
         }
