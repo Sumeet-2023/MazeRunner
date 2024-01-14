@@ -54,10 +54,24 @@ public class GameScreen implements Screen {
         this.mapLevel=mapLevel;
 
         // Music
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
-        backgroundMusic.setVolume(0.2f);
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
+        if(mapLevel.equals(map1) || mapLevel.equals(map2) || mapLevel.equals(map5)) {
+            backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
+            backgroundMusic.setVolume(0.2f);
+            backgroundMusic.setLooping(true);
+            backgroundMusic.play();
+        }
+        else if(mapLevel.equals(map3) || mapLevel.equals(map4)){
+            backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map3Music.mp3"));
+            backgroundMusic.setVolume(0.2f);
+            backgroundMusic.setLooping(true);
+            backgroundMusic.play();
+        }
+        else {
+            backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
+            backgroundMusic.setVolume(0.2f);
+            backgroundMusic.setLooping(true);
+            backgroundMusic.play();
+        }
 
         this.keySound = Gdx.audio.newSound(Gdx.files.internal("keyPickup.mp3"));
 
@@ -77,8 +91,7 @@ public class GameScreen implements Screen {
         escMenuScreen = new EscMenuScreen(game,this);
 
     }
-
-
+    
     // Screen interface methods with necessary functionality
     @Override
     public void render(float delta) {

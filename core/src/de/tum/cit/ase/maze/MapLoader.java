@@ -503,36 +503,44 @@ public class MapLoader {
 
         for (int i = 0; i <= max_x; i++) {
             for (int j = 0; j <= max_y; j++) {
-                game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
+                game.getSpriteBatch().draw(tiles.getIslandGrass(), i * 32, j * 32,32,32);
             }
         }
-
 
         game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
-                    if (coordinates.get(1)==min_y || coordinates.get(1)==max_y) {
-                        game.getSpriteBatch().draw(wall.getHOrangeWall(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    } else if ( coordinates.get(0)==max_x ) {
-                        wall.getHOrangeWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
-                        wall.getHOrangeWall().setSize(32,32);
-                        wall.getHOrangeWall().translateY(16);
-                        wall.getHOrangeWall().setRotation(270);
-                        wall.getHOrangeWall().draw(game.getSpriteBatch());
+                    if ( coordinates.get(1)==max_y) {
+                        game.getSpriteBatch().draw(wall.getIslandWallUp(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    } else if (coordinates.get(1)==0) {
+                        game.getSpriteBatch().draw(wall.getIslandWallDown(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     }
-                    else if (coordinates.get(0)==min_x ) {
-                        wall.getHOrangeWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
-                        wall.getHOrangeWall().setSize(32,32);
-                        wall.getHOrangeWall().translateX(16);
-                        wall.getHOrangeWall().setRotation(90);
-                        wall.getHOrangeWall().draw(game.getSpriteBatch());
+                    else if (coordinates.get(0)==0) {
+                        game.getSpriteBatch().draw(wall.getIslandWallLeft(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                    }
+                    else if (coordinates.get(0)==max_x) {
+                        game.getSpriteBatch().draw(wall.getIslandWallRight(), coordinates.get(0) * 32, coordinates.get(1) * 32, 38, 32);
                     }
                     else {
-                        game.getSpriteBatch().draw(wall.getStoneWall(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                        if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0 || coordinates.get(0)%2==1 && coordinates.get(1)%2==1) {
+                            game.getSpriteBatch().draw(wall.getStoneWall(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+                        } else if (coordinates.get(0)%2==1 && coordinates.get(1)%2==0 || coordinates.get(0)%2==0 && coordinates.get(1)%2==1) {
+                            game.getSpriteBatch().draw(wall.getWood(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
+
+                        }
                     }
-                    if(coordinates.get(0)==max_x && coordinates.get(1)==max_y || coordinates.get(0)==0 && coordinates.get(1)==max_y){
-                        game.getSpriteBatch().draw(wall.getOrangeCornerWall(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+                    if( coordinates.get(0)==0 && coordinates.get(1)==max_y){
+                        game.getSpriteBatch().draw(wall.getIslandCornerWallUpLeft(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+                    }
+                    if(coordinates.get(0)==max_x && coordinates.get(1)==max_y ){
+                        game.getSpriteBatch().draw(wall.getIslandCornerWallUpRight(),coordinates.get(0)*32,coordinates.get(1)*32,56,32);
+                    }
+                    if(coordinates.get(0)==0 && coordinates.get(1)==0 ){
+                        game.getSpriteBatch().draw(wall.getIslandCornerWallDownLeft(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+                    }
+                    if(coordinates.get(0)==max_x && coordinates.get(1)==0 ){
+                        game.getSpriteBatch().draw(wall.getIslandCornerWallDownRight(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
                     }
                     break;
                 case 1:
@@ -558,7 +566,7 @@ public class MapLoader {
                     break;
                 case 5:
                     if (displayKey)
-                        game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+                        game.getSpriteBatch().draw(key.getKey(),coordinates.get(0)*32,coordinates.get(1)*32,28,32);
 
                     break;
             }
