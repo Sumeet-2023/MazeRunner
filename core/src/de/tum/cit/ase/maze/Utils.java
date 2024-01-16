@@ -103,7 +103,6 @@ public class Utils {
             float obstacleX = coordinate.get(0);
             float obstacleY = coordinate.get(1);
             if (Math.abs(x - obstacleX) < tolerance && Math.abs(y - obstacleY) < tolerance) {
-                System.out.println("Collision Detected");
                 return true;
             }
         }

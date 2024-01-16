@@ -4,10 +4,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -15,15 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import de.tum.cit.ase.maze.DesktopFileChooser;
-import de.tum.cit.ase.maze.FileChooser;
-import de.tum.cit.ase.maze.FileChooserCallBack;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
-public class SelectMapScreen implements Screen {
+public class EscSelectMapScreen implements Screen {
     private final Stage stage;
     private MazeRunnerGame game;
-    public SelectMapScreen(MazeRunnerGame game) {
+
+    public EscSelectMapScreen(MazeRunnerGame game) {
         var camera = new OrthographicCamera();
         camera.zoom = 1.0f; // Set camera zoom for a closer view
 
@@ -33,8 +29,6 @@ public class SelectMapScreen implements Screen {
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
-        Image backgroundImage = new Image(new Texture(Gdx.files.internal("MainMenuImage.jpg")));
-        table.setBackground(backgroundImage.getDrawable());
 
         // Create and add a button to go to the game screen
         TextButton map0 = new TextButton("Level 1", game.getSkin());
@@ -47,8 +41,6 @@ public class SelectMapScreen implements Screen {
         table.add(map3).width(300).pad(10).row();
         TextButton map4 = new TextButton("Level 5", game.getSkin());
         table.add(map4).width(300).pad(10).row();
-        TextButton upload = new TextButton("Upload Map", game.getSkin());
-        table.add(upload).width(300).pad(10).row();
         TextButton cancel = new TextButton("Back", game.getSkin());
         table.add(cancel).width(300).pad(10).row();
 
@@ -82,32 +74,20 @@ public class SelectMapScreen implements Screen {
                 game.goToGame("maps//level-5.properties");
             }
         });
-        upload.addListener(new ChangeListener() {
+
+        cancel.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showFileChooser(new FileChooserCallBack() {
-                    @Override
-                    public void onFileChosen(String filePath) {
-                        game.goToGame(filePath);
-                    }
-                });
+                game.goToEscMenu();
+
             }
         });
 
-        cancel.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                        game.goToMenu();
-
-                }
-        });
-
-
     }
-    public void showFileChooser(FileChooserCallBack callBack){
-        FileChooser fileChooser = new DesktopFileChooser();
-        fileChooser.chooseFile(callBack);
 
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -121,30 +101,26 @@ public class SelectMapScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true); // Update the stage viewport on resize
+
     }
 
-    @Override
-    public void dispose() {
-        // Dispose of the stage when screen is disposed
-        stage.dispose();
-    }
-
-    @Override
-    public void show() {
-        // Set the input processor so the stage can receive input events
-        Gdx.input.setInputProcessor(stage);
-    }
-
-    // The following methods are part of the Screen interface but are not used in this screen.
     @Override
     public void pause() {
+
     }
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 }
