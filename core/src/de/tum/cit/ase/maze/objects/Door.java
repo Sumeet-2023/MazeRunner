@@ -21,7 +21,7 @@ public class Door {
         loadVDoorOpenAnimation();
     }
     public void loadHDoorOpenAnimation(){
-        Texture doorSheet =new Texture(Gdx.files.internal("things.png"));
+        Texture doorSheet =new Texture(Gdx.files.internal("things.png"));// why not this in constructor?
         int animationFrame=4;
         Array<TextureRegion> doorFrames=new Array<>(TextureRegion.class);
         for(int row=0;row<animationFrame;row++){

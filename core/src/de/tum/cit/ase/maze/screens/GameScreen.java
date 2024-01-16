@@ -128,9 +128,9 @@ public class GameScreen implements Screen {
 
             // Handle Events
             eventHandler.handlePlayerMovements();
-            eventHandler.handelPlayerObstacleInteraction(delta);
-            eventHandler.handlePlayerEnemyInteraction(delta);
-            eventHandler.handelKey();
+            eventHandler.handelPlayerObstacleInteraction(delta, hud);
+            eventHandler.handlePlayerEnemyInteraction(delta, hud);
+            eventHandler.handelKey(hud);
             eventHandler.handelWin();
             eventHandler.handelLose();
 
@@ -154,7 +154,7 @@ public class GameScreen implements Screen {
 
             // Update and draw HUD
             hud.getStage().act(delta);
-            hud.update();
+
             hud.draw();
 
         }

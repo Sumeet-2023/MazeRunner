@@ -67,27 +67,33 @@ public class EventHandler {
         }
     }
 
-    public void handelKey()
+    public void handelKey(HUD hud)
     {
         if (Math.abs(player.getX() -  mapLoader.getKeyX()) < 0.5  && Math.abs(player.getY() - mapLoader.getKeyY()) < 0.5) {
             player.setHasKey(true);
             mapLoader.setDisplayKey(false);
+            hud.update();
+            hud.animateKeyCollection();
         }
     }
 
-    public void handelPlayerObstacleInteraction(float deltaTime)
+    public void handelPlayerObstacleInteraction(float deltaTime, HUD hud)
     {
         if (Utils.isObstacle(player.getX(), player.getY(), mapLoader.getObstacleCoordinates())){
             if (!isOnObstacle){
                 player.setHeartCount(player.getHeartCount() - 1);
                 isOnObstacle = true;
                 timeOnObstacle = 0f;
+                hud.update();
+                hud.animateHeartLoss(2 - player.getHeartCount());
             }
             else {
                 timeOnObstacle += deltaTime;
                 if (timeOnObstacle >= 3.0f){
                     player.setHeartCount(player.getHeartCount() - 1);
                     timeOnObstacle = 0f;
+                    hud.update();
+                    hud.animateHeartLoss(2 - player.getHeartCount());
                 }
             }
         }
@@ -97,19 +103,24 @@ public class EventHandler {
         }
     }
 
-    public void handlePlayerEnemyInteraction(float deltaTime)
+    public void handlePlayerEnemyInteraction(float deltaTime, HUD hud)
     {
         if (Utils.isEnemy(player.getX(), player.getY(), mapLoader.getEnemies())){
             if (!isOnEnemy){
                 player.setHeartCount(player.getHeartCount() - 1);
                 isOnEnemy = true;
                 timeOnObstacle = 0f;
+                hud.update();
+                hud.animateHeartLoss(2 - player.getHeartCount());
             }
             else {
                 timeOnObstacle += deltaTime;
                 if (timeOnEnemy >= 3.0f){
                     player.setHeartCount(player.getHeartCount() - 1);
                     timeOnEnemy = 0f;
+                    hud.update();
+                    hud.animateHeartLoss(2 - player.getHeartCount());
+
                 }
             }
         }
