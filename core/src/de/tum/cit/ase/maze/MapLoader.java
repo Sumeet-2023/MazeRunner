@@ -34,6 +34,7 @@ public class MapLoader {
     private Ghost ghost;
     private Door doors;
     private Tile tiles;
+    private Decoration decoration;
 
     // Key and its position
     private Key key;
@@ -46,6 +47,9 @@ public class MapLoader {
     private List<List<Integer>> doorCoordinates;
     private List<List<Integer>> obstacleCoordinates;
     private List<Enemy> enemies;
+    private List<List<Integer>> emptySpaceCoordinate;
+    private int randomIndex1;
+    private int randomIndex2;
 
 
     public MapLoader(MazeRunnerGame game, float sinusInput,String level) {
@@ -62,7 +66,6 @@ public class MapLoader {
         // Obstacles
         this.obstacles = new Obstacle();
         obstacleCoordinates = new ArrayList<>();
-        obstacleCoordinates = new ArrayList<>();
 
         // Enemies
         enemies = new ArrayList<>();
@@ -78,8 +81,17 @@ public class MapLoader {
         // Key
         this.key = new Key();
 
+        //Decoration
+        decoration = new Decoration();
+
         // Store coordinates
         setCoordinateLists();
+
+        emptySpaceCoordinate = new ArrayList<>();
+        spaceCoordinate();
+        Random random = new Random();
+        randomIndex1 = random.nextInt(emptySpaceCoordinate.size());
+        randomIndex2 = random.nextInt(emptySpaceCoordinate.size());
 
     }
 
@@ -131,6 +143,23 @@ public class MapLoader {
             }
         }
     }
+    public void spaceCoordinate(){
+        setMaxXY(map);
+        for (int i = 0; i <= max_x; i++) {
+            for (int j = 0; j <= max_y; j++) {
+                List<Integer> xy = new ArrayList<>();
+                xy.add(i);
+                xy.add(j);
+                emptySpaceCoordinate.add(xy);
+            }
+        }
+        for(List<Integer> wallXY : wallCoordinates){
+            emptySpaceCoordinate.removeIf(xy -> xy.get(0).equals(wallXY.get(0))&& xy.get(1).equals(wallXY.get(1)));
+        }
+        for(List<Integer> obstacleXY : obstacleCoordinates){
+            emptySpaceCoordinate.removeIf(xy -> xy.get(0).equals(obstacleXY.get(0))&& xy.get(1).equals(obstacleXY.get(1)));
+        }
+    }
 
     public void loadMap1() {
         setMaxXY(map);
@@ -140,9 +169,8 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
 
-
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -227,9 +255,9 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
 
-
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -320,9 +348,9 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
 
-
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -413,9 +441,9 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
 
-
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -506,8 +534,12 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getIslandGrass(), i * 32, j * 32,32,32);
             }
         }
+        for(List<Integer> exitXY : doorCoordinates) {
+            game.getSpriteBatch().draw(decoration.getWater(), exitXY.get(0) * 32, exitXY.get(1) * 32, 32, 32);
+        }
 
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), 8 * 32, 7 * 32, 32, 32);
+        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -547,14 +579,15 @@ public class MapLoader {
                     break;
                 case 2:
                      if (coordinates.get(0)==max_x) {
-                        doors.getHorizontalDoor().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
-                        doors.getHorizontalDoor().setSize(32, 32);
-                        doors.getHorizontalDoor().translateY(16);
-                        doors.getHorizontalDoor().setRotation(270);
-                        doors.getHorizontalDoor().draw(game.getSpriteBatch());
-                    }
+                         game.getSpriteBatch().draw(decoration.getBoat(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+                     }
                     else {
-                        game.getSpriteBatch().draw(doors.getHorizontalDoor(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
+                         decoration.getBoat().setPosition(coordinates.get(0)*32,coordinates.get(1)*32);
+                         decoration.getBoat().setSize(32,32);
+                         decoration.getBoat().setRotation(270);
+                         decoration.getBoat().translateX(-24);
+                         decoration.getBoat().translateY(-24);
+                         decoration.getBoat().draw(game.getSpriteBatch());
                     }
                     break;
                 case 4:
