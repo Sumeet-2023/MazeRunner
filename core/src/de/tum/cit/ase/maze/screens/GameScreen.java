@@ -141,24 +141,17 @@ public class GameScreen implements Screen {
             camera.viewportHeight = tileSize * minTilesVisibleY;
             camera.viewportWidth = camera.viewportHeight * aspectRatio;
 
-
-
-
             // Handle Events
             eventHandler.handlePlayerMovements();
             eventHandler.handelPlayerObstacleInteraction(delta, hud);
             eventHandler.handlePlayerEnemyInteraction(delta, hud);
+            eventHandler.handlePlayerHeartInteraction();
             eventHandler.handelKey(hud);
+            eventHandler.handelHeart(hud);
             eventHandler.handelWin();
             eventHandler.handelLose();
 
             playSound();
-
-            player.update(Gdx.graphics.getDeltaTime());
-            for (Enemy enemy : mapLoader.getEnemies())
-            {
-                enemy.handleEnemy(Gdx.graphics.getDeltaTime());
-            }
 
             // Rendering the Map
             game.getSpriteBatch().begin();
@@ -189,7 +182,11 @@ public class GameScreen implements Screen {
             hud.getStage().act(delta);
 
             hud.draw();
-
+            player.update(Gdx.graphics.getDeltaTime());
+            for (Enemy enemy : mapLoader.getEnemies())
+            {
+                enemy.handleEnemy(Gdx.graphics.getDeltaTime());
+            }
         }
     }
     public void playSound(){

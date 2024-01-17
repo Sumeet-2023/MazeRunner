@@ -50,7 +50,8 @@ public class MapLoader {
     private List<List<Integer>> emptySpaceCoordinate;
     private int randomIndex1;
     private int randomIndex2;
-
+    private boolean displayHeart1 = true;
+    private boolean displayHeart2 = true;
 
     public MapLoader(MazeRunnerGame game, float sinusInput,String level) {
         this.game = game;
@@ -169,8 +170,9 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
-
+        if(displayHeart1) {
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        }
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -255,8 +257,12 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+        if(displayHeart1) {
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        }
+        if(displayHeart2){
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+        }
 
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
@@ -348,8 +354,12 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+        if(displayHeart1) {
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        }
+        if(displayHeart2){
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+        }
 
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
@@ -441,8 +451,12 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+        if(displayHeart1) {
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        }
+        if(displayHeart2){
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+        }
 
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
@@ -537,9 +551,12 @@ public class MapLoader {
         for(List<Integer> exitXY : doorCoordinates) {
             game.getSpriteBatch().draw(decoration.getWater(), exitXY.get(0) * 32, exitXY.get(1) * 32, 32, 32);
         }
-
-        game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
-
+        if(displayHeart1) {
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+        }
+        if(displayHeart2){
+            game.getSpriteBatch().draw(key.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+        }
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
                 case 0:
@@ -658,6 +675,34 @@ public class MapLoader {
 
     public boolean isDisplayKey() {
         return displayKey;
+    }
+
+    public List<List<Integer>> getEmptySpaceCoordinate() {
+        return emptySpaceCoordinate;
+    }
+
+    public int getRandomIndex1() {
+        return randomIndex1;
+    }
+
+    public int getRandomIndex2() {
+        return randomIndex2;
+    }
+
+    public boolean isDisplayHeart1() {
+        return displayHeart1;
+    }
+
+    public void setDisplayHeart1(boolean displayHeart) {
+        this.displayHeart1 = displayHeart;
+    }
+
+    public boolean isDisplayHeart2() {
+        return displayHeart2;
+    }
+
+    public void setDisplayHeart2(boolean displayHeart2) {
+        this.displayHeart2 = displayHeart2;
     }
 }
 

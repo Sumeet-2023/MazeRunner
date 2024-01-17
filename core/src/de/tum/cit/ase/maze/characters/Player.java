@@ -20,6 +20,9 @@ public class Player {
     private float x;
     private float y;
     private boolean hasKey = false;
+    private boolean hasHeart1 = false;
+    private boolean hasHeart2 = false;
+
     private TextureRegion defaultFrame;
 
     // Attribute for heart count
@@ -200,5 +203,21 @@ public class Player {
 
     public void setHeartCount(int heartCount) {
         this.heartCount = heartCount;
+    }
+
+    public boolean isHasHeart() {
+        return hasHeart1;
+    }
+
+    public void setHasHeart1(boolean hasHeart) {
+        this.hasHeart1 = hasHeart;
+    }
+
+    public void setHasHeart2(boolean hasHeart2) {
+        this.hasHeart2 = hasHeart2;
+    }
+
+    public boolean isHasHeart2() {
+        return hasHeart2;
     }
 }

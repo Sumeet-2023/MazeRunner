@@ -15,21 +15,19 @@ public class EventHandler {
     private MazeRunnerGame game;
     private Music backgroundMusic;
 
-    private Sound keySound;
-
-
     // Attribute for handling obstacle
     private float timeOnObstacle = 0f;
     private boolean isOnObstacle = false;
 
     private boolean isOnEnemy = false;
+    private boolean isOnHeart1 = false;
+    private boolean isOnHeart2 = false;
     private float timeOnEnemy = 0f;
     public EventHandler(Player player, MapLoader mapLoader, MazeRunnerGame game, Music backgroundMusic) {
         this.player = player;
         this.mapLoader = mapLoader;
         this.game = game;
         this.backgroundMusic = backgroundMusic;
-        this.keySound = Gdx.audio.newSound(Gdx.files.internal("keyPickup.mp3"));
     }
 
     public void handlePlayerMovements()
@@ -74,6 +72,21 @@ public class EventHandler {
             mapLoader.setDisplayKey(false);
             hud.update();
             hud.animateKeyCollection();
+        }
+    }
+    public void handelHeart(HUD hud)
+    {
+        if (Math.abs(player.getX() -  mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex1()).get(0)) < 0.5  && Math.abs(player.getY() - mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex1()).get(1)) < 0.5) {
+            player.setHasHeart1(true);
+            mapLoader.setDisplayHeart1(false);
+            hud.update();
+            //hud.animateKeyCollection();
+        }
+        else if (Math.abs(player.getX() -  mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex2()).get(0)) < 0.5  && Math.abs(player.getY() - mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex2()).get(1)) < 0.5) {
+            player.setHasHeart2(true);
+            mapLoader.setDisplayHeart2(false);
+            hud.update();
+            //hud.animateKeyCollection();
         }
     }
 
@@ -127,6 +140,24 @@ public class EventHandler {
         else {
             isOnEnemy = false;
             timeOnEnemy = 0f;
+        }
+    }
+    public void handlePlayerHeartInteraction(){
+        if(Utils.isHeart(player.getX(), player.getY(), mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex1()))) {
+            if (!isOnHeart1) {
+                if (player.getHeartCount() < 3) {
+                    player.setHeartCount(player.getHeartCount() + 1);
+                    isOnHeart1 = true;
+                }
+            }
+        }
+       else if(Utils.isHeart(player.getX(), player.getY(), mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex2()))) {
+            if (!isOnHeart2) {
+                if (player.getHeartCount() < 3) {
+                    player.setHeartCount(player.getHeartCount() + 1);
+                    isOnHeart2 = true;
+                }
+            }
         }
     }
 

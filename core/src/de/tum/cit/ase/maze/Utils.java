@@ -108,6 +108,16 @@ public class Utils {
         }
         return false;
     }
+    public static boolean isHeart(float x, float y, List<Integer> emptySpaceXY){
+        final float tolerance = 0.4f;
+
+            float emptySpaceX = emptySpaceXY.get(0);
+            float emptySpaceY = emptySpaceXY.get(1);
+            if (Math.abs(x - emptySpaceX) < tolerance && Math.abs(y - emptySpaceY) < tolerance) {
+                return true;
+            }
+        return false;
+    }
 
 
     public static boolean isEnemy(float x, float y, List<Enemy> enemies)
