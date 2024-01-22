@@ -158,14 +158,10 @@ public class GameScreen implements Screen {
 
             if(mapLevel.equals(map1)){
                 mapLoader.loadMap1();
-            } else if (mapLevel.equals(map2)) {
-                mapLoader.loadMap2();
-            } else if (mapLevel.equals(map3)) {
-                mapLoader.loadMap3();
-            } else if (mapLevel.equals(map4)) {
-                mapLoader.loadMap4();
-            } else if (mapLevel.equals(map5)) {
-                mapLoader.loadMap5();
+            } else if (mapLevel.equals(map2) || mapLevel.equals(map5)) {
+                mapLoader.loadMap25();
+            } else if (mapLevel.equals(map3) || mapLevel.equals(map4)) {
+                mapLoader.loadMap34();
             } else {
                 mapLoader.loadMap1();
             }

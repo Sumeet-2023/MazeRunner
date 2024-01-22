@@ -7,33 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 public class Key {
-    private Animation<TextureRegion> life;
     private TextureRegion key;
     public Key(){
-        loadHeartAnimation();
         loadKey();
-    }
-    public void loadHeartAnimation() {
-        Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
-
-        int frameWidth = 16;
-        int frameHeight = 16;
-        int animationFrame = 4;
-
-        Array<TextureRegion> heartFrames = new Array<>(TextureRegion.class);
-
-        for (int col = 0; col < animationFrame; col++){
-            heartFrames.add(new TextureRegion(heartSheet, col * frameWidth, 3 * frameHeight, frameWidth, frameHeight));
-        }
-        life = new Animation<>(0.2f,heartFrames);
     }
     public void loadKey(){
         Texture keyTexture = new Texture(Gdx.files.internal("keys_1_1.png"));
         key = new TextureRegion(keyTexture,16,16);
-    }
-
-    public Animation<TextureRegion> getLife() {
-        return life;
     }
 
     public TextureRegion getKey() {

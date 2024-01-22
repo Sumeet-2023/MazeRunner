@@ -15,15 +15,18 @@
     import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
     import com.badlogic.gdx.utils.viewport.ScreenViewport;
     import com.badlogic.gdx.utils.viewport.Viewport;
+    import de.tum.cit.ase.maze.DesktopFileChooser;
+    import de.tum.cit.ase.maze.FileChooser;
+    import de.tum.cit.ase.maze.FileChooserCallBack;
     import de.tum.cit.ase.maze.MazeRunnerGame;
+    import games.spooky.gdx.nativefilechooser.NativeFileChooser;
+    import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 
     /**
      * The MenuScreen class is responsible for displaying the main menu of the game.
      * It extends the LibGDX Screen class and sets up the UI components for the menu.
      */
  public class MenuScreen implements Screen {
-
-
      private final Stage stage;
 
      /**
@@ -51,8 +54,8 @@
          table.add(startGame).width(300).pad(10).row();
          TextButton selectMap = new TextButton("Select Map", game.getSkin());
          table.add(selectMap).width(300).pad(10).row();
-         TextButton howToPlay = new TextButton("How to Play", game.getSkin());
-         table.add(howToPlay).width(300).pad(10).row();
+         TextButton upload = new TextButton("Upload Map", game.getSkin());
+         table.add(upload).width(300).pad(10).row();
          TextButton credits = new TextButton("Credits", game.getSkin());
          table.add(credits).width(300).pad(10).row();
 
@@ -67,6 +70,17 @@
                 game.goToSelectMap();
             }
         });
+         upload.addListener(new ChangeListener() {
+             @Override
+             public void changed(ChangeEvent event, Actor actor) {
+                 showFileChooser(new FileChooserCallBack() {
+                     @Override
+                     public void onFileChosen(String filePath) {
+                         game.goToGame(filePath);
+                     }
+                 });
+             }
+         });
 
         credits.addListener(new ChangeListener() {
             @Override
@@ -75,6 +89,12 @@
 
             }
         });
+    }
+    public void showFileChooser(FileChooserCallBack callBack)
+    {
+            FileChooser fileChooser = new DesktopFileChooser();
+            fileChooser.chooseFile(callBack);
+
     }
 
     @Override
@@ -91,7 +111,6 @@
      }
      @Override
      public void render(float delta) {
-         Gdx.gl.glClearColor(0.2f,0.2f,0.2f,0.2f);
          Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
          stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Update the stage
          stage.draw(); // Draw the stage

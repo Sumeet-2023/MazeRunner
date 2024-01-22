@@ -54,8 +54,6 @@ public class MazeRunnerGame extends Game {
         backgroundMusic.play();
 
         goToMenu(); // Navigate to the menu screen
-
-
     }
 
     /**
@@ -103,10 +101,6 @@ public class MazeRunnerGame extends Game {
     public void goToSelectMap() {
         this.setScreen(new SelectMapScreen(this)); // Set the current screen to MenuScreen
     }
-    public void goToEscSelectMap() {
-        this.setScreen(new EscSelectMapScreen(this)); // Set the current screen to MenuScreen
-    }
-
 
     /**
      * Switches to the Credits screen.

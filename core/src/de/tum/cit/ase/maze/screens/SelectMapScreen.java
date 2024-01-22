@@ -47,8 +47,6 @@ public class SelectMapScreen implements Screen {
         table.add(map3).width(300).pad(10).row();
         TextButton map4 = new TextButton("Level 5", game.getSkin());
         table.add(map4).width(300).pad(10).row();
-        TextButton upload = new TextButton("Upload Map", game.getSkin());
-        table.add(upload).width(300).pad(10).row();
         TextButton cancel = new TextButton("Back", game.getSkin());
         table.add(cancel).width(300).pad(10).row();
 
@@ -82,17 +80,6 @@ public class SelectMapScreen implements Screen {
                 game.goToGame("maps//level-5.properties");
             }
         });
-        upload.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                showFileChooser(new FileChooserCallBack() {
-                    @Override
-                    public void onFileChosen(String filePath) {
-                        game.goToGame(filePath);
-                    }
-                });
-            }
-        });
 
         cancel.addListener(new ChangeListener() {
                 @Override
@@ -101,12 +88,6 @@ public class SelectMapScreen implements Screen {
 
                 }
         });
-
-
-    }
-    public void showFileChooser(FileChooserCallBack callBack){
-        FileChooser fileChooser = new DesktopFileChooser();
-        fileChooser.chooseFile(callBack);
 
     }
 

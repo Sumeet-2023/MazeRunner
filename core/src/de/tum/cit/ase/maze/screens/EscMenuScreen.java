@@ -3,8 +3,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -35,11 +37,11 @@ public class EscMenuScreen implements Screen{
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
 
+        Image backgroundImage = new Image(new Texture(Gdx.files.internal("MainMenuImage.jpg")));
+        table.setBackground(backgroundImage.getDrawable());
         // Create and add a button to go to the game screen
         TextButton continueGame = new TextButton("Continue", game.getSkin());
         table.add(continueGame).width(300).pad(10).row();
-        TextButton howToPlay = new TextButton("Volume", game.getSkin());
-        table.add(howToPlay).width(300).pad(10).row();
         TextButton selectMap = new TextButton("Play New Map", game.getSkin());
         table.add(selectMap).width(300).pad(10).row();
         TextButton exitGame = new TextButton("Exit", game.getSkin());
@@ -52,7 +54,7 @@ public class EscMenuScreen implements Screen{
         });
         selectMap.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) { game.goToEscSelectMap();
+            public void changed(ChangeEvent event, Actor actor) { game.goToSelectMap();
             }
         });
 
