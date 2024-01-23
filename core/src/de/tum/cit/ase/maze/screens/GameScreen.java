@@ -145,7 +145,7 @@ public class GameScreen implements Screen {
             eventHandler.handlePlayerMovements();
             eventHandler.handelPlayerObstacleInteraction(delta, hud);
             eventHandler.handlePlayerEnemyInteraction(delta, hud);
-            eventHandler.handlePlayerHeartInteraction();
+            eventHandler.handlePlayerHeartInteraction(hud);
             eventHandler.handelKey(hud);
             eventHandler.handelHeart(hud);
             eventHandler.handelWin();
