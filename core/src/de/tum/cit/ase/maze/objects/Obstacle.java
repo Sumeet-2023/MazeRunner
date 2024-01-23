@@ -52,15 +52,15 @@ public class Obstacle {
         Texture flameSheet = new Texture(Gdx.files.internal("objects.png"));
 
         int frameWidth = 32;
-        int frameHeight = 16;
+        int frameHeight = 32;
         int animationFrame = 9;
 
         Array<TextureRegion> flameFrames = new Array<>(TextureRegion.class);
 
-        for (int col = 11; col < animationFrame +11; col++){
-            flameFrames.add(new TextureRegion(flameSheet, col * frameWidth, 3 * frameHeight-6, frameWidth, frameHeight));
+        for (int col = 8; col < animationFrame +8; col++){
+            flameFrames.add(new TextureRegion(flameSheet, col * frameWidth, frameHeight, frameWidth, frameHeight));
         }
-        flameAnimation = new Animation<>(0.2f, flameFrames);
+        flameAnimation = new Animation<>(0.1f, flameFrames);
     }
     public void loadPoisonAnimation() {
         Texture poisonSheet = new Texture(Gdx.files.internal("objects.png"));

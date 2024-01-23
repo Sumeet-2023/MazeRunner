@@ -156,12 +156,10 @@ public class GameScreen implements Screen {
             // Rendering the Map
             game.getSpriteBatch().begin();
 
-            if(mapLevel.equals(map1)){
+            if(mapLevel.equals(map1) || mapLevel.equals(map2) || mapLevel.equals(map3) || mapLevel.equals(map4)){
                 mapLoader.loadMap1();
-            } else if (mapLevel.equals(map2) || mapLevel.equals(map5)) {
-                mapLoader.loadMap25();
-            } else if (mapLevel.equals(map3) || mapLevel.equals(map4)) {
-                mapLoader.loadMap34();
+            } else if (mapLevel.equals(map5)) {
+                mapLoader.loadMap5();
             } else {
                 mapLoader.loadMap1();
             }
