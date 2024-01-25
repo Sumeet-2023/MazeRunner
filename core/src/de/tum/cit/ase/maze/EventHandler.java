@@ -3,10 +3,7 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import de.tum.cit.ase.maze.characters.Player;
-
-import java.lang.invoke.MutableCallSite;
 
 public class EventHandler {
 
@@ -74,24 +71,11 @@ public class EventHandler {
             hud.animateKeyCollection();
         }
     }
-    public void handelHeart(HUD hud)
-    {
-            if (Math.abs(player.getX() - mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex1()).get(0)) < 0.5 && Math.abs(player.getY() - mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex1()).get(1)) < 0.5 && player.getHeartCount() < 3) {
-                player.setHasHeart1(true);
-                mapLoader.setDisplayHeart1(false);
-                hud.update();
-                //hud.animateKeyCollection();
-            } else if (Math.abs(player.getX() - mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex2()).get(0)) < 0.5 && Math.abs(player.getY() - mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex2()).get(1)) < 0.5 && player.getHeartCount() < 3) {
-                player.setHasHeart2(true);
-                mapLoader.setDisplayHeart2(false);
-                hud.update();
-                //hud.animateKeyCollection();
-            }
-    }
+
 
     public void handelPlayerObstacleInteraction(float deltaTime, HUD hud)
     {
-        if (Utils.isObstacle(player.getX(), player.getY(), mapLoader.getObstacleCoordinates())){
+        if (Utils.isAtCoordinate(player.getX(), player.getY(), mapLoader.getObstacleCoordinates())){
             if (!isOnObstacle){
                 player.setHeartCount(player.getHeartCount() - 1);
                 isOnObstacle = true;
@@ -114,6 +98,8 @@ public class EventHandler {
             timeOnObstacle = 0f;
         }
     }
+
+
 
     public void handlePlayerEnemyInteraction(float deltaTime, HUD hud)
     {
@@ -141,12 +127,14 @@ public class EventHandler {
             timeOnEnemy = 0f;
         }
     }
+
     public void handlePlayerHeartInteraction(HUD hud){
             if (Utils.isHeart(player.getX(), player.getY(), mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex1()))) {
                 if (!isOnHeart1) {
                     if (player.getHeartCount() < 3) {
                         player.setHeartCount(player.getHeartCount() + 1);
                         isOnHeart1 = true;
+                        mapLoader.setDisplayHeart1(false);
                         hud.update();
                     }
                 }
@@ -155,24 +143,24 @@ public class EventHandler {
                     if (player.getHeartCount() < 3) {
                         player.setHeartCount(player.getHeartCount() + 1);
                         isOnHeart2 = true;
+                        mapLoader.setDisplayHeart2(false);
                         hud.update();
                     }
                 }
             }
     }
 
-    public void handelLose()
-    {
+    public void handelLose() {
         if (player.getHeartCount() == 0)
         {
-            game.goToLooseScreen();
+            game.goToLoseScreen();
             backgroundMusic.dispose();
         }
     }
 
     public void handelWin()
     {
-        if (Utils.isDoor(player.getX(), player.getY(), mapLoader.getDoorCoordinates()) && player.getHasKey())
+        if (Utils.isAtCoordinate(player.getX(), player.getY(), mapLoader.getDoorCoordinates()) && player.getHasKey())
         {
             game.goToWinScreen();
             backgroundMusic.dispose();

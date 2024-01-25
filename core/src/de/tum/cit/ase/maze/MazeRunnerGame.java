@@ -3,7 +3,6 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.tum.cit.ase.maze.screens.*;
@@ -15,21 +14,11 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
  */
 public class MazeRunnerGame extends Game {
     private Music backgroundMusic;
-    private MapLoader mapLoader;
-    // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
-    private CreditScreen creditScreen;
     private EscMenuScreen escMenuScreen;
-    private SelectMapScreen selectMapScreen;
-
-    // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
-    private Sprite sprite;
-
-    // UI Skin
     private Skin skin;
-
 
     /**
      * Constructor for MazeRunnerGame.
@@ -86,40 +75,39 @@ public class MazeRunnerGame extends Game {
         }
     }
 
-    public void goToEscMenu() {
-        this.setScreen(new EscMenuScreen(this,gameScreen)); // Set the current screen to MenuScreen
-        if (gameScreen != null) {
-            gameScreen.dispose(); // Dispose the game screen if it exists
-            gameScreen = null;
-        }
-        if (menuScreen != null) {
-            menuScreen.dispose(); // Dispose the menu screen if it exists
-            menuScreen = null;
-        }
 
-    }
+    /**
+     * Switches to the select menu screen.
+     */
     public void goToSelectMap() {
         this.setScreen(new SelectMapScreen(this)); // Set the current screen to MenuScreen
     }
 
     /**
-     * Switches to the Credits screen.
+     * Switches to the credits screen.
      */
-    public void goToCredits()
-    {
+    public void goToCredits() {
         this.setScreen(new CreditScreen(this));
         if (menuScreen != null){
             menuScreen.dispose();
             menuScreen = null;
         }
     }
-    public void goToLooseScreen() {
-        this.setScreen(new LooseScreen(this)); // Set the current screen to MenuScreen
+
+    /**
+     * Switches to lose screen.
+     */
+    public void goToLoseScreen() {
+        this.setScreen(new LoseScreen(this)); // Set the current screen to MenuScreen
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
     }
+
+    /**
+     * Switches to win screen.
+     */
     public void goToWinScreen() {
         this.setScreen(new WinScreen(this)); // Set the current screen to MenuScreen
         if (gameScreen != null) {
@@ -127,10 +115,6 @@ public class MazeRunnerGame extends Game {
             gameScreen = null;
         }
     }
-
-    /**
-     * Loads the character animation from the character.png file.
-     */
 
     /**
      * Cleans up resources when the game is disposed.
@@ -151,9 +135,5 @@ public class MazeRunnerGame extends Game {
 
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
-    }
-
-    public Sprite getSprite() {
-        return sprite;
     }
 }

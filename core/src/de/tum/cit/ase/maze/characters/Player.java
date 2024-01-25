@@ -20,12 +20,8 @@ public class Player {
     private float x;
     private float y;
     private boolean hasKey = false;
-    private boolean hasHeart1 = false;
-    private boolean hasHeart2 = false;
-
     private TextureRegion defaultFrame;
 
-    // Attribute for heart count
     private int heartCount = 3;
     public Player(float x, float y){
         this.loadDownCharacterAnimation(); // Load Down character animation
@@ -205,19 +201,5 @@ public class Player {
         this.heartCount = heartCount;
     }
 
-    public boolean isHasHeart() {
-        return hasHeart1;
-    }
 
-    public void setHasHeart1(boolean hasHeart) {
-        this.hasHeart1 = hasHeart;
-    }
-
-    public void setHasHeart2(boolean hasHeart2) {
-        this.hasHeart2 = hasHeart2;
-    }
-
-    public boolean isHasHeart2() {
-        return hasHeart2;
-    }
 }

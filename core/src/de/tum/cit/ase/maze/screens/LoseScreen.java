@@ -6,29 +6,23 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.MazeRunnerGame;
-import de.tum.cit.ase.maze.characters.Player;
 
-public class LooseScreen implements Screen {
+public class LoseScreen implements Screen {
     private final MazeRunnerGame game;
     private Music backgroundMusic;
     private final BitmapFont font;
     private final Stage stage;
     private float sinusInput;
 
-    public LooseScreen(MazeRunnerGame game){
+    public LoseScreen(MazeRunnerGame game){
         this.game = game;
         var camera = new OrthographicCamera();
         camera.zoom = 1.0f;
