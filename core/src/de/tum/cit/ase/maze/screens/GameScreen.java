@@ -2,62 +2,54 @@ package de.tum.cit.ase.maze.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.tum.cit.ase.maze.*;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Player;
-import jdk.jshell.execution.Util;
-
-import java.util.List;
 
 /**
- * The GameScreen class is responsible for rendering the gameplay screen.
- * It handles the game logic and rendering of the game elements.
+ * The GameScreen class represents the main gameplay screen of the MazeRunnerGame.
+ * It is responsible for rendering the game world, managing game logic, handling user input, and updating game elements.
+ * This screen includes the game's map, player character, enemies, and HUD elements.
  */
 public class GameScreen implements Screen {
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
-    private final BitmapFont font;
     private final String mapLevel;
     private final Sound keySound;
     private boolean hasKeyCollected = false;
-    private Music backgroundMusic;
-    private MapLoader mapLoader;
-    private Player player;
-    private EventHandler eventHandler;
-    private EscMenuScreen escMenuScreen;
-    private HUD hud;
+    private final Music backgroundMusic;
+    private final MapLoader mapLoader;
+    private final Player player;
+    private final EventHandler eventHandler;
+    private final EscMenuScreen escMenuScreen;
+    private final HUD hud;
     private boolean isPause = false;
     private float sinusInput = 0f;
     private final int tileSize = 32;
     private float aspectRatio;
-    private int minTilesVisibleY;
-    private String map1 = "maps//level-1.properties";
-    private String map2 = "maps//level-2.properties";
-    private String map3 = "maps//level-3.properties";
-    private String map4 = "maps//level-4.properties";
-    private String map5 = "maps//level-5.properties";
+    private final int minTilesVisibleY;
+    private final String map1 = "maps//level-1.properties";
+    private final String map2 = "maps//level-2.properties";
+    private final String map3 = "maps//level-3.properties";
+    private final String map4 = "maps//level-4.properties";
+    private final String map5 = "maps//level-5.properties";
 
     /**
-     * Constructor for GameScreen. Sets up the camera and font.
+     * Constructs a GameScreen for the MazeRunnerGame.
+     * Initializes the game elements, sets up the background music, and prepares the camera for the game view.
      *
      * @param game The main game class, used to access global resources and methods.
+     * @param mapLevel The identifier for the level to be loaded in this game screen.
      */
     public GameScreen(MazeRunnerGame game,String mapLevel) {
         this.game = game;
         this.mapLevel=mapLevel;
-
-        // Music
         if(mapLevel.equals(map1) || mapLevel.equals(map2) || mapLevel.equals(map5)) {
             backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Map1Music.ogg"));
             backgroundMusic.setVolume(0.2f);
@@ -76,34 +68,33 @@ public class GameScreen implements Screen {
             backgroundMusic.setLooping(true);
             backgroundMusic.play();
         }
-
         this.keySound = Gdx.audio.newSound(Gdx.files.internal("keyPickup.mp3"));
-
-        // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
         camera.zoom = 1f;
-
-        // Get the font from the game's skin
-        font = game.getSkin().getFont("font");
-
-
-        // Creating new Instances of clsses
         mapLoader = new MapLoader(game, sinusInput,mapLevel);
         player = new Player(mapLoader.getPlayer_x(), mapLoader.getPlayer_y());
         eventHandler = new EventHandler(player, mapLoader, game, backgroundMusic);
         escMenuScreen = new EscMenuScreen(game,this);
         aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         minTilesVisibleY = 6;
-
-        // Initializing HUD
         hud = new HUD(player, new ScreenViewport());
     }
-    
-    // Screen interface methods with necessary functionality
+
+    /**
+     * Renders the game screen and updates all game elements.
+     * This method is responsible for the main game loop. It handles user input, updates the game state,
+     * and renders the game elements to the screen.
+     * The camera's position is dynamically adjusted based on the player's position to ensure the player
+     * remains in view while respecting the boundaries of the map. The viewport is set to display a fixed
+     * number of tiles vertically (defined by 'minTilesVisibleY'), with the horizontal tiles determined by
+     * the aspect ratio of the screen. This approach maintains a consistent view across different screen sizes.
+     *
+     * @param delta The time in seconds since the last render. Used for animations and game state updates.
+     */
     @Override
     public void render(float delta) {
-        // Check for escape key press to go back to the menu
+        // Handle escape key for pausing the game
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             isPause = !isPause;
             if(isPause){
@@ -113,21 +104,24 @@ public class GameScreen implements Screen {
                 resumeGame();
             }
         }
-        if(!isPause) {
-            ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
-            // Setting the camera position
-            /**
-             * Math.max(player_x * 16, camera.viewportWidth / 2) gives the bigger value from players x position and half of viewport width.
-             *
-             * mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16) this is the maximum value till which the camera can move.
-             *
-             * Math.min(Math.max(player_x * 16, camera.viewportWidth / 2), mapLoader.getMax_x() * 16 - camera.viewportWidth / 2 + 16)
-             * The whole statement give the minimum out of the above two statements.
-             */
-            camera.position.set(Math.min(Math.max(player.getX() * tileSize, camera.viewportWidth / 2), mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize),
-                    Math.min(Math.max(player.getY() * tileSize, camera.viewportHeight / 2), mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize),
-                    0);
+        // Continue only if the game is not paused
+        if(!isPause) {
+            ScreenUtils.clear(0, 0, 0, 1);
+
+            // Calculate camera position
+            // First, determine the central position based on player's position and viewport size
+            // Limit this position to be within the boundaries of the map
+            camera.position.set(
+                    Math.min(
+                            Math.max(player.getX() * tileSize, camera.viewportWidth / 2),
+                            mapLoader.getMax_x() * tileSize - camera.viewportWidth / 2 + tileSize
+                    ),
+                    Math.min(Math.max(player.getY() * tileSize, camera.viewportHeight / 2),
+                            mapLoader.getMax_y() * tileSize - camera.viewportHeight / 2 + tileSize
+                    ),
+                    0
+            );
             camera.update();
 
             // Setting the projection Matrix
@@ -136,12 +130,11 @@ public class GameScreen implements Screen {
 
             mapLoader.setSinusInput(sinusInput);
 
-            // Setting the viewport such that it displays 12x8 tiles.
-
+            // Update the viewport dimensions
             camera.viewportHeight = tileSize * minTilesVisibleY;
             camera.viewportWidth = camera.viewportHeight * aspectRatio;
 
-            // Handle Events
+            // Handle game events and interactions
             eventHandler.handlePlayerMovements();
             eventHandler.handelPlayerObstacleInteraction(delta, hud);
             eventHandler.handlePlayerEnemyInteraction(delta, hud);
@@ -150,19 +143,21 @@ public class GameScreen implements Screen {
             eventHandler.handelWin();
             eventHandler.handelLose();
 
+            // Play sound if key is collected
             playSound();
 
-            // Rendering the Map
+            // Begin sprite batch and render the map
             game.getSpriteBatch().begin();
 
             if(mapLevel.equals(map1) || mapLevel.equals(map2) || mapLevel.equals(map3) || mapLevel.equals(map4)){
-                mapLoader.loadMap1();
+                mapLoader.loadMapGeneral();
             } else if (mapLevel.equals(map5)) {
                 mapLoader.loadMap5();
             } else {
-                mapLoader.loadMap1();
+                mapLoader.loadMapGeneral();
             }
 
+            // Draw the player
             if (player.getCurrentAnimationFrame() != null) {
                     game.getSpriteBatch().draw(player.getCurrentAnimationFrame(), player.getX() * 32, player.getY() * 32, 24, 48);
             }
@@ -171,10 +166,11 @@ public class GameScreen implements Screen {
             }
             game.getSpriteBatch().end();
 
-            // Update and draw HUD
+            // Update and draw the HUD
             hud.getStage().act(delta);
-
             hud.draw();
+
+            // Update player and enemy states
             player.update(Gdx.graphics.getDeltaTime());
             for (Enemy enemy : mapLoader.getEnemies())
             {
@@ -182,6 +178,11 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+    /**
+     * Plays the key collection sound when the player picks up a key.
+     * This method ensures the sound is played only once upon key collection.
+     */
     public void playSound(){
         if(player.getHasKey() && !hasKeyCollected){
             keySound.play();
@@ -190,6 +191,13 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * Adjusts the camera's viewport when the screen size changes.
+     * This method ensures that the game view remains consistent across different screen sizes.
+     *
+     * @param width The new width of the screen.
+     * @param height The new height of the screen.
+     */
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false);
@@ -201,6 +209,10 @@ public class GameScreen implements Screen {
         camera.viewportHeight = Math.min(camera.viewportHeight, (mapLoader.getMax_y() - 2) * tileSize);
     }
 
+    /**
+     * Lifecycle methods for the screen.
+     * These methods are called by the LibGDX framework to handle screen state changes such as pausing, resuming, showing, and hiding the screen.
+     */
     @Override
     public void pause() {
 
@@ -219,15 +231,28 @@ public class GameScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     * Cleans up resources when the screen is no longer needed.
+     * This includes disposing of the background music and sound effects to free up memory.
+     */
     @Override
     public void dispose() {
         backgroundMusic.dispose();
         keySound.dispose();
     }
+
+    /**
+     * Pauses the game and switches to the escape menu screen.
+     * This method is called when the player presses the escape key.
+     */
     public void pauseGame(){
         backgroundMusic.pause();
         game.setScreen(escMenuScreen);
     }
+
+    /**
+     * Resumes the game from the pause state and returns to the game screen from the escape menu.
+     */
     public void resumeGame(){
         backgroundMusic.play();
         isPause=false;

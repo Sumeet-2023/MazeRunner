@@ -5,21 +5,32 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import de.tum.cit.ase.maze.characters.Player;
 
+/**
+ * The EventHandler class is responsible for handling events and interactions within the MazeRunnerGame.
+ * This includes player movements, interactions with objects like keys, obstacles, enemies, and hearts,
+ * as well as determining win or lose conditions. It utilizes various utility methods from the Utils class
+ * to determine the state and outcomes of these interactions.
+ */
 public class EventHandler {
-
-    private Player player;
-    private MapLoader mapLoader;
-    private MazeRunnerGame game;
-    private Music backgroundMusic;
-
-    // Attribute for handling obstacle
+    private final Player player;
+    private final MapLoader mapLoader;
+    private final MazeRunnerGame game;
+    private final Music backgroundMusic;
     private float timeOnObstacle = 0f;
     private boolean isOnObstacle = false;
-
     private boolean isOnEnemy = false;
     private boolean isOnHeart1 = false;
     private boolean isOnHeart2 = false;
     private float timeOnEnemy = 0f;
+
+    /**
+     * Constructs an EventHandler object with necessary game components.
+     *
+     * @param player The player character of the game.
+     * @param mapLoader The object responsible for loading and managing the game map.
+     * @param game The main game object that controls the game's screens and states.
+     * @param backgroundMusic The background music to be played during the game.
+     */
     public EventHandler(Player player, MapLoader mapLoader, MazeRunnerGame game, Music backgroundMusic) {
         this.player = player;
         this.mapLoader = mapLoader;
@@ -27,8 +38,12 @@ public class EventHandler {
         this.backgroundMusic = backgroundMusic;
     }
 
-    public void handlePlayerMovements()
-    {
+    /**
+     * Handles the movement of the player based on keyboard input.
+     * This method checks if the player can move in the desired direction and updates the player's position.
+     * It also handles animation based on the direction of movement.
+     */
+    public void handlePlayerMovements() {
         float animationSpeed = 3;
         float deltaTime = Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -62,8 +77,14 @@ public class EventHandler {
         }
     }
 
-    public void handelKey(HUD hud)
-    {
+    /**
+     * Handles interactions with the key in the game.
+     * Checks if the player has reached the key's coordinates and updates the game state accordingly.
+     * This includes setting the player's 'hasKey' status and updating the HUD.
+     *
+     * @param hud The game's Heads-Up Display (HUD) to be updated on key collection.
+     */
+    public void handelKey(HUD hud) {
         if (Math.abs(player.getX() -  mapLoader.getKeyX()) < 0.5  && Math.abs(player.getY() - mapLoader.getKeyY()) < 0.5) {
             player.setHasKey(true);
             mapLoader.setDisplayKey(false);
@@ -72,9 +93,15 @@ public class EventHandler {
         }
     }
 
-
-    public void handelPlayerObstacleInteraction(float deltaTime, HUD hud)
-    {
+    /**
+     * Handles interactions between the player and obstacles.
+     * This method updates the player's health and HUD when the player encounters an obstacle.
+     * It uses a timer to inflict damage at specific intervals.
+     *
+     * @param deltaTime The time passed since the last frame, used for timing interactions.
+     * @param hud The HUD to update the player's health display.
+     */
+    public void handelPlayerObstacleInteraction(float deltaTime, HUD hud) {
         if (Utils.isAtCoordinate(player.getX(), player.getY(), mapLoader.getObstacleCoordinates())){
             if (!isOnObstacle){
                 player.setHeartCount(player.getHeartCount() - 1);
@@ -99,10 +126,15 @@ public class EventHandler {
         }
     }
 
-
-
-    public void handlePlayerEnemyInteraction(float deltaTime, HUD hud)
-    {
+    /**
+     * Handles interactions between the player and enemies.
+     * This method updates the player's health when encountering an enemy and uses a timer to control damage intervals.
+     * The HUD is updated to reflect changes in the player's health.
+     *
+     * @param deltaTime The time passed since the last frame, used for timing interactions.
+     * @param hud The HUD to update the player's health display.
+     */
+    public void handlePlayerEnemyInteraction(float deltaTime, HUD hud) {
         if (Utils.isEnemy(player.getX(), player.getY(), mapLoader.getEnemies())){
             if (!isOnEnemy){
                 player.setHeartCount(player.getHeartCount() - 1);
@@ -128,8 +160,15 @@ public class EventHandler {
         }
     }
 
+    /**
+     * Handles interactions between the player and heart pickups.
+     * This method checks if the player has reached the heart's location and updates the player's health and HUD.
+     * Hearts increase the player's health.
+     *
+     * @param hud The HUD to be updated when a heart is collected.
+     */
     public void handlePlayerHeartInteraction(HUD hud){
-            if (Utils.isHeart(player.getX(), player.getY(), mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex1()))) {
+            if (Utils.isHeart(player.getX(), player.getY(), mapLoader.getHeartCoordinates().get(mapLoader.getHeartCoordinate1()))) {
                 if (!isOnHeart1) {
                     if (player.getHeartCount() < 3) {
                         player.setHeartCount(player.getHeartCount() + 1);
@@ -138,7 +177,7 @@ public class EventHandler {
                         hud.update();
                     }
                 }
-            } else if (Utils.isHeart(player.getX(), player.getY(), mapLoader.getEmptySpaceCoordinate().get(mapLoader.getRandomIndex2()))) {
+            } else if (Utils.isHeart(player.getX(), player.getY(), mapLoader.getHeartCoordinates().get(mapLoader.getHeartCoordinate2()))) {
                 if (!isOnHeart2) {
                     if (player.getHeartCount() < 3) {
                         player.setHeartCount(player.getHeartCount() + 1);
@@ -150,6 +189,11 @@ public class EventHandler {
             }
     }
 
+    /**
+     * Handles the lose condition of the game.
+     * This method is called when the player's health reaches zero, triggering the transition to the lose screen
+     * and disposing of the background music.
+     */
     public void handelLose() {
         if (player.getHeartCount() == 0)
         {
@@ -158,8 +202,12 @@ public class EventHandler {
         }
     }
 
-    public void handelWin()
-    {
+    /**
+     * Handles the win condition of the game.
+     * Checks if the player has reached the door with the key and transitions to the win screen while disposing
+     * of the background music.
+     */
+    public void handelWin() {
         if (Utils.isAtCoordinate(player.getX(), player.getY(), mapLoader.getDoorCoordinates()) && player.getHasKey())
         {
             game.goToWinScreen();

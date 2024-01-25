@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.tum.cit.ase.maze.screens.*;
-import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
  * The MazeRunnerGame class represents the core of the Maze Runner game.
@@ -22,10 +21,8 @@ public class MazeRunnerGame extends Game {
 
     /**
      * Constructor for MazeRunnerGame.
-     *
-     * @param fileChooser The file chooser for the game, typically used in desktop environment.
      */
-    public MazeRunnerGame(NativeFileChooser fileChooser) {
+    public MazeRunnerGame() {
         super();
     }
 
@@ -74,7 +71,6 @@ public class MazeRunnerGame extends Game {
             menuScreen = null;
         }
     }
-
 
     /**
      * Switches to the select menu screen.

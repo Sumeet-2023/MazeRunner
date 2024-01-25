@@ -1,104 +1,81 @@
 package de.tum.cit.ase.maze;
 
-import com.badlogic.gdx.Gdx;
 import de.tum.cit.ase.maze.characters.Enemy;
 import de.tum.cit.ase.maze.characters.Ghost;
 import de.tum.cit.ase.maze.objects.*;
-
 import java.util.*;
 
-import static com.badlogic.gdx.math.MathUtils.random;
-
+/**
+ * The MapLoader class is responsible for loading and managing the map data for the MazeRunnerGame.
+ * It handles the layout of the game environment, including the placement of walls, obstacles, enemies, and other game elements.
+ * The class also manages dynamic elements like the display state of keys and hearts.
+ */
 public class MapLoader {
-
-    // Map
-    private Map<List<Integer>, Integer> map ;
-
-    // Attributes (Variables)
+    private final Map<List<Integer>, Integer> map ;
     private float sinusInput;
-
-    // Maximum & Minimum value of x and y of the map
     private float max_x;
     private float max_y;
-    private final float min_x = 0;
-    private final float min_y = 0;
-
-    // Coordinates of player's starting point
     private  float player_x;
     private float player_y;
-
-    // Attributes (Class Instances)
-    private MazeRunnerGame game;
-    private Wall wall;
-    private Obstacle obstacles;
-    private Ghost ghost;
-    private Door doors;
-    private Tile tiles;
-    private Decoration decoration;
-    private Heart heart;
-
-    // Key and its position
-    private Key key;
+    private final MazeRunnerGame game;
+    private final Wall wall;
+    private final Obstacle obstacles;
+    private final Ghost ghost;
+    private final Door doors;
+    private final Tile tiles;
+    private final Decoration decoration;
+    private final Heart heart;
+    private final Key key;
     private int keyX;
     private int keyY;
     private boolean displayKey = true;
-
-    // Attributes Coordinate lists
-    private List<List<Integer>> wallCoordinates;
-    private List<List<Integer>> doorCoordinates;
-    private List<List<Integer>> obstacleCoordinates;
-    private List<Enemy> enemies;
-    private List<List<Integer>> emptySpaceCoordinate;
-    private int randomIndex1;
-    private int randomIndex2;
+    private final List<List<Integer>> wallCoordinates;
+    private final List<List<Integer>> doorCoordinates;
+    private final List<List<Integer>> obstacleCoordinates;
+    private final List<Enemy> enemies;
+    private final List<List<Integer>> heartCoordinates;
+    private final int heartCoordinate1;
+    private final int heartCoordinate2;
     private boolean displayHeart1 = true;
     private boolean displayHeart2 = true;
 
+    /**
+     * Constructs a MapLoader object for a specific level of the MazeRunnerGame.
+     * It initializes various game elements like walls, obstacles, enemies, and keys based on the level data.
+     *
+     * @param game The main game object associated with the map.
+     * @param sinusInput A float value used for animations within the map.
+     * @param level The file path or identifier for the level data to be loaded.
+     */
     public MapLoader(MazeRunnerGame game, float sinusInput,String level) {
         this.game = game;
         this.sinusInput = sinusInput;
-
-        // Select Map
-         map = Utils.readMap(level);
-
-        // Wall
+        map = Utils.readMap(level);
         this.wall = new Wall();
         wallCoordinates = new ArrayList<>();
-
-        // Obstacles
         this.obstacles = new Obstacle();
         obstacleCoordinates = new ArrayList<>();
-
-        // Enemies
         enemies = new ArrayList<>();
         ghost = new Ghost();
-
-        // Doors
         this.doors = new Door();
         doorCoordinates = new ArrayList<>();
-
-        // Tiles
         this.tiles = new Tile();
-
-        // Key
         this.key = new Key();
-
-        //Decoration
         decoration = new Decoration();
-
         heart = new Heart();
-
-        // Store coordinates
         setCoordinateLists();
-
-        emptySpaceCoordinate = new ArrayList<>();
+        heartCoordinates = new ArrayList<>();
         spaceCoordinate();
         Random random = new Random();
-        randomIndex1 = random.nextInt(emptySpaceCoordinate.size());
-        randomIndex2 = random.nextInt(emptySpaceCoordinate.size());
-
+        heartCoordinate1 = random.nextInt(heartCoordinates.size());
+        heartCoordinate2 = random.nextInt(heartCoordinates.size());
     }
 
+    /**
+     * Determines and sets the maximum x and y coordinates for the map based on the provided map data.
+     *
+     * @param map A Map with keys as a list of two integers (coordinates) and values as integers (tile types).
+     */
     public void setMaxXY(Map<List<Integer>, Integer> map) {
         max_x = 0;
         max_y = 0;
@@ -110,6 +87,10 @@ public class MapLoader {
         }
     }
 
+    /**
+     * Processes the map data to populate lists of different game elements like walls, doors, and obstacles.
+     * It also sets the player's initial position and the position of the key on the map.
+     */
     public void setCoordinateLists(){
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)){
@@ -147,6 +128,11 @@ public class MapLoader {
             }
         }
     }
+
+    /**
+     * Calculates and stores all possible coordinates for heart placements.
+     * This method ensures that hearts are not placed on walls or obstacles.
+     */
     public void spaceCoordinate(){
         setMaxXY(map);
         for (int i = 0; i <= max_x; i++) {
@@ -154,18 +140,23 @@ public class MapLoader {
                 List<Integer> xy = new ArrayList<>();
                 xy.add(i);
                 xy.add(j);
-                emptySpaceCoordinate.add(xy);
+                heartCoordinates.add(xy);
             }
         }
         for(List<Integer> wallXY : wallCoordinates){
-            emptySpaceCoordinate.removeIf(xy -> xy.get(0).equals(wallXY.get(0))&& xy.get(1).equals(wallXY.get(1)));
+            heartCoordinates.removeIf(xy -> xy.get(0).equals(wallXY.get(0))&& xy.get(1).equals(wallXY.get(1)));
         }
         for(List<Integer> obstacleXY : obstacleCoordinates){
-            emptySpaceCoordinate.removeIf(xy -> xy.get(0).equals(obstacleXY.get(0))&& xy.get(1).equals(obstacleXY.get(1)));
+            heartCoordinates.removeIf(xy -> xy.get(0).equals(obstacleXY.get(0))&& xy.get(1).equals(obstacleXY.get(1)));
         }
     }
 
-    public void loadMap1() {
+    /**
+     * Loads and renders the any map layout.
+     * This method draws tiles, walls, doors, enemies, and other elements based on their coordinates.
+     * It also handles the animation and display state of dynamic elements like hearts.
+     */
+    public void loadMapGeneral() {
         setMaxXY(map);
 
         for (int i = 0; i <= max_x; i++) {
@@ -173,18 +164,19 @@ public class MapLoader {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
             }
         }
-
         if(displayHeart1) {
-            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), heartCoordinates.get(heartCoordinate1).get(0) * 32, heartCoordinates.get(heartCoordinate1).get(1) * 32, 32, 32);
         }
         if(displayHeart2){
-            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), heartCoordinates.get(heartCoordinate2).get(0) * 32, heartCoordinates.get(heartCoordinate2).get(1) * 32, 32, 32);
         }
 
         for (List<Integer> coordinates : map.keySet()) {
+            float min_x = 0;
+            float min_y = 0;
             switch (map.get(coordinates)) {
                 case 0:
-                    if (coordinates.get(1)==min_y || coordinates.get(1)==max_y) {
+                    if (coordinates.get(1)== min_y || coordinates.get(1)==max_y) {
                         game.getSpriteBatch().draw(wall.getHorizontalWall(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     } else if ( coordinates.get(0)==max_x ) {
                         wall.getHorizontalWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
@@ -193,7 +185,7 @@ public class MapLoader {
                         wall.getHorizontalWall().setRotation(270);
                         wall.getHorizontalWall().draw(game.getSpriteBatch());
                     }
-                    else if (coordinates.get(0)==min_x ) {
+                    else if (coordinates.get(0)== min_x) {
                         wall.getHorizontalWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
                         wall.getHorizontalWall().setSize(32,32);
                         wall.getHorizontalWall().translateX(16);
@@ -212,7 +204,7 @@ public class MapLoader {
 
                     break;
                 case 2:
-                    if(coordinates.get(0)==min_x || coordinates.get(0)==max_x){
+                    if(coordinates.get(0)== min_x || coordinates.get(0)==max_x){
                         doors.getHorizontalDoor().setPosition(coordinates.get(0)*32,coordinates.get(1)*32);
                         doors.getHorizontalDoor().setSize(32,32);
                         doors.getHorizontalDoor().translateX(16);
@@ -255,6 +247,12 @@ public class MapLoader {
             }
         }
     }
+
+    /**
+     * Loads and renders the fifth map layout.
+     * Similar to loadMapGeneral, it draws various elements like tiles, walls, doors, but with a different theme and layout.
+     * It also manages the animation and display of dynamic elements.
+     */
     public void loadMap5(){
         setMaxXY(map);
 
@@ -267,10 +265,10 @@ public class MapLoader {
             game.getSpriteBatch().draw(decoration.getWater(), exitXY.get(0) * 32, exitXY.get(1) * 32, 32, 32);
         }
         if(displayHeart1) {
-            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex1).get(0) * 32, emptySpaceCoordinate.get(randomIndex1).get(1) * 32, 32, 32);
+            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), heartCoordinates.get(heartCoordinate1).get(0) * 32, heartCoordinates.get(heartCoordinate1).get(1) * 32, 32, 32);
         }
         if(displayHeart2){
-            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), emptySpaceCoordinate.get(randomIndex2).get(0) * 32, emptySpaceCoordinate.get(randomIndex2).get(1) * 32, 32, 32);
+            game.getSpriteBatch().draw(heart.getLife().getKeyFrame(sinusInput, true), heartCoordinates.get(heartCoordinate2).get(0) * 32, heartCoordinates.get(heartCoordinate2).get(1) * 32, 32, 32);
         }
         for (List<Integer> coordinates : map.keySet()) {
             switch (map.get(coordinates)) {
@@ -353,85 +351,71 @@ public class MapLoader {
             }
         }
     }
+
+    /**
+     * Sets the sinus input value, used for animations within the map.
+     *
+     * @param sinusInput The new sinus input value.
+     */
     public void setSinusInput(float sinusInput) {
         this.sinusInput = sinusInput;
     }
 
-    // Getter for player starting pos
+    /**
+     * Getter methods for various properties of the map.
+     * These include maximum dimensions, player's position, coordinates of different elements, and state of dynamic items.
+     * Each method returns the respective value or list of values.
+     */
     public float getMax_x() {
         return max_x;
     }
-
     public float getMax_y() {
         return max_y;
     }
-
     public float getPlayer_x() {
         return player_x;
     }
-
     public float getPlayer_y() {
         return player_y;
     }
-
-    // getters for coordinate lists
     public List<List<Integer>> getWallCoordinates() {
         return wallCoordinates;
     }
-
     public List<List<Integer>> getDoorCoordinates() {
         return doorCoordinates;
     }
-
     public List<List<Integer>> getObstacleCoordinates() {
         return obstacleCoordinates;
     }
-
     public List<Enemy> getEnemies() {
         return enemies;
     }
-// Getters for key starting values
-
     public int getKeyX() {
         return keyX;
     }
-
     public int getKeyY() {
         return keyY;
     }
+    public List<List<Integer>> getHeartCoordinates() {
+        return heartCoordinates;
+    }
+    public int getHeartCoordinate1() {
+        return heartCoordinate1;
+    }
+    public int getHeartCoordinate2() {
+        return heartCoordinate2;
+    }
 
+    /**
+     * Setter methods for controlling the display state of keys and hearts on the map.
+     * @param displayKey Boolean indicating whether the item (key/heart) should be displayed.
+     */
     public void setDisplayKey(boolean displayKey) {
         this.displayKey = displayKey;
     }
-
-    public boolean isDisplayKey() {
-        return displayKey;
-    }
-
-    public List<List<Integer>> getEmptySpaceCoordinate() {
-        return emptySpaceCoordinate;
-    }
-
-    public int getRandomIndex1() {
-        return randomIndex1;
-    }
-
-    public int getRandomIndex2() {
-        return randomIndex2;
-    }
-
-    public boolean isDisplayHeart1() {
-        return displayHeart1;
-    }
-
     public void setDisplayHeart1(boolean displayHeart) {
         this.displayHeart1 = displayHeart;
     }
-
-    public boolean isDisplayHeart2() {
-        return displayHeart2;
-    }
-
     public void setDisplayHeart2(boolean displayHeart2) {
         this.displayHeart2 = displayHeart2;
     }

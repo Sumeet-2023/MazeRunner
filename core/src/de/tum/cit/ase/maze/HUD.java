@@ -11,28 +11,41 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.characters.Player;
 import de.tum.cit.ase.maze.objects.Heart;
 import de.tum.cit.ase.maze.objects.Key;
-
-import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The HUD (Heads-Up Display) class manages the game's on-screen display elements in MazeRunnerGame.
+ * This includes displaying the player's hearts and keys. The class updates and animates these elements
+ * based on game events such as key collection and heart loss.
+ */
 public class HUD {
-    private Player player;
-    private Stage stage;
-    private Viewport viewport;
-    private Heart heart;
-    private Key key;
+    private final Player player;
+    private final Stage stage;
+    private final Heart heart;
+    private final Key key;
     private Image keyImage;
-    private List<Image> heartImages = new ArrayList<>();
+    private final List<Image> heartImages = new ArrayList<>();
+
+    /**
+     * Constructs a HUD instance for the game.
+     * Initializes the player's hearts and key and sets up the stage for the HUD elements.
+     *
+     * @param player The player character whose status is to be displayed on the HUD.
+     * @param viewport The viewport in which the HUD elements are to be displayed.
+     */
     public HUD(Player player, Viewport viewport) {
         this.player = player;
-        this.viewport = viewport;
         this.heart = new Heart();
         this.key = new Key();
         stage = new Stage(viewport);
         setUpHud();
     }
 
+    /**
+     * Sets up the HUD elements on the game screen.
+     * This method creates and positions the key and heart images, aligning them at the top-right of the screen.
+     */
     public void setUpHud(){
         Table table = new Table();
         table.top();
@@ -54,13 +67,19 @@ public class HUD {
         stage.addActor(table);
     }
 
+    /**
+     * Draws the HUD elements on the screen.
+     * This method should be called in the game's render loop to continuously update the HUD's appearance.
+     */
     public void draw() {
         stage.draw();
     }
 
-
-    public void update()
-    {
+    /**
+     * Updates the HUD elements based on the player's current status.
+     * This includes displaying the key if the player has it, and updating the heart icons to reflect current health.
+     */
+    public void update() {
         if (player.getHasKey())
             keyImage.setVisible(true);
 
@@ -74,6 +93,10 @@ public class HUD {
         }
     }
 
+    /**
+     * Animates the key image when the player collects a key.
+     * The animation involves scaling the key image up and then down to highlight its collection.
+     */
     public void animateKeyCollection() {
         keyImage.clearActions(); // Clear existing actions
         keyImage.addAction(Actions.sequence(
@@ -82,6 +105,12 @@ public class HUD {
         ));
     }
 
+    /**
+     * Animates a heart image when the player loses a heart.
+     * The specified heart image is scaled up and then down to indicate the loss.
+     *
+     * @param heartIndex The index of the heart in the heartImages list to be animated.
+     */
     public void animateHeartLoss(int heartIndex) {
         if (heartIndex >= 0 && heartIndex < heartImages.size()) {
             Image heartImage = heartImages.get(heartIndex);
@@ -93,19 +122,13 @@ public class HUD {
         }
     }
 
-    public Viewport getViewport() {
-        return viewport;
-    }
-
-    public void setViewport(Viewport viewport) {
-        this.viewport = viewport;
-    }
-
+    /**
+     * Returns the Stage object where HUD elements are displayed.
+     * This can be used to add or interact with other elements on the same stage.
+     *
+     * @return The Stage object used by this HUD.
+     */
     public Stage getStage() {
         return stage;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }
