@@ -51,5 +51,5 @@ Execute the following command in the project directory:
 
 ## Documentation
 - The [JavaDoc documentation](doc/index.html) for this project can be found [here](doc/index.html).
-- The UML diagram for this project can be found [here](uml_diagram.png)
+- The UML diagram for this project can be found [here](https://www.figma.com/file/LgbfVA646i5ApL4H32CD35/UML?type=whiteboard&node-id=0%3A1&t=xPXanqFMPSHzNOUv-1)
 
