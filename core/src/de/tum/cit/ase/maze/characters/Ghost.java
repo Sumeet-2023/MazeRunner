@@ -11,11 +11,24 @@ import de.tum.cit.ase.maze.Direction;
 
 import java.util.List;
 
+/**
+ * Represent the Ghost in MazeRunnerGame.
+ * Contains Animation of Ghost.
+ */
+
 public class Ghost{
     private Animation<TextureRegion> ghostDownAnimation;
+
+    /**
+     * Constructor initializes the load method.
+     */
     public Ghost(){
         loadDownGhostAnimation();
     }
+
+    /**
+     * Methods loads the animation and stores it in ghostDownAnimation.
+     */
     private void loadDownGhostAnimation(){
         Texture walkSheet = new Texture(Gdx.files.internal("mobs.png"));
         int frameWidth = 16;
@@ -31,6 +44,10 @@ public class Ghost{
         }
         ghostDownAnimation = new Animation<>(0.08f, walkFrames);
     }
+
+    /**
+     * Getter for ghost Animation attribute.
+     */
     public Animation<TextureRegion> getGhostDownAnimation() {
         return ghostDownAnimation;
     }

@@ -9,18 +9,30 @@ import com.badlogic.gdx.utils.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class creates static obstacles in the MazeRunnerGame.
+ * It includes functionalities for loading obstacle animations.
+ */
 
 public class Obstacle {
      private Animation<TextureRegion> spikeAnimation;
      private Animation<TextureRegion> fireAnimation;
      private Animation<TextureRegion> flameAnimation;
      private Animation<TextureRegion> poisonAnimation;
-     public Obstacle(){
+
+    /**
+     * Constructor initializes all the methods created for obstacles animation.
+     */
+    public Obstacle(){
          this.loadSpikeAnimation();
          this.loadFireAnimation();
          this.loadFlameAnimation();
          this.loadPoisonAnimation();
-     }
+    }
+
+    /**
+     * Methods loads the animations for the obstacle from respective files.
+     */
      public void loadSpikeAnimation(){
          Texture spikeSheet =new Texture(Gdx.files.internal("things.png"));
          int animationFrame=3;
@@ -77,6 +89,10 @@ public class Obstacle {
 
         poisonAnimation = new Animation<>(0.2f, poisonFrames);
     }
+
+    /**
+     * Getters for all the obstacle attribute.
+     */
 
     public Animation<TextureRegion> getSpikeAnimation() {
         return spikeAnimation;

@@ -9,10 +9,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * Represents the Wall in the MazeRunnerGame.
+ * This class includes different kinds of wall Texture.
+ */
+
 public class Wall {
     private Sprite horizontalWall;
     private TextureRegion cornerWall;
-    private TextureRegion well;
     private TextureRegion stoneWall;
     private TextureRegion islandCornerWallUpLeft;
     private TextureRegion islandCornerWallUpRight;
@@ -24,12 +28,12 @@ public class Wall {
     private TextureRegion islandWallLeft;
     private TextureRegion wood;
 
-
-
+    /**
+     * Constructor of Wall initializes all the methods in Wall class.
+     */
     public Wall(){
         loadHorizontalWall();
         loadCornerWall();
-        loadWell();
         loadStoneWall();
         loadIslandCornerWallUL();
         loadIslandCornerWallUR();
@@ -41,6 +45,9 @@ public class Wall {
         loadIslandWallLeft();
         loadWood();
     }
+    /**
+     * Methods loads the TextureRegion/Sprite for the wall of a specific direction as well as for decorations.
+     */
 
     public void loadHorizontalWall()
     {
@@ -50,10 +57,6 @@ public class Wall {
     public void loadCornerWall() {
         Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));
         cornerWall = new TextureRegion(wallTexture, 16 * 3, 0, 16, 16);
-    }
-    public void loadWell() {
-        Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));
-        well = new TextureRegion(wallTexture, 16*7, 3*16, 16, 16);
     }
     public void loadStoneWall()
     {
@@ -97,16 +100,15 @@ public class Wall {
         wood = new TextureRegion(wallTexture, 24, 2*24, 24, 24);
     }
 
+    /**
+     * Getters for all the wall attributes.
+     */
     public Sprite getHorizontalWall() {
         return horizontalWall;
     }
 
     public TextureRegion getCornerWall() {
         return cornerWall;
-    }
-
-    public TextureRegion getWell() {
-        return well;
     }
 
     public TextureRegion getStoneWall() {

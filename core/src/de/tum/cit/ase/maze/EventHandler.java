@@ -190,7 +190,7 @@ public class EventHandler {
     }
 
     /**
-     * Handles the lose condition of the game.
+     * Handles the loose condition of the game.
      * This method is called when the player's health reaches zero, triggering the transition to the lose screen
      * and disposing of the background music.
      */
