@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
  /**
- * The LoseScreen class is responsible for displaying the Loose screen if player looses it's all lives.
+ * The LoseScreen class is responsible for displaying the Lose screen if player losses it's all lives.
  * It extends the LibGDX Screen class and sets up the UI components for LoseScreen class.
  */
 public class LoseScreen implements Screen {
