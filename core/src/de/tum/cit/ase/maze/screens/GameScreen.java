@@ -149,6 +149,7 @@ public class GameScreen implements Screen {
             // Begin sprite batch and render the map
             game.getSpriteBatch().begin();
 
+            //Load map based on received mapLevel.
             if(mapLevel.equals(map1) || mapLevel.equals(map2) || mapLevel.equals(map3) || mapLevel.equals(map4)){
                 mapLoader.loadMapGeneral();
             } else if (mapLevel.equals(map5)) {

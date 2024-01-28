@@ -152,13 +152,14 @@ public class MapLoader {
     }
 
     /**
-     * Loads and renders the any map layout.
+     * Loads and renders any map layout.
      * This method draws tiles, walls, doors, enemies, and other elements based on their coordinates.
      * It also handles the animation and display state of dynamic elements like hearts.
      */
     public void loadMapGeneral() {
         setMaxXY(map);
-
+        // 2 for-loop to draw tile on the map based on max_x & max_y.
+        // Various elements will be drawn above tiles.
         for (int i = 0; i <= max_x; i++) {
             for (int j = 0; j <= max_y; j++) {
                 game.getSpriteBatch().draw(tiles.getTile(), i * 32, j * 32,32,32);
@@ -176,15 +177,19 @@ public class MapLoader {
             float min_y = 0;
             switch (map.get(coordinates)) {
                 case 0:
+                    // draw horizontal wall at minimum & maximum Y coordinate.
                     if (coordinates.get(1)== min_y || coordinates.get(1)==max_y) {
                         game.getSpriteBatch().draw(wall.getHorizontalWall(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    } else if ( coordinates.get(0)==max_x ) {
+                    }
+                    // draw vertical wall at maximum X coordinate.Rotation 270 degree.
+                    else if ( coordinates.get(0)==max_x ) {
                         wall.getHorizontalWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
                         wall.getHorizontalWall().setSize(32,32);
                         wall.getHorizontalWall().translateY(16);
                         wall.getHorizontalWall().setRotation(270);
                         wall.getHorizontalWall().draw(game.getSpriteBatch());
                     }
+                    // draw vertical wall at minimum X coordinate.Rotation 90 degree.
                     else if (coordinates.get(0)== min_x) {
                         wall.getHorizontalWall().setPosition(coordinates.get(0) * 32, coordinates.get(1) * 32);
                         wall.getHorizontalWall().setSize(32,32);
@@ -192,9 +197,11 @@ public class MapLoader {
                         wall.getHorizontalWall().setRotation(90);
                         wall.getHorizontalWall().draw(game.getSpriteBatch());
                     }
+                    // inner wall(tree as decoration).
                     else {
                         game.getSpriteBatch().draw(decoration.getTree(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     }
+                    // corner wall at top right corner & top left corner.To avoid overlapping of horizontal with vertical wall.
                     if(coordinates.get(0)==max_x && coordinates.get(1)==max_y || coordinates.get(0)==0 && coordinates.get(1)==max_y){
                         game.getSpriteBatch().draw(wall.getCornerWall(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
                     }
@@ -216,6 +223,7 @@ public class MapLoader {
                     }
                     break;
                 case 3:
+                    // Draw 4 obstacle based on even odd condition.
                     if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0) {
                         game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
                     }
@@ -255,7 +263,8 @@ public class MapLoader {
      */
     public void loadMap5(){
         setMaxXY(map);
-
+        // 2 for-loop to draw tile on the map based on max_x & max_y.
+        // Various elements will be drawn above tiles.
         for (int i = 0; i <= max_x; i++) {
             for (int j = 0; j <= max_y; j++) {
                 game.getSpriteBatch().draw(tiles.getIslandGrass(), i * 32, j * 32,32,32);
@@ -284,6 +293,7 @@ public class MapLoader {
                     else if (coordinates.get(0)==max_x) {
                         game.getSpriteBatch().draw(wall.getIslandWallRight(), coordinates.get(0) * 32, coordinates.get(1) * 32, 38, 32);
                     }
+                    // Draw wall based on even-odd condition.
                     else {
                         if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0 || coordinates.get(0)%2==1 && coordinates.get(1)%2==1) {
                             game.getSpriteBatch().draw(wall.getStoneWall(), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
@@ -292,6 +302,7 @@ public class MapLoader {
 
                         }
                     }
+                    //corner walls.
                     if( coordinates.get(0)==0 && coordinates.get(1)==max_y){
                         game.getSpriteBatch().draw(wall.getIslandCornerWallUpLeft(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
                     }
@@ -308,6 +319,7 @@ public class MapLoader {
                 case 1:
                     break;
                 case 2:
+                    // Boat will be drawn above Water Texture.
                      if (coordinates.get(0)==max_x) {
                          game.getSpriteBatch().draw(decoration.getBoat(),coordinates.get(0)*32,coordinates.get(1)*32,32,32);
                      }
@@ -320,22 +332,7 @@ public class MapLoader {
                          decoration.getBoat().draw(game.getSpriteBatch());
                     }
                     break;
-                case 3:
-                    if(coordinates.get(0)%2==0 && coordinates.get(1)%2==0) {
-                        game.getSpriteBatch().draw(obstacles.getFireAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    }
-                    else if(coordinates.get(0)%2==1 && coordinates.get(1)%2==0){
-                        game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    }
-                    else if(coordinates.get(0)%2==0 && coordinates.get(1)%2==1){
-                        game.getSpriteBatch().draw(obstacles.getPoisonAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    }
-                    else if(coordinates.get(0)%2==1 && coordinates.get(1)%2==1){
-                        game.getSpriteBatch().draw(obstacles.getFlameAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    }
-                    else {
-                        game.getSpriteBatch().draw(obstacles.getSpikeAnimation().getKeyFrame(sinusInput, true), coordinates.get(0) * 32, coordinates.get(1) * 32, 32, 32);
-                    }
+                // No case 3 in Map 5
                 case 4:
                     for (Enemy enemy: enemies)
                     {

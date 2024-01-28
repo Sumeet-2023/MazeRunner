@@ -15,13 +15,20 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
+ /**
+ * The LoseScreen class is responsible for displaying the Lose screen if player losses it's all lives.
+ * It extends the LibGDX Screen class and sets up the UI components for LoseScreen class.
+ */
 public class LoseScreen implements Screen {
     private final MazeRunnerGame game;
     private Music backgroundMusic;
     private final BitmapFont font;
     private final Stage stage;
-    private float sinusInput;
 
+     /**
+      * Constructor for LoseScreen. Sets up the camera, viewport, stage,backgroundMusic and UI elements.
+      * @param game The main game class, used to access global resources and methods.
+     **/
     public LoseScreen(MazeRunnerGame game){
         this.game = game;
         var camera = new OrthographicCamera();
@@ -48,7 +55,8 @@ public class LoseScreen implements Screen {
 
     @Override
     public void show() {
-
+       // Set the input processor so the stage can receive input events
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -67,7 +75,14 @@ public class LoseScreen implements Screen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
+     @Override
+     public void dispose() {
+         // Dispose of the stage,backgroundMusic when screen is disposed
+         stage.dispose();
+         backgroundMusic.dispose();
+     }
 
+     // The following methods are part of the Screen interface but are not used in this screen.
     @Override
     public void pause() {
 
@@ -82,10 +97,4 @@ public class LoseScreen implements Screen {
     public void hide() {
 
     }
-
-    @Override
-    public void dispose() {
-      backgroundMusic.dispose();
-    }
-
 }

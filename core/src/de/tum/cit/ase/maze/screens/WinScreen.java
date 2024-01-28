@@ -21,11 +21,20 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+ /**
+ * The WinScreen class is responsible for displaying the Win screen if player reaches the door safely after collecting the keys.
+ * It extends the LibGDX Screen class and sets up the UI components for WinScreen class.
+ */
 public class WinScreen implements Screen {
     private final MazeRunnerGame game;
     private Music backgroundMusic;
     private final BitmapFont font;
     private final Stage stage;
+
+    /**
+     * Constructor for WinScreen. Sets up the camera, viewport, stage,backgroundMusic and UI elements.
+     * @param game The main game class, used to access global resources and methods.
+     */
     public WinScreen(MazeRunnerGame game){
         this.game = game;
         var camera = new OrthographicCamera();
@@ -43,18 +52,15 @@ public class WinScreen implements Screen {
         Image backgroundImage = new Image(new Texture(Gdx.files.internal("WinImage.png")));
         table.setBackground(backgroundImage.getDrawable());
 
-
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("LooseWinMusic.wav"));
         backgroundMusic.setVolume(0.8f);
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
-
-
-
     }
     @Override
     public void show() {
-
+        // Set the input processor so the stage can receive input events
+         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -73,7 +79,14 @@ public class WinScreen implements Screen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
+    @Override
+    public void dispose() {
+         // Dispose of the stage,backgroundMusic when screen is disposed
+         stage.dispose();
+         backgroundMusic.dispose();
+    }
 
+   // The following methods are part of the Screen interface but are not used in this screen.
     @Override
     public void pause() {
 
@@ -87,10 +100,5 @@ public class WinScreen implements Screen {
     @Override
     public void hide() {
 
-    }
-
-    @Override
-    public void dispose() {
-     backgroundMusic.dispose();
     }
 }

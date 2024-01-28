@@ -73,5 +73,7 @@ public class CreditScreen implements Screen {
 
     @Override
     public void dispose() {
+        // Dispose of the stage when screen is disposed.
+        stage.dispose();
     }
 }
