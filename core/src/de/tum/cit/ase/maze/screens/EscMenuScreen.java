@@ -21,7 +21,7 @@ public class EscMenuScreen implements Screen{
     private GameScreen gameScreen;
 
     /**
-     * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
+     * Constructor for EscMenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
@@ -83,7 +83,7 @@ public class EscMenuScreen implements Screen{
 
     @Override
     public void dispose() {
-        // Dispose of the stage when screen is disposed
+        // Dispose of the stage when screen is disposed.
         stage.dispose();
     }
 

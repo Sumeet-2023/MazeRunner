@@ -6,16 +6,26 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * This Class contains animated/static(for HUD) Heart for MazeRunnerGame.
+ */
+
 public class Heart {
     private TextureRegion heart;
     private Animation<TextureRegion> life;
     private TextureRegion emptyHeart;
 
+    /**
+     * Constructor initializes methods which stores Animations/Texture for Heart.
+     */
     public Heart(){
         loadTextureRegions();
         loadHeartAnimation();
     }
 
+    /**
+     * Methods loads Animations of Heart,Texture of Heart.
+     */
     private void loadTextureRegions(){
         Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
         this.heart = new TextureRegion(heartSheet, 4 * 16, 0 * 16, 16, 16);
@@ -36,6 +46,9 @@ public class Heart {
         life = new Animation<>(0.2f,heartFrames);
     }
 
+    /**
+     *Getters for Heart attribute.
+     */
     public TextureRegion getHeart() {
         return heart;
     }

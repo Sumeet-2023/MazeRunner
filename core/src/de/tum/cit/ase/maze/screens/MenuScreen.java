@@ -19,8 +19,6 @@
     import de.tum.cit.ase.maze.FileChooser;
     import de.tum.cit.ase.maze.FileChooserCallBack;
     import de.tum.cit.ase.maze.MazeRunnerGame;
-    import games.spooky.gdx.nativefilechooser.NativeFileChooser;
-    import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 
     /**
      * The MenuScreen class is responsible for displaying the main menu of the game.
@@ -70,7 +68,7 @@
                 game.goToSelectMap();
             }
         });
-         upload.addListener(new ChangeListener() {
+        upload.addListener(new ChangeListener() {
              @Override
              public void changed(ChangeEvent event, Actor actor) {
                  showFileChooser(new FileChooserCallBack() {
@@ -79,7 +77,7 @@
                          game.goToGame(filePath);
                      }
                  });
-             }
+          }
          });
 
         credits.addListener(new ChangeListener() {
@@ -90,12 +88,21 @@
             }
         });
     }
-    public void showFileChooser(FileChooserCallBack callBack)
-    {
-            FileChooser fileChooser = new DesktopFileChooser();
-            fileChooser.chooseFile(callBack);
 
-    }
+        /**
+         * Opens a file chooser dialog to allow the user to select a map file for uploading.
+         * When a file is chosen, the provided callback is invoked with the chosen file path.
+         *
+         * @param callBack The callback to handle the chosen file path.
+         */
+    public void showFileChooser(FileChooserCallBack callBack)
+     {
+         // Create a file chooser instance
+            FileChooser fileChooser = new DesktopFileChooser();
+
+         // Open the file chooser dialog, and handle the chosen file in the callback
+            fileChooser.chooseFile(callBack);
+     }
 
     @Override
     public void dispose() {
