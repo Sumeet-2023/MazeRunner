@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.tum.cit.ase.maze"},{"l":"de.tum.cit.ase.maze.characters"},{"l":"de.tum.cit.ase.maze.objects"},{"l":"de.tum.cit.ase.maze.screens"}];updateSearchResults();

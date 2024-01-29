@@ -50,6 +50,6 @@ Execute the following command in the project directory:
 - ESC to pause the game.
 
 ## Documentation
-- The [JavaDoc documentation](doc/index.html) for this project can be found [here](doc/index.html).
+- The [JavaDoc documentation](JavaDocs/index.html) for this project can be found [here](JavaDocs/index.html).
 - The UML diagram for this project can be found [here](https://www.figma.com/file/LgbfVA646i5ApL4H32CD35/UML?type=whiteboard&node-id=0%3A1&t=xPXanqFMPSHzNOUv-1)
 
