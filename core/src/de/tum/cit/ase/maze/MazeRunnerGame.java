@@ -53,7 +53,7 @@ public class MazeRunnerGame extends Game {
             gameScreen = null;
         }
         if (escMenuScreen != null) {
-            escMenuScreen.dispose(); // Dispose the game screen if it exists
+            escMenuScreen.dispose(); // Dispose the escMenuScreen screen if it exists
             escMenuScreen = null;
         }
 
@@ -76,16 +76,16 @@ public class MazeRunnerGame extends Game {
      * Switches to the select menu screen.
      */
     public void goToSelectMap() {
-        this.setScreen(new SelectMapScreen(this)); // Set the current screen to MenuScreen
+        this.setScreen(new SelectMapScreen(this)); // Set the current screen to SelectMapScreen
     }
 
     /**
      * Switches to the credits screen.
      */
     public void goToCredits() {
-        this.setScreen(new CreditScreen(this));
+        this.setScreen(new CreditScreen(this)); // Set the current screen to CreditScreen.
         if (menuScreen != null){
-            menuScreen.dispose();
+            menuScreen.dispose(); // Dispose menuScreen if it exists.
             menuScreen = null;
         }
     }
@@ -94,7 +94,7 @@ public class MazeRunnerGame extends Game {
      * Switches to lose screen.
      */
     public void goToLoseScreen() {
-        this.setScreen(new LoseScreen(this)); // Set the current screen to MenuScreen
+        this.setScreen(new LoseScreen(this)); // Set the current screen to LoseScreen
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
@@ -105,7 +105,7 @@ public class MazeRunnerGame extends Game {
      * Switches to win screen.
      */
     public void goToWinScreen() {
-        this.setScreen(new WinScreen(this)); // Set the current screen to MenuScreen
+        this.setScreen(new WinScreen(this)); // Set the current screen to WinScreen
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;

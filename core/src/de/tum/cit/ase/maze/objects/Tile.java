@@ -20,13 +20,16 @@ public class Tile {
         loadIslandGrass();
     }
     /**
-     *Methods loads the TextureRegion/Sprite for the tile.
+     *Methods loads the Texture of tile.
      */
     public void loadTile()
     {
         Texture tileTexture = new Texture(Gdx.files.internal("basictiles.png"));
         tile = new TextureRegion(tileTexture, 16, 8*16, 16, 16);
     }
+    /**
+     *Methods loads the Texture of islandGrass.
+     */
     public void loadIslandGrass(){
         Texture tileTexture = new Texture(Gdx.files.internal("Island Tileset.png"));
         islandGrass = new TextureRegion(tileTexture, 0, 0, 27, 24);

@@ -18,7 +18,7 @@ public class Door {
     }
 
     /**
-     * Method loads the door Texture.
+     * Method loads the door Texture in horizontalDoor.
      */
     public void loadHorizontalDoor(){
         Texture doorTexture = new Texture(Gdx.files.internal("basictiles.png"));

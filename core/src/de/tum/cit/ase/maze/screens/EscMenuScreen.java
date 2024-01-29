@@ -15,7 +15,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
-
+/**
+ * The EscMenuScreen displays the screen when esc button is pressed i.e game is in pause state.
+ */
 public class EscMenuScreen implements Screen{
     private final Stage stage;
     private GameScreen gameScreen;

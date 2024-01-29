@@ -31,7 +31,7 @@ public class Obstacle {
     }
 
     /**
-     * Methods loads the animations for the obstacle from respective files.
+     * Methods loads the animations of spike in spikeAnimation.
      */
      public void loadSpikeAnimation(){
          Texture spikeSheet =new Texture(Gdx.files.internal("things.png"));
@@ -46,6 +46,10 @@ public class Obstacle {
 
          spikeAnimation=new Animation<>(0.4f,spikeFrames);
      }
+
+    /**
+     * Methods loads the animations of fire in fireAnimation.
+     */
     public void loadFireAnimation() {
         Texture fireSheet = new Texture(Gdx.files.internal("objects.png"));
 
@@ -60,6 +64,9 @@ public class Obstacle {
         }
         fireAnimation = new Animation<>(0.1f, fireFrames);
     }
+    /**
+     * Methods loads the animations of flame in flameAnimation.
+     */
     public void loadFlameAnimation() {
         Texture flameSheet = new Texture(Gdx.files.internal("objects.png"));
 
@@ -74,6 +81,9 @@ public class Obstacle {
         }
         flameAnimation = new Animation<>(0.1f, flameFrames);
     }
+    /**
+     * Methods loads the animations of smoke in poisonAnimation.
+     */
     public void loadPoisonAnimation() {
         Texture poisonSheet = new Texture(Gdx.files.internal("objects.png"));
 
@@ -93,7 +103,6 @@ public class Obstacle {
     /**
      * Getters for all the obstacle attribute.
      */
-
     public Animation<TextureRegion> getSpikeAnimation() {
         return spikeAnimation;
     }

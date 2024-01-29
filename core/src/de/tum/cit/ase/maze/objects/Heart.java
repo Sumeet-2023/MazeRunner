@@ -24,13 +24,17 @@ public class Heart {
     }
 
     /**
-     * Methods loads Animations of Heart,Texture of Heart.
+     * loadTextureRegions loads Textures of Heart in heart & emptyHeart.
      */
     private void loadTextureRegions(){
         Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
         this.heart = new TextureRegion(heartSheet, 4 * 16, 0 * 16, 16, 16);
         this.emptyHeart = new TextureRegion(heartSheet, 8 * 16, 0 * 16, 16, 16);
     }
+
+    /**
+     * Loads the animation of Heart.
+     */
     public void loadHeartAnimation() {
         Texture heartSheet = new Texture(Gdx.files.internal("objects.png"));
 

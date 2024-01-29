@@ -45,10 +45,10 @@ public class Wall {
         loadIslandWallLeft();
         loadWood();
     }
+
     /**
      * Methods loads the TextureRegion/Sprite for the wall of a specific direction as well as for decorations.
      */
-
     public void loadHorizontalWall()
     {
         Texture wallTexture = new Texture(Gdx.files.internal("basictiles.png"));

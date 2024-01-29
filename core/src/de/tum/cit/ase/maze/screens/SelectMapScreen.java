@@ -20,9 +20,18 @@ import de.tum.cit.ase.maze.FileChooser;
 import de.tum.cit.ase.maze.FileChooserCallBack;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
+/**
+ * The SelectMapScreen is responsible for displaying map level selection screen.
+ */
 public class SelectMapScreen implements Screen {
     private final Stage stage;
     private MazeRunnerGame game;
+
+    /**
+     * Construct the SelectMapScreen for MazeRunnerGame.
+     * Initialize the game element,sets viewport,add actors to stage,adds Listener.
+     * @param game The main game class, used to access global resources and methods.
+     */
     public SelectMapScreen(MazeRunnerGame game) {
         var camera = new OrthographicCamera();
         camera.zoom = 1.0f; // Set camera zoom for a closer view

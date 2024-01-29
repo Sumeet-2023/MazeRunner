@@ -15,12 +15,20 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.maze.MazeRunnerGame;
 
-
+/**
+ * The CreditScreen displays MazeRunnerGame creator names.
+ */
 public class CreditScreen implements Screen {
     private final MazeRunnerGame game;
     private final BitmapFont font;
 
     private final Stage stage;
+
+    /**
+     * Construct the CreditScreen for MazeRunnerGame.
+     * Initialize the game element,sets the viewport,add actors to stage.
+     * @param game The main game class, used to access global resources and methods.
+     */
     public CreditScreen(MazeRunnerGame game)
     {
         this.game = game;
